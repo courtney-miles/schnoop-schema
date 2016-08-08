@@ -1,0 +1,6 @@
+/.idea/
+/.vagrant/
+/vendor/
+composer.phar
+phpunit.xml
+Vagrantfile
