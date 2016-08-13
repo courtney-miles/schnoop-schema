@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteStringTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 abstract class AbstractTimeType implements TimeTypeInterface
 {
-    use QuoteStringTrait;
+    use QuoteTrait;
 
     protected $precision;
 

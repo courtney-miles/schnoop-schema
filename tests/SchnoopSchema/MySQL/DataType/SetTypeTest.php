@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 8/07/16
- * Time: 4:42 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
 
-class SetTypeTest extends SchnoopTestCase
+class SetTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @var SetType

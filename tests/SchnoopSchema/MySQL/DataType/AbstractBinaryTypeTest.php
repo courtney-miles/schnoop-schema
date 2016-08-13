@@ -8,10 +8,10 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBinaryType;
 
-class AbstractBinaryTypeTest extends SchnoopTestCase
+class AbstractBinaryTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @var AbstractBinaryType

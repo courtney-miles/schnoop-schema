@@ -5,9 +5,9 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Index;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Index\IndexedColumn;
 use MilesAsylum\SchnoopSchema\MySQL\Index\IndexedColumnInterface;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
-class IndexedColumnTest extends SchnoopTestCase
+class IndexedColumnTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider constructProvider
@@ -21,6 +21,7 @@ class IndexedColumnTest extends SchnoopTestCase
         $indexedColumn = new IndexedColumn($column, $length, $collation);
 
         $this->assertSame($column, $indexedColumn->getColumn());
+        $this->assertSame($column->getName(), $indexedColumn->getColumnName());
         $this->assertSame($expectHasLength, $indexedColumn->hasLength());
         $this->assertSame($length, $indexedColumn->getLength());
         $this->assertSame($collation, $indexedColumn->getCollation());
@@ -33,6 +34,8 @@ class IndexedColumnTest extends SchnoopTestCase
     public function constructProvider()
     {
         $mockColumn = $this->createMock(ColumnInterface::class);
+        $mockColumn->method('getName')
+            ->willReturn('schnoop_col');
 
         return [
             [

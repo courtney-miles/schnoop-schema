@@ -71,26 +71,28 @@ abstract class AbstractIndex implements IndexInterface
     {
         return implode(
             ' ',
-            [
-                strtoupper($type),
-                $name,
-                isset($indexType) ? 'USING ' . $indexType : null,
-                $this->makeIndexedColumnsDDL(),
-                $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
-            ]
+            array_filter(
+                [
+                    strtoupper($type),
+                    $name !== null ? '`' . $name . '`' : null,
+                    isset($indexType) ? 'USING ' . $indexType : null,
+                    $this->makeIndexedColumnsDDL(),
+                    $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
+                ]
+            )
         );
     }
 
     protected function makeIndexedColumnsDDL()
     {
-        $indexedColumns = [];
+        $columnNames = [];
 
         foreach ($this->indexedColumns as $indexedColumn) {
-            $indexedColumns[] = $indexedColumn->getColumnName()
-            . $indexedColumn->hasLength() ? '(' . $indexedColumn->getLength() . ')' : null
-                . ' ' . $indexedColumn->getCollation();
+            $columnNames[] = '`' . $indexedColumn->getColumnName() . '`'
+                . ($indexedColumn->hasLength() ? '(' . $indexedColumn->getLength() . ')' : null)
+                . ' ' . strtoupper($indexedColumn->getCollation());
         }
 
-        return '(' . implode(',', $indexedColumns) . ')';
+        return '(' . implode(',', $columnNames) . ')';
     }
 }

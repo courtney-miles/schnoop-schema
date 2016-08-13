@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\LongTextType;
 
-class LongTextTypeTest extends SchnoopTestCase
+class LongTextTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider constructedProvider()

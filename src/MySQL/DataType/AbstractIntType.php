@@ -10,7 +10,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\DisplayWidthTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteNumericTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\SignedTrait;
 
 abstract class AbstractIntType implements IntTypeInterface
@@ -18,7 +18,7 @@ abstract class AbstractIntType implements IntTypeInterface
     use DisplayWidthTrait;
     use SignedTrait;
     use NumericRangeTrait;
-    use QuoteNumericTrait;
+    use QuoteTrait;
     
     public function __construct($displayWidth, $isSigned, $minRange, $maxRange)
     {

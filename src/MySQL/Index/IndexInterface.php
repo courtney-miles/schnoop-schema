@@ -21,4 +21,6 @@ interface IndexInterface extends \MilesAsylum\SchnoopSchema\IndexInterface
     public function getIndexedColumns();
 
     public function getComment();
+
+    public function hasComment();
 }

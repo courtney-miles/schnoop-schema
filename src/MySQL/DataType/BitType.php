@@ -10,11 +10,13 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\LengthTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 class BitType implements BitTypeInterface
 {
     use LengthTrait;
     use NumericRangeTrait;
+    use QuoteTrait;
 
     const MAX_LENGTH = 64;
 
@@ -43,11 +45,6 @@ class BitType implements BitTypeInterface
     public function cast($value)
     {
         return (int)$value;
-    }
-
-    public function quote($value)
-    {
-        return "'" . addslashes($value) . "'";
     }
 
     public function __toString()

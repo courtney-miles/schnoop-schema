@@ -1,17 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 12/07/16
- * Time: 7:40 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\YearType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
-class YearTypeTest extends \PHPUnit_Framework_TestCase
+class YearTypeTest extends SchnoopSchemaTestCase
 {
     public function testConstruct()
     {
@@ -21,5 +16,6 @@ class YearTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(DataTypeInterface::TYPE_YEAR, $yearType->getType());
         $this->assertTrue($yearType->doesAllowDefault());
         $this->assertSame((int)$yearStr, $yearType->cast($yearStr));
+        $this->assertSame('YEAR', (string)$yearType);
     }
 }

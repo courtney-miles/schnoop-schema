@@ -8,12 +8,12 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Table;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
 
-class TableTest extends SchnoopTestCase
+class TableTest extends SchnoopSchemaTestCase
 {
     /**
      * @var Table

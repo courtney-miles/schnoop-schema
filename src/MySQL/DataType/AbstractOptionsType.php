@@ -4,13 +4,13 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\OptionTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteStringTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 abstract class AbstractOptionsType implements OptionsTypeInterface
 {
     use OptionTrait;
     use CollationTrait;
-    use QuoteStringTrait;
+    use QuoteTrait;
 
     public function __construct(array $options, $collation)
     {
@@ -31,7 +31,7 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
         return sprintf(
             "%s(%s) COLLATE %s",
             strtoupper($this->getType()),
-            "'" . implode("', ", $this->getOptions()) . "'",
+            "'" . implode("','", $this->getOptions()) . "'",
             $this->getCollation()
         );
     }

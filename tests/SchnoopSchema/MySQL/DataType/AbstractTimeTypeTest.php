@@ -8,13 +8,13 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTimeType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractTimeTypeTest extends SchnoopTestCase
+class AbstractTimeTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider abstractTimeTypeProvider

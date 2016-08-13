@@ -9,12 +9,12 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteStringTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 abstract class AbstractStringType implements StringTypeInterface
 {
     use CollationTrait;
-    use QuoteStringTrait;
+    use QuoteTrait;
     
     /**
      * @var int

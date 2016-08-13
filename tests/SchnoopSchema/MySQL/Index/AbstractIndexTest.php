@@ -2,18 +2,24 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Index;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Index\AbstractIndex;
 use MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface;
 
-class AbstractIndexTest extends SchnoopTestCase
+class AbstractIndexTest extends SchnoopSchemaTestCase
 {
-    public function testConstructed()
-    {
+    /**
+     * @dataProvider constructedProvider
+     * @param string|null $comment
+     * @param bool $expectHasComment
+     */
+    public function testConstructed(
+        $comment,
+        $expectHasComment
+    ) {
         $name = 'schnoop_idx';
         $indexedColumns = [];
         $indexType = IndexInterface::INDEX_TYPE_BTREE;
-        $comment = 'Schnoop comment';
 
         $abstractIndex = $this->getMockForAbstractClass(
             AbstractIndex::class,
@@ -26,7 +32,36 @@ class AbstractIndexTest extends SchnoopTestCase
         );
 
         $this->indexAsserts(
-            $name, null, $indexedColumns, $indexType, $comment, $abstractIndex
+            $name,
+            null,
+            $indexedColumns,
+            $indexType,
+            $comment,
+            $expectHasComment,
+            null,
+            $abstractIndex
         );
+    }
+
+    /**
+     * @see testConstructed
+     * @return array
+     */
+    public function constructedProvider()
+    {
+        return [
+            [
+                'Schnoop comment',
+                true
+            ],
+            [
+                '',
+                false
+            ],
+            [
+                null,
+                false
+            ]
+        ];
     }
 }

@@ -4,7 +4,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteNumericTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\SignedTrait;
 
 abstract class AbstractNumericPointType implements NumericPointTypeInterface
@@ -12,7 +12,7 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
     use PrecisionScaleTrait;
     use SignedTrait;
     use NumericRangeTrait;
-    use QuoteNumericTrait;
+    use QuoteTrait;
 
     /**
      * AbstractNumericPointType constructor.
@@ -24,10 +24,11 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
     {
         $this->setSigned($signed);
 
-        if (isset($precision, $scale)) {
+        if (isset($precision)) {
             $this->setPrecisionScale($precision, $scale);
 
-            $maxRange = str_repeat('9', $precision - $scale) . '.' . str_repeat('9', $scale);
+            $maxRange = str_repeat('9', $precision - $scale)
+                . (!empty($scale) ? '.' . str_repeat('9', $scale) : null);
             $minRange = $signed ? '-' . $maxRange : '0';
             $this->setRange($minRange, $maxRange);
         }

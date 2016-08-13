@@ -55,14 +55,6 @@ class Database extends AbstractDatabase implements DatabaseInterface
     }
 
     /**
-     * @param string $characterSet
-     */
-    protected function setDefaultCharacterSet($characterSet)
-    {
-        $this->defaultCharacterSet = $characterSet;
-    }
-
-    /**
      * @param string $collation
      */
     protected function setDefaultCollation($collation)

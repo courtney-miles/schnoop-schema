@@ -1,21 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 19/06/16
- * Time: 10:42 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractNumericPointType;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractNumericPointTypeTest extends SchnoopTestCase
+class AbstractNumericPointTypeTest extends SchnoopSchemaTestCase
 {
     /**
-     * @dataProvider constructedProvider()
+     * @dataProvider constructedProvider
      * @param $isSigned
      * @param $precision
      * @param $scale
@@ -46,7 +40,7 @@ class AbstractNumericPointTypeTest extends SchnoopTestCase
             $type,
             $isSigned,
             $precision,
-            $scale,
+            empty($scale) ? 0 : $scale,
             $expectedMinRange,
             $expectedMaxRange,
             $expectedDoesAllowNull,
@@ -56,7 +50,7 @@ class AbstractNumericPointTypeTest extends SchnoopTestCase
     }
 
     /**
-     * @see testConstructed()
+     * @see testConstructed
      * @return array
      */
     public function constructedProvider()
@@ -86,6 +80,16 @@ class AbstractNumericPointTypeTest extends SchnoopTestCase
                 '9999.99',
                 true,
                 "FOO($precision,$scale) UNSIGNED"
+            ],
+            [
+                $notSigned,
+                $precision,
+                null,
+                'foo',
+                '0',
+                '999999',
+                true,
+                "FOO($precision) UNSIGNED"
             ]
         ];
     }

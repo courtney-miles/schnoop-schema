@@ -5,16 +5,14 @@ namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\FloatType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\IntTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericPointTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\OptionsTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\StringTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface;
 use PHPUnit\Framework\TestCase;
 
-class SchnoopTestCase extends TestCase
+class SchnoopSchemaTestCase extends TestCase
 {
     /**
      * @param string $expectedType
@@ -67,14 +65,46 @@ class SchnoopTestCase extends TestCase
         $expectedDDL,
         NumericPointTypeInterface $actualNumericPointType
     ) {
-        $this->assertSame($expectedType, $actualNumericPointType->getType());
-        $this->assertSame($expectedPrecision, $actualNumericPointType->getPrecision());
-        $this->assertSame($expectedScale, $actualNumericPointType->getScale());
-        $this->assertSame($expectedSigned, $actualNumericPointType->isSigned());
-        $this->assertSame($expectedMinRange, $actualNumericPointType->getMinRange());
-        $this->assertSame($expectedMaxRange, $actualNumericPointType->getMaxRange());
-        $this->assertSame($expectedAllowDefault, $actualNumericPointType->doesAllowDefault());
-        $this->assertSame($expectedDDL, (string)$actualNumericPointType);
+        $this->assertSame(
+            $expectedType,
+            $actualNumericPointType->getType(),
+            'Unexpected value returned for getType().'
+        );
+        $this->assertSame(
+            $expectedPrecision,
+            $actualNumericPointType->getPrecision(),
+            'Unexpected value returned for getPrecision().'
+        );
+        $this->assertSame(
+            $expectedScale,
+            $actualNumericPointType->getScale(),
+            'Unexpected value returned for getScale().'
+        );
+        $this->assertSame(
+            $expectedSigned,
+            $actualNumericPointType->isSigned(),
+            'Unexpected value returned for isSigned().'
+        );
+        $this->assertSame(
+            $expectedMinRange,
+            $actualNumericPointType->getMinRange(),
+            'Unexpected value returned for getMinRange().'
+        );
+        $this->assertSame(
+            $expectedMaxRange,
+            $actualNumericPointType->getMaxRange(),
+            'Unexpected value returned for getMaxRange().'
+        );
+        $this->assertSame(
+            $expectedAllowDefault,
+            $actualNumericPointType->doesAllowDefault(),
+            'Unexpected value returned for doesAllowDefault().'
+        );
+        $this->assertSame(
+            $expectedDDL,
+            (string)$actualNumericPointType,
+            'Unexpected DDL value.'
+        );
     }
 
     /**
@@ -120,6 +150,13 @@ class SchnoopTestCase extends TestCase
         $this->assertSame($expectedDDL, (string)$actualStringType);
     }
 
+    /**
+     * @param string $expectedType
+     * @param int $expectedPrecision
+     * @param true $expectedAllowDefault
+     * @param string $expectedDDL
+     * @param TimeTypeInterface $actualTimeType
+     */
     public function timeTypeAsserts(
         $expectedType,
         $expectedPrecision,
@@ -174,6 +211,8 @@ class SchnoopTestCase extends TestCase
      * @param ColumnInterface[] $expectedIndexedColumns
      * @param string $expectedIndexType
      * @param string $expectedComment
+     * @param bool $expectedHasComment
+     * @param string $expectedDDL
      * @param IndexInterface $actualIndex
      */
     public function indexAsserts(
@@ -182,15 +221,50 @@ class SchnoopTestCase extends TestCase
         array $expectedIndexedColumns,
         $expectedIndexType,
         $expectedComment,
+        $expectedHasComment,
+        $expectedDDL,
         IndexInterface $actualIndex
     ) {
-        $this->assertSame($expectedName, $actualIndex->getName());
-        $this->assertSame($expectedIndexedColumns, $actualIndex->getIndexedColumns());
-        $this->assertSame($expectedIndexType, $actualIndex->getIndexType());
-        $this->assertSame($expectedComment, $actualIndex->getComment());
+        $this->assertSame(
+            $expectedName,
+            $actualIndex->getName(),
+            'Index name is not what is expected.'
+        );
+        $this->assertSame(
+            $expectedIndexedColumns,
+            $actualIndex->getIndexedColumns(),
+            'Indexed columns are not what is expected.'
+        );
+        $this->assertSame(
+            $expectedIndexType,
+            $actualIndex->getIndexType(),
+            'Index type is not what is expected.'
+        );
+        $this->assertSame(
+            $expectedComment,
+            $actualIndex->getComment(),
+            'Index comment is not what is expected.'
+        );
+        $this->assertSame(
+            $expectedHasComment,
+            $actualIndex->hasComment(),
+            'Index having a comment is not what is expected.'
+        );
 
         if ($expectedType !== null) {
-            $this->assertSame($expectedType, $actualIndex->getType());
+            $this->assertSame(
+                $expectedType,
+                $actualIndex->getType(),
+                'Index type is not what is expected.'
+            );
+        }
+
+        if ($expectedDDL !== null) {
+            $this->assertSame(
+                $expectedDDL,
+                (string)$actualIndex,
+                'Index DDL is not what is expected.'
+            );
         }
     }
 }

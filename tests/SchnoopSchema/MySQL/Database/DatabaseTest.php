@@ -8,10 +8,10 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Database;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Database\Database;
 
-class DatabaseTest extends SchnoopTestCase
+class DatabaseTest extends SchnoopSchemaTestCase
 {
     /**
      * @var Database

@@ -2,10 +2,10 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
-trait QuoteStringTrait
+trait QuoteTrait
 {
     public function quote($value)
     {
-        return "'" . addslashes($value) . "'";
+        return is_numeric($value) ? (string)$value : "'" . addslashes($value) . "'";
     }
 }

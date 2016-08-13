@@ -2,12 +2,12 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TextType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 
-class TextTypeTest extends SchnoopTestCase
+class TextTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider constructedProvider()

@@ -5,6 +5,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema;
 use MilesAsylum\SchnoopSchema\AbstractTable;
 use MilesAsylum\SchnoopSchema\ColumnInterface;
 use MilesAsylum\SchnoopSchema\IndexInterface;
+use PHPUnit_Framework_MockObject_MockObject;
 
 class AbstractTableTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,6 +124,52 @@ class AbstractTableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIndexNotFound()
     {
-        $this->assertNull($this->abstractCommonTable->getIndex('bougs'));
+        $this->assertNull($this->abstractCommonTable->getIndex('bogus'));
+    }
+
+    public function testHasPrimaryKeyNotFound()
+    {
+        $this->assertFalse($this->abstractCommonTable->hasPrimaryKey());
+    }
+
+    public function testHasPrimaryKeyFound()
+    {
+        $mockIndex = $this->createMock(IndexInterface::class);
+        $mockIndex->method('getName')->willReturn('PRIMARY');
+
+        /** @var AbstractTable|PHPUnit_Framework_MockObject_MockObject $abstractCommonTable */
+        $abstractCommonTable = $this->getMockForAbstractClass(
+            AbstractTable::class,
+            [
+                $this->name,
+                $this->mockColumns,
+                [$mockIndex]
+            ]
+        );
+
+        $this->assertTrue($abstractCommonTable->hasPrimaryKey());
+    }
+
+    public function testGetPrimaryKeyNotFound()
+    {
+        $this->assertNull($this->abstractCommonTable->getPrimaryKey());
+    }
+
+    public function testGetPrimaryKeyFound()
+    {
+        $mockIndex = $this->createMock(IndexInterface::class);
+        $mockIndex->method('getName')->willReturn('PRIMARY');
+
+        /** @var AbstractTable|PHPUnit_Framework_MockObject_MockObject $abstractCommonTable */
+        $abstractCommonTable = $this->getMockForAbstractClass(
+            AbstractTable::class,
+            [
+                $this->name,
+                $this->mockColumns,
+                [$mockIndex]
+            ]
+        );
+
+        $this->assertSame($mockIndex, $abstractCommonTable->getPrimaryKey());
     }
 }

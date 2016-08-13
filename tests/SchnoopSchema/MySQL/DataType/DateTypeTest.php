@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 12/07/16
- * Time: 7:37 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DateType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
-class DateTypeTest extends \PHPUnit_Framework_TestCase
+class DateTypeTest extends SchnoopSchemaTestCase
 {
     public function testConstruct()
     {
@@ -22,5 +16,6 @@ class DateTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(DataTypeInterface::TYPE_DATE, $dateType->getType());
         $this->assertTrue($dateType->doesAllowDefault());
         $this->assertSame($dateStr, $dateType->cast($dateStr));
+        $this->assertSame('DATE', (string)$dateType);
     }
 }

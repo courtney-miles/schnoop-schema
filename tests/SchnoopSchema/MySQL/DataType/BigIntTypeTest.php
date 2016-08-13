@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BigIntType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class BigIntTypeTest extends SchnoopTestCase
+class BigIntTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider constructedProvider()

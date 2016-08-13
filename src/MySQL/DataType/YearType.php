@@ -8,11 +8,11 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteNumericTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 class YearType implements DataTypeInterface
 {
-    use QuoteNumericTrait;
+    use QuoteTrait;
 
     /**
      * @return string

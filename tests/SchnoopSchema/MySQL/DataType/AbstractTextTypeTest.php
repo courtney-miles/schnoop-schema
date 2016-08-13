@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTextType;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractTextTypeTest extends SchnoopTestCase
+class AbstractTextTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @dataProvider constructedProvider()

@@ -16,8 +16,6 @@
   "require-dev": {
     "phpunit/phpunit" : "~5.0",
     "phpunit/dbunit": "~2.0",
-    "squizlabs/php_codesniffer": "@stable",
-    "phpmd/phpmd" : "@stable",
     "satooshi/php-coveralls": "^1.0"
   },
   "autoload": {

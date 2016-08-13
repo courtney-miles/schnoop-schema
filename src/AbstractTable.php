@@ -88,12 +88,12 @@ abstract class AbstractTable implements TableInterface
 
     public function hasPrimaryKey()
     {
-        return $this->hasIndex('PRIMARY KEY');
+        return $this->hasIndex('PRIMARY');
     }
 
     public function getPrimaryKey()
     {
-        return $this->getIndex('PRIMARY KEY');
+        return $this->getIndex('PRIMARY');
     }
 
     /**

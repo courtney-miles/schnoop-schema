@@ -8,11 +8,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BitType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class BitTypeTest extends SchnoopTestCase
+class BitTypeTest extends SchnoopSchemaTestCase
 {
     /**
      * @var BitType
@@ -35,6 +35,7 @@ class BitTypeTest extends SchnoopTestCase
         $this->assertSame(0, $this->bitType->getMinRange());
         $this->assertSame(pow(2, 3), $this->bitType->getMaxRange());
         $this->assertTrue($this->bitType->doesAllowDefault());
+        $this->assertSame("BIT({$this->length})", (string)$this->bitType);
     }
 
     public function testCast()

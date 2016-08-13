@@ -160,8 +160,6 @@ class Column extends AbstractColumn implements ColumnInterface
 
     protected function prepareDDLDefault($default)
     {
-        $default = $this->getDefault();
-
         if (is_array($default)) {
             foreach ($default as $k => $option) {
                 $default[$k] = $this->getDataType()->quote($option);

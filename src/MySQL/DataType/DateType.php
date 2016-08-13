@@ -8,11 +8,11 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteStringTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 class DateType implements DataTypeInterface
 {
-    use QuoteStringTrait;
+    use QuoteTrait;
 
     /**
      * @return string
