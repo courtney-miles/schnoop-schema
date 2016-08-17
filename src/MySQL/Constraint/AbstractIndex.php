@@ -1,8 +1,10 @@
 <?php
 
-namespace MilesAsylum\SchnoopSchema\MySQL\Index;
+namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-abstract class AbstractIndex implements IndexInterface
+use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
+
+abstract class AbstractIndex extends AbstractConstraint implements IndexInterface
 {
     /**
      * @var string
@@ -10,9 +12,9 @@ abstract class AbstractIndex implements IndexInterface
     protected $name;
 
     /**
-     * @var IndexedColumnInterface[]
+     * @var TableInterface
      */
-    protected $indexedColumns;
+    protected $table;
 
     /**
      * @var string
@@ -24,19 +26,11 @@ abstract class AbstractIndex implements IndexInterface
      */
     protected $comment;
 
-    /**
-     * Index constructor.
-     * @param string $name
-     * @param IndexedColumnInterface[] $indexedColumns
-     * @param string $indexType
-     * @param string $comment
-     */
-    public function __construct($name, array $indexedColumns, $indexType, $comment)
+    public function __construct($name, $constraintType, $indexType = null)
     {
-        $this->name = $name;
-        $this->indexedColumns = $indexedColumns;
-        $this->indexType = $indexType;
-        $this->comment = $comment;
+        parent::__construct($name, $constraintType);
+
+        $this->setIndexType($indexType);
     }
 
     public function getName()
@@ -49,14 +43,6 @@ abstract class AbstractIndex implements IndexInterface
         return $this->indexType;
     }
 
-    /**
-     * @return IndexedColumnInterface[]
-     */
-    public function getIndexedColumns()
-    {
-        return $this->indexedColumns;
-    }
-
     public function getComment()
     {
         return $this->comment;
@@ -67,6 +53,12 @@ abstract class AbstractIndex implements IndexInterface
         return (bool)strlen($this->comment);
     }
 
+
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
     protected function makeIndexDDL($type, $name = null, $indexType = null)
     {
         return implode(
@@ -75,7 +67,7 @@ abstract class AbstractIndex implements IndexInterface
                 [
                     strtoupper($type),
                     $name !== null ? '`' . $name . '`' : null,
-                    isset($indexType) ? 'USING ' . $indexType : null,
+//                    isset($indexType) ? 'USING ' . $indexType : null,
                     $this->makeIndexedColumnsDDL(),
                     $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
                 ]
@@ -85,14 +77,19 @@ abstract class AbstractIndex implements IndexInterface
 
     protected function makeIndexedColumnsDDL()
     {
-        $columnNames = [];
+        $columnDDLs = [];
 
         foreach ($this->indexedColumns as $indexedColumn) {
-            $columnNames[] = '`' . $indexedColumn->getColumnName() . '`'
+            $columnDDLs[] = '`' . $indexedColumn->getColumnName() . '`'
                 . ($indexedColumn->hasLength() ? '(' . $indexedColumn->getLength() . ')' : null)
                 . ' ' . strtoupper($indexedColumn->getCollation());
         }
 
-        return '(' . implode(',', $columnNames) . ')';
+        return '(' . implode(',', $columnDDLs) . ')';
+    }
+
+    protected function setIndexType($indexType)
+    {
+        $this->indexType = $indexType;
     }
 }

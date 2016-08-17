@@ -1,19 +1,42 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 19/06/16
- * Time: 4:15 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
-interface ColumnInterface extends \MilesAsylum\SchnoopSchema\ColumnInterface
+use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
+
+interface ColumnInterface
 {
+    public function getName();
+
+    /**
+     * @return DataTypeInterface
+     */
+    public function getDataType();
+
+    /**
+     * @return TableInterface
+     */
+    public function getTable();
+
+    public function setTable(TableInterface $table);
+
+    /**
+     * @return bool
+     */
+    public function hasTable();
+
+    public function __toString();
+
     /**
      * @return boolean
      */
-    public function doesAllowNull();
+    public function isNullable();
+
+    /**
+     * @param bool $nullable
+     */
+    public function setNullable($nullable);
 
     /**
      * @return bool
@@ -25,18 +48,39 @@ interface ColumnInterface extends \MilesAsylum\SchnoopSchema\ColumnInterface
      */
     public function getDefault();
 
+    public function setDefault($default);
+
     /**
      * @return string
      */
     public function getComment();
 
     /**
-     * @return bool|null Returns a boolean if the column is for a numeric data type, otherwise null.
+     * @return bool
      */
-    public function doesZeroFill();
+    public function hasComment();
 
     /**
-     * @return bool|null Returns a boolean if the column is for a numeric data type, otherwise null.
+     * @param string $comment
+     */
+    public function setComment($comment);
+
+    /**
+     * @return bool|null Returns a boolean if the column is for a numeric
+     * data-type, otherwise null for types that do not support this property.
+     */
+    public function isZeroFill();
+
+    /**
+     * @param bool $zeroFill
+     */
+    public function setZeroFill($zeroFill);
+
+    /**
+     * @return bool|null Returns a boolean if the column is for a numeric
+     * data-type, otherwise null for types that do not support this property.
      */
     public function isAutoIncrement();
+
+    public function setAutoIncrement($autoIncrement);
 }

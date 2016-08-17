@@ -33,15 +33,59 @@ class DatabaseTest extends SchnoopSchemaTestCase
     {
         parent::setUp();
 
-        $this->database = new Database($this->name, $this->collation);
+        $this->database = new Database($this->name);
 
         $this->ddl = "CREATE DATABASE `{$this->name}` DEFAULT COLLATE '{$this->collation}'";
     }
 
-    public function testConstructed()
+    public function testName()
     {
         $this->assertSame($this->name, $this->database->getName());
-        $this->assertSame($this->collation, $this->database->getDefaultCollation());
-        $this->assertSame($this->ddl, (string)$this->database);
+    }
+
+    public function testDefaultCollationUndefined()
+    {
+        $this->assertFalse($this->database->hasDefaultCollation());
+        $this->assertNull($this->database->getDefaultCollation());
+    }
+
+    public function testSetDefaultCollation()
+    {
+        $collation = 'utf8_general_ci';
+        $this->database->setDefaultCollation($collation);
+
+        $this->assertTrue($this->database->hasDefaultCollation());
+        $this->assertSame($collation, $this->database->getDefaultCollation());
+    }
+
+    /**
+     * @dataProvider DDLProvider
+     * @param $database
+     * @param $expectedDDL
+     */
+    public function testDDL($database, $expectedDDL)
+    {
+        $this->assertSame($expectedDDL, (string)$database);
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        $dbWithCollation = new Database('foo');
+        $dbWithCollation->setDefaultCollation('utf8_general_ci');
+
+        return [
+            [
+                new Database('foo'),
+                'CREATE DATABASE `foo`;'
+            ],
+            [
+                $dbWithCollation,
+                "CREATE DATABASE `foo` DEFAULT COLLATE 'utf8_general_ci';"
+            ]
+        ];
     }
 }

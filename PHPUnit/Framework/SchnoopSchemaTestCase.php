@@ -3,13 +3,15 @@
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\IntTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericPointTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\StringTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use PHPUnit\Framework\TestCase;
 
 class SchnoopSchemaTestCase extends TestCase
@@ -171,100 +173,18 @@ class SchnoopSchemaTestCase extends TestCase
     }
 
     /**
-     * @param string $expectedName
-     * @param DataTypeInterface|string $expectedDataType
-     * @param bool $expectedAllowNull
-     * @param $expectedHasDefault
-     * @param string $expectedDefault
-     * @param string $expectedComment
-     * @param $expectedZeroFill
-     * @param $expectedAutoIncrement
-     * @param string $expectedDDL
-     * @param ColumnInterface $actualColumn
+     * @param $constraintName
+     * @param $constraintDDL
+     * @return ConstraintInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function columnAsserts(
-        $expectedName,
-        $expectedDataType,
-        $expectedAllowNull,
-        $expectedHasDefault,
-        $expectedDefault,
-        $expectedComment,
-        $expectedZeroFill,
-        $expectedAutoIncrement,
-        $expectedDDL,
-        ColumnInterface $actualColumn
-    ) {
-        $this->assertSame($expectedName, $actualColumn->getName());
-        $this->assertSame($expectedDataType, $actualColumn->getDataType());
-        $this->assertSame($expectedAllowNull, $actualColumn->doesAllowNull());
-        $this->assertSame($expectedHasDefault, $actualColumn->hasDefault());
-        $this->assertSame($expectedDefault, $actualColumn->getDefault());
-        $this->assertSame($expectedComment, $actualColumn->getComment());
-        $this->assertSame($expectedZeroFill, $actualColumn->doesZeroFill());
-        $this->assertSame($expectedAutoIncrement, $actualColumn->isAutoIncrement());
-        $this->assertSame($expectedDDL, (string)$actualColumn);
-    }
+    protected function createMockConstraint($constraintName, $constraintDDL)
+    {
+        $mockConstraint = $this->createMock(ConstraintInterface::class);
+        $mockConstraint->method('getName')
+            ->willReturn($constraintName);
+        $mockConstraint->method('__toString')
+            ->willReturn($constraintDDL);
 
-    /**
-     * @param string $expectedName
-     * @param string $expectedType
-     * @param ColumnInterface[] $expectedIndexedColumns
-     * @param string $expectedIndexType
-     * @param string $expectedComment
-     * @param bool $expectedHasComment
-     * @param string $expectedDDL
-     * @param IndexInterface $actualIndex
-     */
-    public function indexAsserts(
-        $expectedName,
-        $expectedType,
-        array $expectedIndexedColumns,
-        $expectedIndexType,
-        $expectedComment,
-        $expectedHasComment,
-        $expectedDDL,
-        IndexInterface $actualIndex
-    ) {
-        $this->assertSame(
-            $expectedName,
-            $actualIndex->getName(),
-            'Index name is not what is expected.'
-        );
-        $this->assertSame(
-            $expectedIndexedColumns,
-            $actualIndex->getIndexedColumns(),
-            'Indexed columns are not what is expected.'
-        );
-        $this->assertSame(
-            $expectedIndexType,
-            $actualIndex->getIndexType(),
-            'Index type is not what is expected.'
-        );
-        $this->assertSame(
-            $expectedComment,
-            $actualIndex->getComment(),
-            'Index comment is not what is expected.'
-        );
-        $this->assertSame(
-            $expectedHasComment,
-            $actualIndex->hasComment(),
-            'Index having a comment is not what is expected.'
-        );
-
-        if ($expectedType !== null) {
-            $this->assertSame(
-                $expectedType,
-                $actualIndex->getType(),
-                'Index type is not what is expected.'
-            );
-        }
-
-        if ($expectedDDL !== null) {
-            $this->assertSame(
-                $expectedDDL,
-                (string)$actualIndex,
-                'Index DDL is not what is expected.'
-            );
-        }
+        return $mockConstraint;
     }
 }

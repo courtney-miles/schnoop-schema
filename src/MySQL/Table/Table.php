@@ -8,12 +8,23 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
-use MilesAsylum\SchnoopSchema\AbstractTable;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 
-class Table extends AbstractTable implements TableInterface
+class Table implements TableInterface
 {
+    protected $name;
+
+    /**
+     * @var ColumnInterface[]
+     */
+    protected $columns = array();
+
+    /**
+     * @var ConstraintInterface[]
+     */
+    protected $constraints = [];
+
     protected $engine;
 
     protected $defaultCollation;
@@ -25,36 +36,103 @@ class Table extends AbstractTable implements TableInterface
      */
     protected $comment;
 
-    /**
-     * @var array|\MilesAsylum\SchnoopSchema\MySQL\Index\IndexInterface[]
-     */
-    protected $indexes;
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
 
     /**
-     * Table constructor.
-     * @param string $name
-     * @param ColumnInterface[] $columns
-     * @param IndexInterface[] $indexes
-     * @param string $engine
-     * @param string $rowFormat
-     * @param string $collation
-     * @param string $comment
+     * @return mixed
      */
-    public function __construct(
-        $name,
-        array $columns,
-        array $indexes,
-        $engine = null,
-        $rowFormat = null,
-        $collation = null,
-        $comment = null
-    ) {
-        parent::__construct($name, $columns, $indexes);
-        $this->setEngine($engine);
-        $this->setDefaultCollation($collation);
-        $this->setRowFormat($rowFormat);
-        $this->setComment($comment);
-        $this->setIndexes($indexes);
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getColumnList()
+    {
+        return array_keys($this->columns);
+    }
+
+    /**
+     * @return AbstractColumn[]
+     */
+    public function getColumns()
+    {
+        return array_values($this->columns);
+    }
+
+    public function hasColumn($columnName)
+    {
+        return isset($this->columns[$columnName]);
+    }
+
+    public function getColumn($columnName)
+    {
+        return $this->hasColumn($columnName) ? $this->columns[$columnName] : null;
+    }
+
+    public function setColumns(array $columns)
+    {
+        $this->columns = [];
+
+        foreach ($columns as $column) {
+            $this->addColumn($column);
+        }
+    }
+
+    /**
+     * @param ColumnInterface $column
+     */
+    public function addColumn(ColumnInterface $column)
+    {
+        $column->setTable($this);
+        $this->columns[$column->getName()] = $column;
+    }
+
+    public function getConstraintList()
+    {
+        return array_keys($this->constraints);
+    }
+
+    public function getConstraints()
+    {
+        return array_values($this->constraints);
+    }
+
+    public function hasConstraint($constraintName)
+    {
+        return isset($this->constraints[$constraintName]);
+    }
+
+    public function getConstraint($constraintName)
+    {
+        return $this->hasConstraint($constraintName) ? $this->constraints[$constraintName] : null;
+    }
+
+    public function setConstraints(array $constraints)
+    {
+        $this->constraints = [];
+
+        foreach ($constraints as $index) {
+            $this->addConstraint($index);
+        }
+    }
+
+    public function addConstraint(ConstraintInterface $constraint)
+    {
+        $constraint->setTable($this);
+        $this->constraints[$constraint->getName()] = $constraint;
+    }
+
+    public function hasPrimaryKey()
+    {
+        return $this->hasConstraint('PRIMARY');
+    }
+
+    public function getPrimaryKey()
+    {
+        return $this->getConstraint('PRIMARY');
     }
 
     /**
@@ -71,6 +149,14 @@ class Table extends AbstractTable implements TableInterface
     }
 
     /**
+     * @param mixed $engine
+     */
+    public function setEngine($engine)
+    {
+        $this->engine = $engine;
+    }
+
+    /**
      * @return mixed
      */
     public function getDefaultCollation()
@@ -81,6 +167,14 @@ class Table extends AbstractTable implements TableInterface
     public function hasDefaultCollation()
     {
         return !empty($this->defaultCollation);
+    }
+
+    /**
+     * @param mixed $defaultCollation
+     */
+    public function setDefaultCollation($defaultCollation)
+    {
+        $this->defaultCollation = $defaultCollation;
     }
 
     /**
@@ -96,6 +190,15 @@ class Table extends AbstractTable implements TableInterface
         return !empty($this->rowFormat);
     }
 
+
+    /**
+     * @param mixed $rowFormat
+     */
+    public function setRowFormat($rowFormat)
+    {
+        $this->rowFormat = $rowFormat;
+    }
+
     /**
      * @return mixed
      */
@@ -106,19 +209,27 @@ class Table extends AbstractTable implements TableInterface
 
     public function hasComment()
     {
-        return strlen($this->comment);
+        return (bool)strlen($this->comment);
+    }
+
+    /**
+     * @param mixed $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
     }
 
     public function __toString()
     {
         $columnDefinitions = [];
         foreach ($this->getColumns() as $column) {
-            $columnDefinitions[] = (string)$column;
+            $columnDefinitions[] = '  '.(string)$column;
         }
 
         $indexDefinitions = [];
-        foreach ($this->getIndexes() as $index) {
-            $indexDefinitions[] = (string)$index;
+        foreach ($this->getConstraints() as $index) {
+            $indexDefinitions[] = '  '.(string)$index;
         }
 
         $tableOptions = array_filter(
@@ -130,42 +241,19 @@ class Table extends AbstractTable implements TableInterface
             ]
         );
 
-        return 'CREATE TABLE `' . $this->name . "` (\n    "
-            . implode(",\n    ", array_merge($columnDefinitions, $indexDefinitions))
-            . "\n)\n"
-            . implode("\n", $tableOptions)
-            . ';';
-    }
-
-    /**
-     * @param mixed $engine
-     */
-    protected function setEngine($engine)
-    {
-        $this->engine = $engine;
-    }
-
-    /**
-     * @param mixed $defaultCollation
-     */
-    protected function setDefaultCollation($defaultCollation)
-    {
-        $this->defaultCollation = $defaultCollation;
-    }
-
-    /**
-     * @param mixed $rowFormat
-     */
-    protected function setRowFormat($rowFormat)
-    {
-        $this->rowFormat = $rowFormat;
-    }
-
-    /**
-     * @param mixed $comment
-     */
-    protected function setComment($comment)
-    {
-        $this->comment = $comment;
+        return implode(
+            "\n",
+            array_filter(
+                [
+                    'CREATE TABLE `' . $this->name . "` (",
+                    implode(
+                        ",\n",
+                        array_merge($columnDefinitions, $indexDefinitions)
+                    ),
+                    ')',
+                    implode("\n", $tableOptions),
+                ]
+            )
+        ) . ';';
     }
 }

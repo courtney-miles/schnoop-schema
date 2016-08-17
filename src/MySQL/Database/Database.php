@@ -11,8 +11,10 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 use MilesAsylum\SchnoopSchema\AbstractDatabase;
 use MilesAsylum\Schnoop\Schnoop;
 
-class Database extends AbstractDatabase implements DatabaseInterface
+class Database implements DatabaseInterface
 {
+    protected $name;
+
     /**
      * @var string
      */
@@ -22,17 +24,15 @@ class Database extends AbstractDatabase implements DatabaseInterface
      * @var string
      */
     protected $defaultCollation;
-    
-    /**
-     * @var Schnoop
-     */
-    protected $schnoop;
 
-    public function __construct($name, $collation = null)
+    public function __construct($name)
     {
-        parent::__construct($name);
+        $this->name = $name;
+    }
 
-        $this->setDefaultCollation($collation);
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -48,17 +48,15 @@ class Database extends AbstractDatabase implements DatabaseInterface
         return !empty($this->defaultCollation);
     }
 
+    public function setDefaultCollation($defaultCollation)
+    {
+        $this->defaultCollation = $defaultCollation;
+    }
+
     public function __toString()
     {
         return "CREATE DATABASE `$this->name`"
-            . ($this->hasDefaultCollation() ? " DEFAULT COLLATE '{$this->getDefaultCollation()}'" : null);
-    }
-
-    /**
-     * @param string $collation
-     */
-    protected function setDefaultCollation($collation)
-    {
-        $this->defaultCollation = $collation;
+            . ($this->hasDefaultCollation() ? " DEFAULT COLLATE '{$this->getDefaultCollation()}'" : null)
+            . ';';
     }
 }

@@ -1,23 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 19/06/16
- * Time: 3:52 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
 use MilesAsylum\SchnoopSchema\AbstractColumn;
+use MilesAsylum\SchnoopSchema\Exception\ColumnException;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
-/**
- * Class Column
- * @package MilesAsylum\SchnoopSchema\MySQL\Column
- * @method DataTypeInterface getDataType
- */
-class Column extends AbstractColumn implements ColumnInterface
+class Column implements ColumnInterface
 {
     /**
      * @var string
@@ -25,9 +16,19 @@ class Column extends AbstractColumn implements ColumnInterface
     protected $name;
 
     /**
+     * @var DataTypeInterface
+     */
+    protected $dataType;
+
+    /**
+     * @var TableInterface
+     */
+    protected $table;
+
+    /**
      * @var bool
      */
-    protected $allowNull;
+    protected $nullable = false;
 
     /**
      * @var mixed
@@ -49,32 +50,70 @@ class Column extends AbstractColumn implements ColumnInterface
      */
     protected $autoIncrement;
 
-    public function __construct(
-        $name,
-        DataTypeInterface $dataType,
-        $allowNull,
-        $default,
-        $comment,
-        $zeroFill = null,
-        $autoIncrement = null
-    ) {
-        parent::__construct($name, $dataType);
-        $this->allowNull = $allowNull;
-        $this->setDefault($default);
-        $this->comment = $comment;
+    public function __construct($name, DataTypeInterface $dataType)
+    {
+        $this->name = $name;
+        $this->dataType = $dataType;
 
         if ($this->dataType instanceof NumericTypeInterface) {
-            $this->zeroFill = isset($zeroFill) ? (bool)$zeroFill : false;
-            $this->autoIncrement = isset($autoIncrement) ? (bool)$autoIncrement : false;
+            $this->zeroFill = false;
+            $this->autoIncrement = false;
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    public function setTable(TableInterface $table)
+    {
+        if (isset($this->table)) {
+            throw new ColumnException(
+                sprintf(
+                    'Attempt made to attach column %s to table %s when it is already attached to %s',
+                    $this->getName(),
+                    $table->getName(),
+                    $this->table->getName()
+                )
+            );
+        }
+
+        $this->table = $table;
+    }
+
+    public function hasTable()
+    {
+        return isset($this->table);
+    }
+
+    /**
+     * @return DataTypeInterface
+     */
+    public function getDataType()
+    {
+        return $this->dataType;
     }
 
     /**
      * @return boolean
      */
-    public function doesAllowNull()
+    public function isNullable()
     {
-        return $this->allowNull;
+        return $this->nullable;
+    }
+
+    public function setNullable($nullable)
+    {
+        $this->nullable = $nullable;
     }
 
     public function hasDefault()
@@ -83,13 +122,36 @@ class Column extends AbstractColumn implements ColumnInterface
             return false;
         }
 
-        return $this->default !== null || $this->doesAllowNull();
+        return $this->default !== null || $this->isNullable();
     }
 
     public function getDefault()
     {
         return $this->default;
     }
+
+    public function setDefault($default)
+    {
+        if ($default !== null && !$this->getDataType()->doesAllowDefault()) {
+            trigger_error(
+                'Unable to set default value for the column as the data-type does not support a default.',
+                E_USER_WARNING
+            );
+
+            $default = null;
+        }
+
+        if (is_array($default)) {
+            foreach ($default as $k => $v) {
+                $default[$k] = $this->getDataType()->cast($v);
+            }
+        } elseif ($default !== null) {
+            $default = $this->getDataType()->cast($default);
+        }
+
+        $this->default = $default;
+    }
+
 
     /**
      * @return string
@@ -104,34 +166,49 @@ class Column extends AbstractColumn implements ColumnInterface
         return (bool)strlen($this->comment);
     }
 
-    protected function setDefault($default)
+    public function setComment($comment)
     {
-        if ($default !== null && !$this->getDataType()->doesAllowDefault()) {
-            trigger_error(
-                'Attempt made to set a default value for a data-type that does not support a default. The supplied default value has been ignored.',
-                E_USER_WARNING
-            );
-            
-            $default = null;
-        }
-
-        $this->default = $default !== null ? $this->getDataType()->cast($default) : $default;
+        $this->comment = $comment;
     }
 
     /**
-     * @return boolean
+     * @return boolean|null
      */
-    public function doesZeroFill()
+    public function isZeroFill()
     {
         return $this->zeroFill;
     }
 
+    public function setZeroFill($zeroFill)
+    {
+        if ($this->dataType instanceof NumericTypeInterface) {
+            $this->zeroFill = $zeroFill;
+        } else {
+            trigger_error(
+                "Unable to set zero-fill property on the column as its data-type does not support it.",
+                E_USER_WARNING
+            );
+        }
+    }
+
     /**
-     * @return boolean
+     * @return boolean|null
      */
     public function isAutoIncrement()
     {
         return $this->autoIncrement;
+    }
+
+    public function setAutoIncrement($autoIncrement)
+    {
+        if ($this->dataType instanceof NumericTypeInterface) {
+            $this->autoIncrement = $autoIncrement;
+        } else {
+            trigger_error(
+                "Unable to set autoincrement property on the column as its data-type does not support it.",
+                E_USER_WARNING
+            );
+        }
     }
 
     public function __toString()
@@ -148,8 +225,8 @@ class Column extends AbstractColumn implements ColumnInterface
                 [
                     '`' . $this->getName() . '`',
                     (string)$this->getDataType(),
-                    $this->doesZeroFill() ? 'ZEROFILL' : null,
-                    $this->allowNull ? 'NULL' : 'NOT NULL',
+                    $this->isZeroFill() ? 'ZEROFILL' : null,
+                    $this->nullable ? 'NULL' : 'NOT NULL',
                     $this->hasDefault() ? 'DEFAULT ' . $default : null,
                     $this->isAutoIncrement() ? 'AUTO_INCREMENT' : null,
                     $this->hasComment() ? sprintf("COMMENT '%s'", addslashes($this->getComment())) : null

@@ -8,11 +8,15 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
-interface DatabaseInterface extends \MilesAsylum\SchnoopSchema\DatabaseInterface
+interface DatabaseInterface
 {
+    public function getName();
+
     public function getDefaultCollation();
 
     public function hasDefaultCollation();
+
+    public function setDefaultCollation($defaultCollation);
 
     public function __toString();
 }

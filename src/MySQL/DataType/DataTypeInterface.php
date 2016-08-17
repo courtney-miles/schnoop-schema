@@ -8,7 +8,7 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-interface DataTypeInterface extends \MilesAsylum\SchnoopSchema\DataTypeInterface
+interface DataTypeInterface
 {
     const TYPE_BOOL = 'bool';
 
@@ -52,6 +52,13 @@ interface DataTypeInterface extends \MilesAsylum\SchnoopSchema\DataTypeInterface
     const TYPE_YEAR = 'year';
 
     /**
+     * @return string
+     */
+    public function getType();
+
+    public function __toString();
+
+    /**
      * @return bool
      */
     public function doesAllowDefault();
@@ -64,7 +71,8 @@ interface DataTypeInterface extends \MilesAsylum\SchnoopSchema\DataTypeInterface
     public function cast($value);
 
     /**
-     * Quotes a value, based on the type, for use in a DDL statement. Do not believe for a second that this will make queries safe.
+     * Quotes a value, based on the type, for use in a DDL statement. Do not
+     * believe for a second that this will make your queries safe.
      * @param $value
      * @return mixed
      */
