@@ -20,15 +20,6 @@ abstract class AbstractBinaryType implements BinaryTypeInterface
     private $length;
 
     /**
-     * AbstractBinaryType constructor.
-     * @param int $length
-     */
-    public function __construct($length)
-    {
-        $this->setLength($length);
-    }
-
-    /**
      * @return int
      */
     public function getLength()
@@ -36,12 +27,22 @@ abstract class AbstractBinaryType implements BinaryTypeInterface
         return $this->length;
     }
 
+    public function hasLength()
+    {
+        return !empty($this->length);
+    }
+
     /**
      * @param int $length
      */
-    protected function setLength($length)
+    public function setLength($length)
     {
         $this->length = (int)$length;
+    }
+
+    public function doesAllowDefault()
+    {
+        return true;
     }
 
     public function cast($value)

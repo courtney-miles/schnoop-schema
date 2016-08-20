@@ -4,6 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKey;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
@@ -42,7 +43,7 @@ class ForeignKeyTest extends ConstraintTestCase
 
     protected function getConstraintType()
     {
-        return ConstraintInterface::CONSTRAINT_FOREIGN;
+        return ConstraintInterface::CONSTRAINT_FOREIGN_KEY;
     }
 
     public function testInitialProperties()
@@ -84,5 +85,36 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertTrue($this->foreignKey->hasReferenceTable());
         $this->assertSame($mockReferenceTable, $this->foreignKey->getReferenceTable());
         $this->assertSame($referenceColumnNames, $this->foreignKey->getReferenceColumnNames());
+    }
+
+    public function testDDL()
+    {
+        $expectedDDL = <<<SQL
+CONSTRAINT `{$this->constraintName}` FOREIGN KEY (`col_a`,`col_b`) REFERENCES `ref_tbl` (`ref_col_a`,`ref_col_b`) ON DELETE RESTRICT ON UPDATE RESTRICT
+SQL;
+
+        $indexedColumnA = $this->createMock(IndexedColumn::class);
+        $indexedColumnA->method('getColumnName')->willReturn('col_a');
+        $indexedColumnB = $this->createMock(IndexedColumn::class);
+        $indexedColumnB->method('getColumnName')->willReturn('col_b');
+
+        $indexedColumns = [
+            $indexedColumnA,
+            $indexedColumnB
+        ];
+
+        $this->foreignKey->setIndexedColumns($indexedColumns);
+
+        $mockReferenceTable = $this->createMock(TableInterface::class);
+        $mockReferenceTable->method('getName')->willReturn('ref_tbl');
+
+        $referenceColumnNames = [
+            'ref_col_a',
+            'ref_col_b'
+        ];
+
+        $this->foreignKey->setReferenceColumns($mockReferenceTable, $referenceColumnNames);
+
+        $this->assertSame($expectedDDL, (string)$this->foreignKey);
     }
 }

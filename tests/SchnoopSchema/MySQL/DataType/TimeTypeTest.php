@@ -2,58 +2,37 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
 
-class TimeTypeTest extends SchnoopSchemaTestCase
+class TimeTypeTest extends TimeTypeTestCase
 {
     /**
-     * @dataProvider timeTypeProvider
-     * @param int $expectedPrecision
-     * @param string $expectedDDL
-     * @param TimeType $actualTimeType
+     * @var TimeType
      */
-    public function testConstruct(
-        $expectedPrecision,
-        $expectedDDL,
-        TimeType $actualTimeType
-    ) {
-        $this->timeTypeAsserts(
-            DataTypeInterface::TYPE_TIME,
-            $expectedPrecision,
-            true,
-            $expectedDDL,
-            $actualTimeType
-        );
+    protected $timeType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->timeType = new TimeType();
     }
 
-    public function testCast()
+    protected function getTimeType()
     {
-        $time = '11:59';
-        $timeType = new TimeType();
-
-        $this->assertSame($time, $timeType->cast($time));
+        return $this->timeType;
     }
 
-    /**
-     * @see testConstruct
-     */
-    public function timeTypeProvider()
+    protected function createTimeType()
     {
-        $precision = 3;
+        return new TimeType();
+    }
 
-        return [
-            [
-                0,
-                'TIME',
-                new TimeType()
-            ],
-            [
-                $precision,
-                "TIME($precision)",
-                new TimeType($precision)
-            ]
-        ];
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_TIME, $this->timeType->getType());
     }
 }

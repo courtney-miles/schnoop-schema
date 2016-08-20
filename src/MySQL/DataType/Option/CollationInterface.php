@@ -14,4 +14,8 @@ interface CollationInterface
      * @return string
      */
     public function getCollation();
+
+    public function hasCollation();
+
+    public function setCollation($collation);
 }

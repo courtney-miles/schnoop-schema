@@ -12,5 +12,4 @@ use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleInterface;
 
 interface NumericPointTypeInterface extends NumericTypeInterface, PrecisionScaleInterface
 {
-
 }

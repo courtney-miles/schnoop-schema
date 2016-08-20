@@ -2,42 +2,38 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\OptionsTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
 
-class SetTypeTest extends SchnoopSchemaTestCase
+class SetTypeTest extends OptionsTypeTestCase
 {
     /**
      * @var SetType
      */
     protected $setType;
 
-    protected $options = [
-        'foo',
-        'bar'
-    ];
-
-    protected $charSet = 'utf8';
-
-    protected $collation = 'utf8_general_ci';
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->setType = new SetType(
-            $this->options,
-            $this->collation
-        );
+        $this->setType = new SetType();
     }
 
-    public function testConstruct()
+    public function getOptionsType()
     {
+        return $this->setType;
+    }
+
+    public function createOptionsType()
+    {
+        return new SetType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_SET, $this->setType->getType());
-        $this->assertSame($this->options, $this->setType->getOptions());
-        $this->assertSame($this->collation, $this->setType->getCollation());
-        $this->assertTrue($this->setType->doesAllowDefault());
     }
 
     public function testCast()

@@ -2,90 +2,45 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\FloatType;
 
-class FloatTypeTest extends SchnoopSchemaTestCase
+class FloatTypeTest extends NumericPointTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider
-     * @param bool $expectedIsSigned
-     * @param int|null $expectedPrecision
-     * @param int|null $expectedScale
-     * @param string|null $expectedMinRange
-     * @param string|null $expectedMaxRange
-     * @param string $expectedDDL
-     * @param FloatType $actualFloatType
+     * @var FloatType
      */
-    public function testConstructed(
-        $expectedIsSigned,
-        $expectedPrecision,
-        $expectedScale,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        $actualFloatType
-    ) {
-        $this->numericPointTypeAsserts(
-            DataTypeInterface::TYPE_FLOAT,
-            $expectedIsSigned,
-            $expectedPrecision,
-            $expectedScale,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualFloatType
-        );
+    protected $floatType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->floatType = new FloatType();
+    }
+
+    protected function getNumericPointType()
+    {
+        return $this->floatType;
+    }
+
+    protected function createNumericPointType()
+    {
+        return new FloatType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_FLOAT, $this->floatType->getType());
     }
 
     public function testCast()
     {
-        $floatType = new FloatType(true);
+        $floatType = new FloatType();
 
-        $this->assertSame(123.23, $floatType->cast('123.23'));
-    }
-
-    /**
-     * @see testConstructed
-     * @return array
-     */
-    public function constructedProvider()
-    {
-        $signed = true;
-        $notSigned = false;
-        $precision = 6;
-        $scale = 2;
-
-        return [
-            [
-                $signed,
-                $precision,
-                $scale,
-                '-9999.99',
-                '9999.99',
-                "FLOAT($precision,$scale)",
-                new FloatType($signed, $precision, $scale)
-            ],
-            [
-                $notSigned,
-                $precision,
-                $scale,
-                '0',
-                '9999.99',
-                "FLOAT($precision,$scale) UNSIGNED",
-                new FloatType($notSigned, $precision, $scale)
-            ],
-            [
-                $signed,
-                null,
-                null,
-                null,
-                null,
-                'FLOAT',
-                new FloatType($signed)
-            ]
-        ];
+        $this->assertSame(123.45, $floatType->cast(123.45));
     }
 }

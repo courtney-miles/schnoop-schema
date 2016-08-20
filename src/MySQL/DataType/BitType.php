@@ -9,23 +9,20 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\LengthTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 class BitType implements BitTypeInterface
 {
     use LengthTrait;
-    use NumericRangeTrait;
     use QuoteTrait;
 
     const MAX_LENGTH = 64;
 
-    public function __construct($length)
+    public function __construct($length = 1)
     {
         $this->setLength($length);
-        $this->setRange(0, pow(2, $length));
     }
-    
+
     /**
      * @return string
      */
@@ -39,7 +36,18 @@ class BitType implements BitTypeInterface
         return true;
     }
 
+    public function getMinRange()
+    {
+        return 0;
+    }
+
+    public function getMaxRange()
+    {
+        return pow(2, $this->length)-1;
+    }
+
     /**
+     * @param mixed $value
      * @return mixed
      */
     public function cast($value)

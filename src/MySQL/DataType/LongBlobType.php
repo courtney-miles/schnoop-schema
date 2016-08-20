@@ -12,11 +12,6 @@ class LongBlobType extends AbstractBlobType
 {
     const LENGTH = 4294967295;
 
-    public function __construct()
-    {
-        parent::__construct(self::LENGTH);
-    }
-
     /**
      * @return string
      */

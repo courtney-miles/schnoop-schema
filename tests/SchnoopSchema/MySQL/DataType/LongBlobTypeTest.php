@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 26/06/16
- * Time: 6:11 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\LongBlobType;
 
-class LongBlobTypeTest extends SchnoopSchemaTestCase
+class LongBlobTypeTest extends DataTypeTestCase
 {
     /**
      * @var LongBlobType
@@ -26,19 +20,26 @@ class LongBlobTypeTest extends SchnoopSchemaTestCase
         $this->longBlobType = new LongBlobType();
     }
 
-    public function testConstruct()
+    public function testInitialProperties()
     {
-        $this->binaryTypeAsserts(
-            DataTypeInterface::TYPE_LONGBLOB,
-            pow(2, 32)-1,
-            false,
-            'LONGBLOB',
-            $this->longBlobType
-        );
+        $this->assertSame(DataTypeInterface::TYPE_LONGBLOB, $this->longBlobType->getType());
+        $this->assertFalse($this->longBlobType->doesAllowDefault());
     }
 
     public function testCast()
     {
         $this->assertSame('123', $this->longBlobType->cast(123));
+    }
+
+    public function DDLProvider()
+    {
+        $longBlobType = new LongBlobType();
+
+        return [
+            [
+                'LONGBLOB',
+                $longBlobType
+            ]
+        ];
     }
 }

@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 20/06/16
- * Time: 4:41 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-class CharType extends AbstractStringType
+class CharType extends AbstractCharType
 {
     const MAX_LENGTH = 255;
 
-    public function __construct($length, $collation = null)
+    public function __construct($length = 1)
     {
-        parent::__construct($length, $collation);
+        $this->setLength($length);
     }
 
     /**
@@ -23,10 +17,5 @@ class CharType extends AbstractStringType
     public function getType()
     {
         return self::TYPE_CHAR;
-    }
-    
-    public function doesAllowDefault()
-    {
-        return true;
     }
 }

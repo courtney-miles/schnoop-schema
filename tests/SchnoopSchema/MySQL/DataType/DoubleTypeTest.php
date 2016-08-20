@@ -2,90 +2,37 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DoubleType;
 
-class DoubleTypeTest extends SchnoopSchemaTestCase
+class DoubleTypeTest extends NumericPointTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider
-     * @param bool $expectedIsSigned
-     * @param int|null $expectedPrecision
-     * @param int|null $expectedScale
-     * @param string|null $expectedMinRange
-     * @param string|null $expectedMaxRange
-     * @param string $expectedDDL
-     * @param DoubleType $actualDecimalType
+     * @var DoubleType
      */
-    public function testConstructed(
-        $expectedIsSigned,
-        $expectedPrecision,
-        $expectedScale,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        $actualDecimalType
-    ) {
-        $this->numericPointTypeAsserts(
-            DataTypeInterface::TYPE_DOUBLE,
-            $expectedIsSigned,
-            $expectedPrecision,
-            $expectedScale,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualDecimalType
-        );
+    protected $doubleType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->doubleType = new DoubleType();
+    }
+
+    protected function getNumericPointType()
+    {
+        return $this->doubleType;
+    }
+
+    protected function createNumericPointType()
+    {
+        return new DoubleType();
     }
 
     public function testCast()
     {
-        $doubleType = new DoubleType(true);
+        $doubleType = new DoubleType();
 
-        $this->assertSame(123.23, $doubleType->cast('123.23'));
-    }
-
-    /**
-     * @see testConstructed
-     * @return array
-     */
-    public function constructedProvider()
-    {
-        $signed = true;
-        $notSigned = false;
-        $precision = 6;
-        $scale = 2;
-
-        return [
-            [
-                $signed,
-                $precision,
-                $scale,
-                '-9999.99',
-                '9999.99',
-                "DOUBLE($precision,$scale)",
-                new DoubleType($signed, $precision, $scale)
-            ],
-            [
-                $notSigned,
-                $precision,
-                $scale,
-                '0',
-                '9999.99',
-                "DOUBLE($precision,$scale) UNSIGNED",
-                new DoubleType($notSigned, $precision, $scale)
-            ],
-            [
-                $signed,
-                null,
-                null,
-                null,
-                null,
-                "DOUBLE",
-                new DoubleType($signed)
-            ]
-        ];
+        $this->assertSame(123.45, $doubleType->cast(123.45));
     }
 }

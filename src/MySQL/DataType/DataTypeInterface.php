@@ -73,7 +73,8 @@ interface DataTypeInterface
     /**
      * Quotes a value, based on the type, for use in a DDL statement. Do not
      * believe for a second that this will make your queries safe.
-     * @param $value
+     * @param string|float|int $value The value to quote. If you are passing
+     * a number and you need it quoted, cast it to a string.
      * @return mixed
      */
     public function quote($value);

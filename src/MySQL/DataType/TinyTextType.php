@@ -6,11 +6,6 @@ class TinyTextType extends AbstractTextType
 {
     const LENGTH = 255;
 
-    public function __construct($collation = null)
-    {
-        parent::__construct(self::LENGTH, $collation);
-    }
-
     /**
      * @return string
      */

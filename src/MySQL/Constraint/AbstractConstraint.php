@@ -49,12 +49,6 @@ abstract class AbstractConstraint implements ConstraintInterface
 
     public function setTable(TableInterface $table)
     {
-        if (!($table instanceof MySQLTableInterface)) {
-            throw new DBMSMismatchException(
-                "Supplied table object is not for the MySQL DBMS."
-            );
-        }
-
 //        foreach ($this->indexedColumns as $indexedColumn) {
 //            if (!$table->hasColumn($indexedColumn->getColumnName())) {
 //                throw new UnknownColumnException(

@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 23/06/16
- * Time: 7:35 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BlobType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class BlobTypeTest extends SchnoopSchemaTestCase
+class BlobTypeTest extends DataTypeTestCase
 {
     /**
      * @var BlobType
@@ -26,19 +20,26 @@ class BlobTypeTest extends SchnoopSchemaTestCase
         $this->blobType = new BlobType();
     }
 
-    public function testConstruct()
+    public function testInitialProperties()
     {
-        $this->binaryTypeAsserts(
-            DataTypeInterface::TYPE_BLOB,
-            pow(2, 16)-1,
-            false,
-            'BLOB',
-            $this->blobType
-        );
+        $this->assertSame(DataTypeInterface::TYPE_BLOB, $this->blobType->getType());
+        $this->assertFalse($this->blobType->doesAllowDefault());
     }
 
     public function testCast()
     {
         $this->assertSame('123', $this->blobType->cast(123));
+    }
+
+    public function DDLProvider()
+    {
+        $blobType = new BlobType();
+
+        return [
+            [
+                'BLOB',
+                $blobType
+            ]
+        ];
     }
 }

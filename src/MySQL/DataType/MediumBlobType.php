@@ -12,11 +12,6 @@ class MediumBlobType extends AbstractBlobType
 {
     const LENGTH = 16777215;
 
-    public function __construct()
-    {
-        parent::__construct(self::LENGTH);
-    }
-
     /**
      * @return string
      */

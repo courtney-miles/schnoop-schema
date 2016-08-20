@@ -23,10 +23,15 @@ trait DisplayWidthTrait
         return $this->displayWidth;
     }
 
+    public function hasDisplayWidth()
+    {
+        return !empty($this->displayWidth);
+    }
+
     /**
      * @param int $displayWidth
      */
-    protected function setDisplayWidth($displayWidth)
+    public function setDisplayWidth($displayWidth)
     {
         $this->displayWidth = (int)$displayWidth;
     }

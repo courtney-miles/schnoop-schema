@@ -2,78 +2,50 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBlobType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTextType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractTextTypeTest extends SchnoopSchemaTestCase
+class AbstractTextTypeTest extends TextTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param string $type
-     * @param int $length
-     * @param string $collation
-     * @param string $expectedDDL
+     * @var AbstractBlobType
      */
-    public function testConstructed(
-        $type,
-        $length,
-        $collation,
-        $expectedDDL
-    ) {
-        $abstractTextType = $this->createMockAbstractTextType($type, $length, $collation);
+    protected $abstractTextType;
 
-        $this->stringTypeAsserts(
-            $type,
-            $length,
-            $collation,
-            false,
-            $expectedDDL,
-            $abstractTextType
-        );
-    }
+    protected $type = 'foo';
 
-    /**
-     * @see testConstructed()
-     * @return array
-     */
-    public function constructedProvider()
+    public function setUp()
     {
-        $type = 'foo';
-        $length = 128;
-        $collation = 'utf8_general_ci';
+        parent::setUp();
 
-        return [
-            [
-                $type,
-                $length,
-                $collation,
-                "FOO COLLATE '$collation'"
-            ],
-            [
-                $type,
-                $length,
-                null,
-                "FOO"
-            ]
-        ];
+        $this->abstractTextType = $this->createMockAbstractTextType($this->type);
+    }
+
+    protected function getTextType()
+    {
+        return $this->abstractTextType;
+    }
+
+    protected function createTextType()
+    {
+        return $this->createMockAbstractTextType($this->type);
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame($this->type, $this->abstractTextType->getType());
     }
 
     /**
      * @param string $type
-     * @param int $length
-     * @param string $collation
      * @return AbstractTextType|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createMockAbstractTextType($type, $length, $collation)
+    protected function createMockAbstractTextType($type)
     {
-        $abstractTextType = $this->getMockForAbstractClass(
-            AbstractTextType::class,
-            [
-                $length,
-                $collation
-            ]
-        );
+        $abstractTextType = $this->getMockForAbstractClass(AbstractTextType::class);
 
         $abstractTextType->method('getType')
             ->willReturn($type);

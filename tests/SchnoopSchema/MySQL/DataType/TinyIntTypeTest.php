@@ -2,73 +2,67 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TinyIntType;
 
-class TinyIntTypeTest extends SchnoopSchemaTestCase
+class TinyIntTypeTest extends IntTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedDisplayWidth
-     * @param bool $expectedIsSigned
-     * @param int $expectedMinRange
-     * @param int $expectedMaxRange
-     * @param string $expectedDDL
-     * @param TinyIntType $actualTinyIntType
+     * @var TinyIntType
      */
-    public function testConstructed(
-        $expectedDisplayWidth,
-        $expectedIsSigned,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        TinyIntType $actualTinyIntType
-    ) {
-        $this->intTypeAsserts(
-            DataTypeInterface::TYPE_TINYINT,
-            $expectedDisplayWidth,
-            $expectedIsSigned,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualTinyIntType
-        );
+    protected $tinyIntType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->tinyIntType = new TinyIntType();
     }
 
-    public function testCast()
+    protected function getIntType()
     {
-        $tinyIntType = new TinyIntType(2, true);
-        $this->assertSame(123, $tinyIntType->cast('123'));
+        return $this->tinyIntType;
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_TINYINT, $this->tinyIntType->getType());
+        $this->assertSame(TinyIntType::MIN_SIGNED, $this->tinyIntType->getMinRange());
+        $this->assertSame(TinyIntType::MAX_SIGNED, $this->tinyIntType->getMaxRange());
+    }
+
+    public function testSetUnsigned()
+    {
+        $this->tinyIntType->setSigned(false);
+
+        $this->assertFalse($this->tinyIntType->isSigned());
+        $this->assertSame(TinyIntType::MIN_UNSIGNED, $this->tinyIntType->getMinRange());
+        $this->assertSame(TinyIntType::MAX_UNSIGNED, $this->tinyIntType->getMaxRange());
     }
 
     /**
-     * @see testConstructed()
+     * @see testDDL
      * @return array
      */
-    public function constructedProvider()
+    public function DDLProvider()
     {
-        $displayWidth = 10;
-        $signed = true;
-        $notSigned = false;
+        $tinyIntTypeDefault = new TinyIntType();
+
+        $tinyIntTypeExtra = new TinyIntType();
+        $tinyIntTypeExtra->setDisplayWidth(3);
+        $tinyIntTypeExtra->setSigned(false);
 
         return [
             [
-                $displayWidth,
-                $signed,
-                -pow(2, 8)/2,
-                pow(2, 8)/2-1,
-                "TINYINT($displayWidth)",
-                new TinyIntType($displayWidth, $signed)
+                'TINYINT',
+                $tinyIntTypeDefault
             ],
             [
-                $displayWidth,
-                $notSigned,
-                0,
-                pow(2, 8)-1,
-                "TINYINT($displayWidth) UNSIGNED",
-                new TinyIntType($displayWidth, $notSigned)
+                'TINYINT(3) UNSIGNED',
+                $tinyIntTypeExtra
             ]
         ];
     }

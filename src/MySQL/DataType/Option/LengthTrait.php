@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 20/06/16
- * Time: 4:34 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
@@ -23,10 +17,15 @@ trait LengthTrait
         return $this->length;
     }
 
+    public function hasLength()
+    {
+        return !empty($this->length);
+    }
+
     /**
      * @param int $length
      */
-    protected function setLength($length)
+    public function setLength($length)
     {
         $this->length = (int)$length;
     }

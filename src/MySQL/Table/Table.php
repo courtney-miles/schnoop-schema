@@ -55,7 +55,7 @@ class Table implements TableInterface
     }
 
     /**
-     * @return AbstractColumn[]
+     * @return ColumnInterface[]
      */
     public function getColumns()
     {
@@ -122,7 +122,14 @@ class Table implements TableInterface
     public function addConstraint(ConstraintInterface $constraint)
     {
         $constraint->setTable($this);
-        $this->constraints[$constraint->getName()] = $constraint;
+
+        $name = $constraint->getName();
+
+        if (strtoupper($name) == 'PRIMARY') {
+            $name = strtoupper($name);
+        }
+
+        $this->constraints[$name] = $constraint;
     }
 
     public function hasPrimaryKey()

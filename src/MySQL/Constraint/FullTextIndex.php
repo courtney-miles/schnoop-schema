@@ -6,7 +6,7 @@ class FullTextIndex extends AbstractIndex
 {
     public function __construct($name)
     {
-        parent::__construct($name, self::CONSTRAINT_FULLTEXT, self::INDEX_TYPE_FULLTEXT);
+        parent::__construct($name, self::CONSTRAINT_FULLTEXT_INDEX, self::INDEX_TYPE_FULLTEXT);
     }
 
     public function __toString()

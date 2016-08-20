@@ -6,7 +6,7 @@ class UniqueIndex extends AbstractIndex
 {
     public function __construct($name)
     {
-        parent::__construct($name, self::CONSTRAINT_UNIQUE, self::INDEX_TYPE_BTREE);
+        parent::__construct($name, self::CONSTRAINT_UNIQUE_INDEX, self::INDEX_TYPE_BTREE);
     }
 
     public function setIndexType($indexType)
@@ -20,6 +20,6 @@ class UniqueIndex extends AbstractIndex
             return $this->makeIndexDDL('PRIMARY KEY', null, $this->getIndexType());
         }
 
-        return $this->makeIndexDDL($this->getConstraintType() . ' INDEX', $this->getName());
+        return $this->makeIndexDDL($this->getConstraintType(), $this->getName());
     }
 }

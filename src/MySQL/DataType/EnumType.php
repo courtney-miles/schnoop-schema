@@ -11,12 +11,4 @@ class EnumType extends AbstractOptionsType
     {
         return self::TYPE_ENUM;
     }
-
-    /**
-     * @return mixed
-     */
-    public function cast($value)
-    {
-        return (string)$value;
-    }
 }

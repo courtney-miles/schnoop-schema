@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 18/06/16
- * Time: 6:16 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
@@ -26,7 +20,7 @@ trait SignedTrait
     /**
      * @param boolean $signed
      */
-    protected function setSigned($signed)
+    public function setSigned($signed)
     {
         $this->signed = (bool)$signed;
     }

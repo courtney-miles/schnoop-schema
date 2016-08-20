@@ -2,74 +2,71 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\BigIntType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\BigIntType;
 
-class BigIntTypeTest extends SchnoopSchemaTestCase
+class BigIntTypeTest extends IntTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedDisplayWidth
-     * @param bool $expectedIsSigned
-     * @param int $expectedMinRange
-     * @param int $expectedMaxRange
-     * @param string $expectedDDL
-     * @param BigIntType $actualBigInt
+     * @var BigIntType
      */
-    public function testConstructed(
-        $expectedDisplayWidth,
-        $expectedIsSigned,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        BigIntType $actualBigInt
-    ) {
-        $this->intTypeAsserts(
-            DataTypeInterface::TYPE_BIGINT,
-            $expectedDisplayWidth,
-            $expectedIsSigned,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualBigInt
-        );
+    protected $bigIntType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->bigIntType = new BigIntType();
     }
 
-    public function testCast()
+    protected function getIntType()
     {
-        $bigInt = new BigIntType(10, false);
+        return $this->bigIntType;
+    }
 
-        $this->assertSame(123, $bigInt->cast('123'));
+    protected function newIntType()
+    {
+        return new BigIntType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_BIGINT, $this->bigIntType->getType());
+        $this->assertSame(BigIntType::MIN_SIGNED, $this->bigIntType->getMinRange());
+        $this->assertSame(BigIntType::MAX_SIGNED, $this->bigIntType->getMaxRange());
+    }
+
+    public function testSetUnsigned()
+    {
+        $this->bigIntType->setSigned(false);
+
+        $this->assertFalse($this->bigIntType->isSigned());
+        $this->assertSame(BigIntType::MIN_UNSIGNED, $this->bigIntType->getMinRange());
+        $this->assertSame(BigIntType::MAX_UNSIGNED, $this->bigIntType->getMaxRange());
     }
 
     /**
-     * @see testConstructed()
+     * @see testDDL
      * @return array
      */
-    public function constructedProvider()
+    public function DDLProvider()
     {
-        $displayWidth = 10;
-        $signed = true;
-        $notSigned = false;
+        $bigIntTypeDefault = new BigIntType();
+
+        $BigIntTypeExtra = new BigIntType();
+        $BigIntTypeExtra->setDisplayWidth(3);
+        $BigIntTypeExtra->setSigned(false);
 
         return [
             [
-                $displayWidth,
-                $signed,
-                (float)('-' . bcdiv(bcpow('2', '64'), '2')),
-                (int)bcsub(bcdiv(bcpow('2', '64'), '2'), '1'),
-                "BIGINT($displayWidth)",
-                new BigIntType($displayWidth, $signed)
+                'BIGINT',
+                $bigIntTypeDefault
             ],
             [
-                $displayWidth,
-                $notSigned,
-                0,
-                (float)bcsub(bcpow('2', '64'), '1'),
-                "BIGINT($displayWidth) UNSIGNED",
-                new BigIntType($displayWidth, $notSigned)
+                'BIGINT(3) UNSIGNED',
+                $BigIntTypeExtra
             ]
         ];
     }

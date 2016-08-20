@@ -11,4 +11,8 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 interface DisplayWidthInterface
 {
     public function getDisplayWidth();
+
+    public function hasDisplayWidth();
+
+    public function setDisplayWidth($displayWidth);
 }

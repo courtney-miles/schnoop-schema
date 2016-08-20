@@ -35,7 +35,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
 
     public function __construct($name)
     {
-        parent::__construct($name, self::CONSTRAINT_FOREIGN);
+        parent::__construct($name, self::CONSTRAINT_FOREIGN_KEY);
         $this->setOnDeleteAction(self::REFERENCE_ACTION_RESTRICT);
         $this->setOnUpdateAction(self::REFERENCE_ACTION_RESTRICT);
     }
@@ -47,7 +47,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
             array_filter(
                 [
                     'CONSTRAINT `' . $this->getName() . '`',
-                    strtoupper($this->getConstraintType()) . ' KEY',
+                    strtoupper($this->getConstraintType()),
                     $this->makeIndexedColumnsDDL(),
                     'REFERENCES',
                     $this->makeReferenceColumnDDL(),

@@ -8,7 +8,7 @@ use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
 class DateTypeTest extends SchnoopSchemaTestCase
 {
-    public function testConstruct()
+    public function testInitialProperties()
     {
         $dateType = new DateType();
         $dateStr = '2016-01-01';

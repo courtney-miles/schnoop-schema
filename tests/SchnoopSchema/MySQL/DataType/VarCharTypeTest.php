@@ -2,63 +2,43 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\VarCharType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\CharTypeTestCase;
 
-class VarCharTypeTest extends SchnoopSchemaTestCase
+class VarCharTypeTest extends CharTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param VarCharType $actualCharType
+     * @var VarCharType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        VarCharType $actualCharType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_VARCHAR,
-            $expectedLength,
-            $expectedCollation,
-            true,
-            $expectedDDL,
-            $actualCharType
-        );
+    protected $varCharType;
+    protected $length = 6;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->varCharType = new VarCharType($this->length);
     }
 
-    public function testCastToString()
+    protected function getCharType()
     {
-        $charType = new VarCharType(10);
-        $this->assertSame('123', $charType->cast(123));
+        return $this->varCharType;
     }
 
-    /**
-     * @see testConstructed()
-     * @return array
-     */
-    public function constructedProvider()
+    protected function createCharType()
     {
-        $length = 10;
-        $collation = 'utf8_general_ci';
+        return new VarCharType($this->length);
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "VARCHAR($length) COLLATE '$collation'",
-                new VarCharType($length, $collation)
-            ],
-            [
-                $length,
-                null,
-                "VARCHAR($length)",
-                new VarCharType($length)
-            ]
-        ];
+    protected function getInitialLength()
+    {
+        return $this->length;
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_VARCHAR, $this->varCharType->getType());
     }
 }

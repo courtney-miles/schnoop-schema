@@ -2,10 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBlobType;
 
-class AbstractBlobTypeTest extends SchnoopSchemaTestCase
+class AbstractBlobTypeTest extends DataTypeTestCase
 {
     /**
      * @var AbstractBlobType
@@ -20,23 +21,44 @@ class AbstractBlobTypeTest extends SchnoopSchemaTestCase
     {
         parent::setUp();
 
-        $this->abstractBlobType = $this->getMockForAbstractClass(
-            AbstractBlobType::class,
-            [$this->length]
-        );
-
-        $this->abstractBlobType->method('getType')
-            ->willReturn($this->type);
+        $this->abstractBlobType = $this->createMockAbstractBlobType($this->type);
     }
 
-    public function testConstructed()
+    public function testInitialProperties()
     {
-        $this->binaryTypeAsserts(
-            $this->type,
-            $this->length,
-            false,
-            strtoupper($this->type),
-            $this->abstractBlobType
+        $this->assertFalse($this->abstractBlobType->doesAllowDefault());
+    }
+
+    public function testCast()
+    {
+        $this->assertSame('123', $this->abstractBlobType->cast(123));
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        return [
+            [
+                'FOO',
+                $this->createMockAbstractBlobType('foo')
+            ]
+        ];
+    }
+
+    /**
+     * @param $type
+     * @return AbstractBlobType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMockAbstractBlobType($type)
+    {
+        $abstractBlobType = $this->getMockForAbstractClass(
+            AbstractBlobType::class
         );
+        $abstractBlobType->method('getType')->willReturn($type);
+
+        return $abstractBlobType;
     }
 }

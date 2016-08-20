@@ -2,63 +2,43 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\CharTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\CharType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class CharTypeTest extends SchnoopSchemaTestCase
+class CharTypeTest extends CharTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param CharType $actualCharType
+     * @var CharType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        CharType $actualCharType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_CHAR,
-            $expectedLength,
-            $expectedCollation,
-            true,
-            $expectedDDL,
-            $actualCharType
-        );
+    protected $charType;
+    protected $length = 1;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->charType = new CharType();
     }
 
-    public function testCastToString()
+    protected function getCharType()
     {
-        $charType = new CharType(10);
-        $this->assertSame('123', $charType->cast(123));
+        return $this->charType;
     }
 
-    /**
-     * @see testConstructed()
-     * @return array
-     */
-    public function constructedProvider()
+    protected function createCharType()
     {
-        $length = 10;
-        $collation = 'utf8_general_ci';
+        return new CharType();
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "CHAR($length) COLLATE '$collation'",
-                new CharType($length, $collation)
-            ],
-            [
-                $length,
-                null,
-                "CHAR($length)",
-                new CharType($length)
-            ]
-        ];
+    protected function getInitialLength()
+    {
+        return $this->length;
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_CHAR, $this->charType->getType());
     }
 }

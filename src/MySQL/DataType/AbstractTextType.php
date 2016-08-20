@@ -1,18 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 1/07/16
- * Time: 7:10 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-abstract class AbstractTextType extends AbstractStringType implements TextTypeInterface
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
+
+abstract class AbstractTextType implements TextTypeInterface
 {
+    use CollationTrait;
+    use QuoteTrait;
+
     public function doesAllowDefault()
     {
         return false;
+    }
+
+    public function cast($value)
+    {
+        return (string)$value;
     }
 
     public function __toString()

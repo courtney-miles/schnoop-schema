@@ -32,7 +32,7 @@ trait CollationTrait
      * @param string $collation
      * @internal param string $characterSet
      */
-    protected function setCollation($collation)
+    public function setCollation($collation)
     {
         $this->collation = $collation;
     }

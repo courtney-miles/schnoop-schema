@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 18/06/16
- * Time: 6:21 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\DisplayWidthTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\SignedTrait;
 
@@ -17,16 +10,13 @@ abstract class AbstractIntType implements IntTypeInterface
 {
     use DisplayWidthTrait;
     use SignedTrait;
-    use NumericRangeTrait;
     use QuoteTrait;
     
-    public function __construct($displayWidth, $isSigned, $minRange, $maxRange)
+    public function __construct()
     {
-        $this->setDisplayWidth($displayWidth);
-        $this->setSigned($isSigned);
-        $this->setRange($minRange, $maxRange);
+        $this->setSigned(true);
     }
-    
+
     public function doesAllowDefault()
     {
         return true;

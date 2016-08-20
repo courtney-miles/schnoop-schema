@@ -2,73 +2,66 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\MediumIntType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class MediumIntTypeTest extends SchnoopSchemaTestCase
+class MediumIntTypeTest extends IntTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedDisplayWidth
-     * @param bool $expectedIsSigned
-     * @param int $expectedMinRange
-     * @param int $expectedMaxRange
-     * @param string $expectedDDL
-     * @param MediumIntType $actualMediumIntType
+     * @var MediumIntType
      */
-    public function testConstructed(
-        $expectedDisplayWidth,
-        $expectedIsSigned,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        MediumIntType $actualMediumIntType
-    ) {
-        $this->intTypeAsserts(
-            DataTypeInterface::TYPE_MEDIUMINT,
-            $expectedDisplayWidth,
-            $expectedIsSigned,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualMediumIntType
-        );
+    protected $mediumIntType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->mediumIntType = new MediumIntType();
     }
 
-    public function testCast()
+    protected function getIntType()
     {
-        $mediumIntType = new MediumIntType(10, true);
-        $this->assertSame(123, $mediumIntType->cast('123'));
+        return $this->mediumIntType;
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_MEDIUMINT, $this->mediumIntType->getType());
+        $this->assertSame(MediumIntType::MIN_SIGNED, $this->mediumIntType->getMinRange());
+        $this->assertSame(MediumIntType::MAX_SIGNED, $this->mediumIntType->getMaxRange());
+    }
+
+    public function testSetUnsigned()
+    {
+        $this->mediumIntType->setSigned(false);
+
+        $this->assertFalse($this->mediumIntType->isSigned());
+        $this->assertSame(MediumIntType::MIN_UNSIGNED, $this->mediumIntType->getMinRange());
+        $this->assertSame(MediumIntType::MAX_UNSIGNED, $this->mediumIntType->getMaxRange());
     }
 
     /**
-     * @see testConstructed()
+     * @see testDDL
      * @return array
      */
-    public function constructedProvider()
+    public function DDLProvider()
     {
-        $displayWidth = 10;
-        $signed = true;
-        $notSigned = false;
+        $intTypeDefault = new MediumIntType();
+
+        $intTypeExtra = new MediumIntType();
+        $intTypeExtra->setDisplayWidth(3);
+        $intTypeExtra->setSigned(false);
 
         return [
             [
-                $displayWidth,
-                $signed,
-                -pow(2, 24)/2,
-                pow(2, 24)/2-1,
-                "MEDIUMINT($displayWidth)",
-                new MediumIntType($displayWidth, $signed)
+                'MEDIUMINT',
+                $intTypeDefault
             ],
             [
-                $displayWidth,
-                $notSigned,
-                0,
-                pow(2, 24)-1,
-                "MEDIUMINT($displayWidth) UNSIGNED",
-                new MediumIntType($displayWidth, $notSigned)
+                'MEDIUMINT(3) UNSIGNED',
+                $intTypeExtra
             ]
         ];
     }

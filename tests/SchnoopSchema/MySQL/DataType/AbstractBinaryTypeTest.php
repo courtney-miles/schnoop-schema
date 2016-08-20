@@ -8,10 +8,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\BinaryTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBinaryType;
 
-class AbstractBinaryTypeTest extends SchnoopSchemaTestCase
+class AbstractBinaryTypeTest extends BinaryTypeTestCase
 {
     /**
      * @var AbstractBinaryType
@@ -26,30 +27,64 @@ class AbstractBinaryTypeTest extends SchnoopSchemaTestCase
     {
         parent::setUp();
 
-        $this->abstractBinaryType = $this->getMockForAbstractClass(
-            AbstractBinaryType::class,
-            [
-                $this->length
-            ]
-        );
-
-        $this->abstractBinaryType->method('getType')
-            ->willReturn($this->type);
+        $this->abstractBinaryType = $this->createMockAbstractBinaryType($this->type);
     }
 
-    public function testConstructed()
+    /**
+     * @return BinaryTypeInterface
+     */
+    protected function getBinaryType()
     {
-        $this->binaryTypeAsserts(
-            $this->type,
-            (int)$this->length,
-            null,
-            'FOO(' . $this->length . ')',
-            $this->abstractBinaryType
-        );
+        return $this->abstractBinaryType;
+    }
+
+    public function testInitialProperties()
+    {
+        $this->assertFalse($this->abstractBinaryType->hasLength());
+        $this->assertNull($this->abstractBinaryType->getLength());
+        $this->assertTrue($this->abstractBinaryType->doesAllowDefault());
     }
 
     public function testCast()
     {
         $this->assertSame('123', $this->abstractBinaryType->cast(123));
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        $abstractBinaryType = $this->createMockAbstractBinaryType('foo');
+
+        $abstractBinaryTypeExtra = $this->createMockAbstractBinaryType('foo');
+        $abstractBinaryTypeExtra->setLength(3);
+
+        return [
+            [
+                'FOO',
+                $abstractBinaryType
+            ],
+            [
+                'FOO(3)',
+                $abstractBinaryTypeExtra
+            ]
+        ];
+    }
+
+    /**
+     * @param $type
+     * @return AbstractBinaryType|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMockAbstractBinaryType($type)
+    {
+        $abstractBinaryType = $this->getMockForAbstractClass(
+            AbstractBinaryType::class
+        );
+        $abstractBinaryType->method('getType')
+            ->willReturn($type);
+
+        return $abstractBinaryType;
     }
 }

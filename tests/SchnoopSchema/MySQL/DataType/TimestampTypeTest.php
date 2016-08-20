@@ -2,50 +2,37 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimestampType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
 
-class TimestampTypeTest extends SchnoopSchemaTestCase
+class TimestampTypeTest extends TimeTypeTestCase
 {
     /**
-     * @dataProvider timeTypeProvider
-     * @param int $expectedPrecision
-     * @param string $expectedDDL
-     * @param TimestampType $actualTimestampType
+     * @var TimestampType
      */
-    public function testConstruct(
-        $expectedPrecision,
-        $expectedDDL,
-        TimestampType $actualTimestampType
-    ) {
-        $this->timeTypeAsserts(
-            DataTypeInterface::TYPE_TIMESTAMP,
-            $expectedPrecision,
-            true,
-            $expectedDDL,
-            $actualTimestampType
-        );
+    protected $timestampType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->timestampType = new TimestampType();
     }
 
-    /**
-     * @see testConstruct
-     */
-    public function timeTypeProvider()
+    protected function getTimeType()
     {
-        $precision = 3;
+        return $this->timestampType;
+    }
 
-        return [
-            [
-                0,
-                'TIMESTAMP',
-                new TimestampType()
-            ],
-            [
-                $precision,
-                "TIMESTAMP($precision)",
-                new TimestampType($precision)
-            ]
-        ];
+    protected function createTimeType()
+    {
+        return new TimestampType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_TIMESTAMP, $this->timestampType->getType());
     }
 }

@@ -27,6 +27,18 @@ class UniqueIndexTest extends IndexTestCase
         $this->uniqueIndex = new UniqueIndex($this->constraintName);
     }
 
+    public function testDDL()
+    {
+        $this->indexDDLAsserts("UNIQUE INDEX `{$this->constraintName}`");
+    }
+
+    public function testPublicKeyDDL()
+    {
+        $this->uniqueIndex = new UniqueIndex('primary');
+
+        $this->indexDDLAsserts("PRIMARY KEY");
+    }
+
     protected function getConstraintName()
     {
         return $this->constraintName;
@@ -34,7 +46,7 @@ class UniqueIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_UNIQUE;
+        return IndexInterface::CONSTRAINT_UNIQUE_INDEX;
     }
 
     protected function getIndexType()

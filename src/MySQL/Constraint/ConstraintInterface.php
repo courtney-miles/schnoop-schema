@@ -7,10 +7,10 @@ use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 interface ConstraintInterface
 {
     const CONSTRAINT_INDEX = 'INDEX';
-    const CONSTRAINT_UNIQUE = 'UNIQUE';
-    const CONSTRAINT_FULLTEXT = 'FULLTEXT';
-    const CONSTRAINT_SPATIAL = 'SPATIAL';
-    const CONSTRAINT_FOREIGN = 'FOREIGN';
+    const CONSTRAINT_UNIQUE_INDEX = 'UNIQUE INDEX';
+    const CONSTRAINT_FULLTEXT_INDEX = 'FULLTEXT INDEX';
+    const CONSTRAINT_SPATIAL_INDEX = 'SPATIAL INDEX';
+    const CONSTRAINT_FOREIGN_KEY = 'FOREIGN KEY';
 
     public function getName();
 

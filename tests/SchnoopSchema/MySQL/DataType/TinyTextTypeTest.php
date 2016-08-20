@@ -2,63 +2,44 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TinyTextType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
-class TinyTextTypeTest extends SchnoopSchemaTestCase
+class TinyTextTypeTest extends TextTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param TinyTextType $actualLongTextType
+     * @var TinyTextType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        TinyTextType $actualLongTextType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_TINYTEXT,
-            $expectedLength,
-            $expectedCollation,
-            false,
-            $expectedDDL,
-            $actualLongTextType
-        );
-    }
+    protected $tinyTextType;
 
-    public function testCast()
+    public function setUp()
     {
-        $longTextType = new TinyTextType();
-        $this->assertSame('123', $longTextType->cast(123));
+        parent::setUp();
+
+        $this->tinyTextType = new TinyTextType();
     }
 
     /**
-     * @see testConstructed()
-     * @return array
+     * @return TextTypeInterface
      */
-    public function constructedProvider()
+    protected function getTextType()
     {
-        $length = pow(2, 8) -1;
-        $collation = 'utf8_general_ci';
+        return $this->tinyTextType;
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "TINYTEXT COLLATE '$collation'",
-                new TinyTextType($collation)
-            ],
-            [
-                $length,
-                null,
-                'TINYTEXT',
-                new TinyTextType()
-            ]
-        ];
+    /**
+     * @return TextTypeInterface
+     */
+    protected function createTextType()
+    {
+        return new TinyTextType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_TINYTEXT, $this->tinyTextType->getType());
     }
 }

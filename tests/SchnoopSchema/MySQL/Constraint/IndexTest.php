@@ -27,6 +27,11 @@ class IndexTest extends IndexTestCase
         $this->index = new Index($this->constraintName);
     }
 
+    public function testDDL()
+    {
+        $this->indexDDLAsserts("INDEX `{$this->constraintName}`");
+    }
+
     protected function getConstraintName()
     {
         return $this->constraintName;

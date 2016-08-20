@@ -3,53 +3,45 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractOptionsType;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\OptionsTypeTestCase;
 
-class AbstractOptionsTypeSchemaTest extends SchnoopSchemaTestCase
+class AbstractOptionsTypeTest extends OptionsTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider
-     * @param array $options
-     * @param string $collation
-     * @param string $expectedDDL
+     * @var AbstractOptionsType
      */
-    public function testConstructed(
-        array $options,
-        $collation,
-        $expectedDDL
-    ) {
-        /** @var AbstractOptionsType|PHPUnit_Framework_MockObject_MockObject $abstractOptionsType */
-        $abstractOptionsType = $this->getMockForAbstractClass(
-            AbstractOptionsType::class,
-            [
-                $options,
-                $collation
-            ]
-        );
-        $abstractOptionsType->method('getType')->willReturn('FOO');
+    protected $abstractOptionsType;
 
-        $this->assertTrue($abstractOptionsType->doesAllowDefault());
-        $this->assertSame($options, $abstractOptionsType->getOptions());
-        $this->assertSame($collation, $abstractOptionsType->getCollation());
-        $this->assertSame($expectedDDL, (string)$abstractOptionsType);
+    protected $type = 'foo';
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->abstractOptionsType = $this->createOptionsType();
     }
 
-    /**
-     * @see testConstructed
-     * @return array
-     */
-    public function constructedProvider()
+    public function getOptionsType()
     {
-        return [
-            [
-                [
-                    'one',
-                    'two'
-                ],
-                'utf8mb4_general_ci',
-                "FOO('one','two') COLLATE utf8mb4_general_ci"
-            ]
-        ];
+        return $this->abstractOptionsType;
+    }
+
+    public function createOptionsType()
+    {
+        return $this->createAbstractOptionsType($this->type);
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame($this->type, $this->abstractOptionsType->getType());
+    }
+
+    protected function createAbstractOptionsType($type)
+    {
+        $abstractOptionsType = $this->getMockForAbstractClass(AbstractOptionsType::class);
+        $abstractOptionsType->method('getType')->willReturn($type);
+
+        return $abstractOptionsType;
     }
 }

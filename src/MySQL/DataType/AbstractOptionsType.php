@@ -3,19 +3,33 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\OptionTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 
 abstract class AbstractOptionsType implements OptionsTypeInterface
 {
-    use OptionTrait;
     use CollationTrait;
     use QuoteTrait;
 
-    public function __construct(array $options, $collation)
+    protected $options = [];
+
+    public function getOptions()
     {
-        $this->setOptions($options);
-        $this->setCollation($collation);
+        return $this->options;
+    }
+
+    public function hasOptions()
+    {
+        return !empty($this->options);
+    }
+
+    public function hasOption($option)
+    {
+        return in_array($option, $this->options);
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     /**
@@ -26,13 +40,32 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
         return true;
     }
 
+    public function cast($value)
+    {
+        return (string)$value;
+    }
+
     public function __toString()
     {
-        return sprintf(
-            "%s(%s) COLLATE %s",
-            strtoupper($this->getType()),
-            "'" . implode("','", $this->getOptions()) . "'",
-            $this->getCollation()
+        return implode(
+            ' ',
+            array_filter(
+                [
+                    strtoupper($this->getType()) . "(" . $this->prepareOptionsDDL($this->getOptions()) . ")",
+                    $this->hasCollation() ? 'COLLATE ' . $this->getCollation() : null
+                ]
+            )
         );
+    }
+
+    protected function prepareOptionsDDL(array $options)
+    {
+        $escapedOptions = [];
+
+        foreach ($options as $option) {
+            $escapedOptions[] = $this->quote((string)$option);
+        }
+
+        return implode(',', $escapedOptions);
     }
 }

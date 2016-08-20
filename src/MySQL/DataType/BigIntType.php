@@ -10,21 +10,23 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class BigIntType extends AbstractIntType
 {
-    const MIN_RANGE_SIGNED = -9223372036854775808;
-    const MAX_RANGE_SIGNED = 9223372036854775807;
-    const MIN_RANGE_UNSIGNED = 0;
-    const MAX_RANGE_UNSIGNED = 18446744073709551615;
-
-    public function __construct($displayWidth, $isSigned)
-    {
-        $minRange = $isSigned ? self::MIN_RANGE_SIGNED : self::MIN_RANGE_UNSIGNED;
-        $maxRange = $isSigned ? self::MAX_RANGE_SIGNED : self::MAX_RANGE_UNSIGNED;
-
-        parent::__construct($displayWidth, $isSigned, $minRange, $maxRange);
-    }
+    const MIN_SIGNED = -9223372036854775808;
+    const MAX_SIGNED = 9223372036854775807;
+    const MIN_UNSIGNED = 0;
+    const MAX_UNSIGNED = 18446744073709551615;
 
     public function getType()
     {
         return self::TYPE_BIGINT;
+    }
+
+    public function getMinRange()
+    {
+        return $this->isSigned() ? self::MIN_SIGNED : self::MIN_UNSIGNED;
+    }
+
+    public function getMaxRange()
+    {
+        return $this->isSigned() ? self::MAX_SIGNED : self::MAX_UNSIGNED;
     }
 }

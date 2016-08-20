@@ -27,6 +27,11 @@ class SpatialIndexTest extends IndexTestCase
         $this->spatialIndex = new SpatialIndex($this->constraintName);
     }
 
+    public function testDDL()
+    {
+        $this->indexDDLAsserts("SPATIAL INDEX `{$this->constraintName}`");
+    }
+
     protected function getConstraintName()
     {
         return $this->constraintName;
@@ -34,7 +39,7 @@ class SpatialIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_SPATIAL;
+        return IndexInterface::CONSTRAINT_SPATIAL_INDEX;
     }
 
     protected function getIndexType()

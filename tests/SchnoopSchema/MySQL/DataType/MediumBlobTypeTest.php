@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\MediumBlobType;
 
-class MediumBlobTypeTest extends SchnoopSchemaTestCase
+class MediumBlobTypeTest extends DataTypeTestCase
 {
     /**
      * @var MediumBlobType
@@ -20,19 +20,30 @@ class MediumBlobTypeTest extends SchnoopSchemaTestCase
         $this->mediumBlobType = new MediumBlobType();
     }
 
-    public function testConstruct()
+    public function testInitialProperties()
     {
-        $this->binaryTypeAsserts(
-            DataTypeInterface::TYPE_MEDIUMBLOB,
-            pow(2, 24)-1,
-            false,
-            'MEDIUMBLOB',
-            $this->mediumBlobType
-        );
+        $this->assertSame(DataTypeInterface::TYPE_MEDIUMBLOB, $this->mediumBlobType->getType());
+        $this->assertFalse($this->mediumBlobType->doesAllowDefault());
     }
 
     public function testCast()
     {
         $this->assertSame('123', $this->mediumBlobType->cast(123));
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        $mediumBlobType = new MediumBlobType();
+
+        return [
+            [
+                'MEDIUMBLOB',
+                $mediumBlobType
+            ]
+        ];
     }
 }

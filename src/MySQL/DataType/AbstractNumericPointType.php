@@ -2,7 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\NumericRangeTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\SignedTrait;
@@ -11,32 +10,44 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
 {
     use PrecisionScaleTrait;
     use SignedTrait;
-    use NumericRangeTrait;
     use QuoteTrait;
 
-    /**
-     * AbstractNumericPointType constructor.
-     * @param bool $signed
-     * @param int $precision
-     * @param int $scale
-     */
-    public function __construct($signed, $precision = null, $scale = null)
+    public function __construct()
     {
-        $this->setSigned($signed);
-
-        if (isset($precision)) {
-            $this->setPrecisionScale($precision, $scale);
-
-            $maxRange = str_repeat('9', $precision - $scale)
-                . (!empty($scale) ? '.' . str_repeat('9', $scale) : null);
-            $minRange = $signed ? '-' . $maxRange : '0';
-            $this->setRange($minRange, $maxRange);
-        }
+        $this->setSigned(true);
     }
     
     public function doesAllowDefault()
     {
         return true;
+    }
+
+    public function getMinRange()
+    {
+        $minRange = null;
+
+        if ($this->hasPrecision()) {
+            if ($this->isSigned()) {
+                $minRange = '-' . str_repeat('9', $this->getPrecision() - $this->getScale())
+                    . (!empty($this->getScale()) ? '.' . str_repeat('9', $this->getScale()) : null);
+            } else {
+                $minRange = 0;
+            }
+        }
+
+        return $minRange;
+    }
+
+    public function getMaxRange()
+    {
+        $maxRange = null;
+
+        if ($this->hasPrecision()) {
+            $maxRange = str_repeat('9', $this->getPrecision() - $this->getScale())
+                . (!empty($this->getScale()) ? '.' . str_repeat('9', $this->getScale()) : null);
+        }
+
+        return $maxRange;
     }
 
     public function __toString()

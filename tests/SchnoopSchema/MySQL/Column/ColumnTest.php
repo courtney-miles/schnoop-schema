@@ -2,6 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Column;
 
+use MilesAsylum\SchnoopSchema\Exception\ColumnException;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
 use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
@@ -110,15 +111,17 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertSame($defaultArray, $this->column->getDefault());
     }
 
-    /**
-     * @dataProvider DDLProvider
-     * @param $column
-     * @param $expectedDDL
-     */
-    public function testDDL(Column $column, $expectedDDL)
+    public function testNotHasDefaultWhenNotAllowDefaultAndAllowNull()
     {
-        $this->assertSame($expectedDDL, (string)$column);
+        $dataType = $this->createMock(DataTypeInterface::class);
+        $dataType->method('doesAllowDefault')->willReturn(false);
+        $column = new Column($this->name, $dataType);
+        $column->setNullable(true);
+
+        $this->assertFalse($column->hasDefault());
+        $this->assertNull($this->column->getDefault());
     }
+
 
     /**
      * @expectedException \PHPUnit_Framework_Error_Warning
@@ -141,6 +144,94 @@ class ColumnTest extends SchnoopSchemaTestCase
         $column->setDefault('foo');
     }
 
+    public function testDefaultNotSetWhenNotAllowed()
+    {
+        /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
+        $mockDataType = $this->createMock(DataTypeInterface::class);
+        $mockDataType->method('cast')
+            ->willReturn('');
+        $mockDataType->method('doesAllowDefault')
+            ->willReturn(false);
+
+        $column = new Column(
+            'foo',
+            $mockDataType
+        );
+
+        @$column->setDefault('foo');
+        $this->assertFalse($column->hasDefault());
+        $this->assertNull($this->column->getDefault());
+    }
+
+    public function testSetZeroFill()
+    {
+        $dataType = $this->createMock(NumericTypeInterface::class);
+        $dataType->method('doesAllowDefault')->willReturn(true);
+        $column = new Column($this->name, $dataType);
+        $column->setZeroFill(true);
+
+        $this->assertTrue($column->isZeroFill());
+    }
+
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedExceptionMessage Unable to set zero-fill property on the column as its data-type does not support it.
+     */
+    public function testWarningSetZeroFillOnUnsupportedType()
+    {
+        $this->column->setZeroFill(true);
+    }
+
+    public function testSetAutoIncrement()
+    {
+        $dataType = $this->createMock(NumericTypeInterface::class);
+        $dataType->method('doesAllowDefault')->willReturn(true);
+        $column = new Column($this->name, $dataType);
+        $column->setAutoIncrement(true);
+
+        $this->assertTrue($column->isAutoIncrement());
+    }
+
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedExceptionMessage Unable to set autoincrement property on the column as its data-type does not support it.
+     */
+    public function testWarningSetAutoIncrementOnUnsupportedType()
+    {
+        $this->column->setAutoIncrement(true);
+    }
+
+    public function testSetComment()
+    {
+        $comment = 'Schnoop comment';
+        $this->column->setComment($comment);
+
+        $this->assertSame($comment, $this->column->getComment());
+    }
+
+    /**
+     * @dataProvider DDLProvider
+     * @param $column
+     * @param $expectedDDL
+     */
+    public function testDDL(Column $column, $expectedDDL)
+    {
+        $this->assertSame($expectedDDL, (string)$column);
+    }
+
+    /**
+     * @expectedException \MilesAsylum\SchnoopSchema\Exception\ColumnException
+     */
+    public function testExceptionWhenTableAlreadySet()
+    {
+        $mockTable1 = $this->createMock(TableInterface::class);
+        $mockTable1->method('getName')->willReturn('tbl_one');
+        $mockTable2 = $this->createMock(TableInterface::class);
+        $mockTable2->method('getName')->willReturn('tbl_two');
+
+        $this->column->setTable($mockTable1);
+        $this->column->setTable($mockTable2);
+    }
 
     /**
      * @see testDDL

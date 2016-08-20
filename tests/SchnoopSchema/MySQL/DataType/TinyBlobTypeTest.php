@@ -8,11 +8,11 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TinyBlobType;
 
-class TinyBlobTypeTest extends SchnoopSchemaTestCase
+class TinyBlobTypeTest extends DataTypeTestCase
 {
     /**
      * @var TinyBlobType
@@ -26,19 +26,30 @@ class TinyBlobTypeTest extends SchnoopSchemaTestCase
         $this->tinyBlobType = new TinyBlobType();
     }
 
-    public function testConstruct()
+    public function testInitialProperties()
     {
-        $this->binaryTypeAsserts(
-            DataTypeInterface::TYPE_TINYBLOB,
-            pow(2, 8)-1,
-            false,
-            'TINYBLOB',
-            $this->tinyBlobType
-        );
+        $this->assertSame(DataTypeInterface::TYPE_TINYBLOB, $this->tinyBlobType->getType());
+        $this->assertFalse($this->tinyBlobType->doesAllowDefault());
     }
 
     public function testCast()
     {
         $this->assertSame('123', $this->tinyBlobType->cast(123));
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        $tinyBlobType = new TinyBlobType();
+
+        return [
+            [
+                'TINYBLOB',
+                $tinyBlobType
+            ]
+        ];
     }
 }

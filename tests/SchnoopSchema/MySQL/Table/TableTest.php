@@ -8,6 +8,7 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Table;
 
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\UniqueIndex;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
@@ -31,15 +32,27 @@ class TableTest extends SchnoopSchemaTestCase
         );
     }
 
-    public function testName()
+    public function testInitialProperties()
     {
         $this->assertSame($this->name, $this->table->getName());
-    }
 
-    public function testUndefinedEngine()
-    {
         $this->assertFalse($this->table->hasEngine());
         $this->assertNull($this->table->getEngine());
+
+        $this->assertFalse($this->table->hasDefaultCollation());
+        $this->assertNull($this->table->getDefaultCollation());
+
+        $this->assertFalse($this->table->hasRowFormat());
+        $this->assertNull($this->table->getRowFormat());
+
+        $this->assertFalse($this->table->hasComment());
+        $this->assertNull($this->table->getComment());
+
+        $this->assertSame([], $this->table->getColumns());
+
+        $this->assertSame([], $this->table->getConstraints());
+        $this->assertFalse($this->table->hasPrimaryKey());
+        $this->assertNull($this->table->getPrimaryKey());
     }
 
     public function testSetEngine()
@@ -48,12 +61,6 @@ class TableTest extends SchnoopSchemaTestCase
 
         $this->assertTrue($this->table->hasEngine());
         $this->assertSame(Table::ENGINE_INNODB, $this->table->getEngine());
-    }
-
-    public function testUndefinedDefaultCollation()
-    {
-        $this->assertFalse($this->table->hasDefaultCollation());
-        $this->assertNull($this->table->getDefaultCollation());
     }
 
     public function testSetDefaultCollation()
@@ -66,24 +73,12 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($defaultCollation, $this->table->getDefaultCollation());
     }
 
-    public function testUndefinedRowFormat()
-    {
-        $this->assertFalse($this->table->hasRowFormat());
-        $this->assertNull($this->table->getRowFormat());
-    }
-
     public function testSetRowFormat()
     {
         $this->table->setRowFormat(Table::ROW_FORMAT_COMPACT);
 
         $this->assertTrue($this->table->hasRowFormat());
         $this->assertSame(Table::ROW_FORMAT_COMPACT, $this->table->getRowFormat());
-    }
-
-    public function testUndefinedComment()
-    {
-        $this->assertFalse($this->table->hasComment());
-        $this->assertNull($this->table->getComment());
     }
 
     public function testSetComment()
@@ -95,13 +90,12 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($comment, $this->table->getComment());
     }
 
-    public function testUndefinedColumns()
+    public function testUndefinedColumn()
     {
         $columnName = 'schnoop_col';
 
         $this->assertFalse($this->table->hasColumn($columnName));
         $this->assertNull($this->table->getColumn($columnName));
-        $this->assertSame([], $this->table->getColumns());
     }
 
     public function testAddColumn()
@@ -148,13 +142,12 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($columnNames, $this->table->getColumnList());
     }
 
-    public function testUndefinedConstraints()
+    public function testUndefinedConstraint()
     {
         $constraintName = 'schnoop_idx';
 
         $this->assertFalse($this->table->hasConstraint($constraintName));
         $this->assertNull($this->table->getConstraint($constraintName));
-        $this->assertSame([], $this->table->getConstraints());
     }
 
     public function testAddConstraint()
@@ -199,6 +192,16 @@ class TableTest extends SchnoopSchemaTestCase
 
         $this->assertSame($mockConstraints, $this->table->getConstraints());
         $this->assertSame($constraintNames, $this->table->getConstraintList());
+    }
+
+    public function testAddPrimaryKey()
+    {
+        $mockPrimaryKey = $this->createMock(UniqueIndex::class);
+        $mockPrimaryKey->method('getName')->willReturn('primary');
+        $this->table->addConstraint($mockPrimaryKey);
+
+        $this->assertTrue($this->table->hasPrimaryKey());
+        $this->assertSame($mockPrimaryKey, $this->table->getPrimaryKey());
     }
 
     public function testDDL()

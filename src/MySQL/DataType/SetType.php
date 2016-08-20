@@ -21,7 +21,7 @@ class SetType extends AbstractOptionsType
     {
         if (!empty($value)) {
             foreach ($value as $k => $v) {
-                $value[$k] = (string)$v;
+                $value[$k] = parent::cast($v);
             }
         }
 

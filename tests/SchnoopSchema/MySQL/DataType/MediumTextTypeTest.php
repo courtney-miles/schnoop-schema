@@ -2,63 +2,45 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\MediumTextType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
-class MediumTextTypeTest extends SchnoopSchemaTestCase
+class MediumTextTypeTest extends TextTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param MediumTextType $actualMediumTextType
+     * @var MediumTextType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        MediumTextType $actualMediumTextType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_MEDIUMTEXT,
-            $expectedLength,
-            $expectedCollation,
-            false,
-            $expectedDDL,
-            $actualMediumTextType
-        );
-    }
+    protected $mediumTextType;
 
-    public function testCast()
+    public function setUp()
     {
-        $mediumTextType = new MediumTextType();
-        $this->assertSame('123', $mediumTextType->cast(123));
+        parent::setUp();
+
+        $this->mediumTextType = new MediumTextType();
     }
 
     /**
-     * @see testConstructed()
-     * @return array
+     * @return TextTypeInterface
      */
-    public function constructedProvider()
+    protected function getTextType()
     {
-        $length = pow(2, 24) -1;
-        $collation = 'utf8_general_ci';
+        return $this->mediumTextType;
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "MEDIUMTEXT COLLATE '$collation'",
-                new MediumTextType($collation)
-            ],
-            [
-                $length,
-                null,
-                'MEDIUMTEXT',
-                new MediumTextType()
-            ]
-        ];
+    /**
+     * @return TextTypeInterface
+     */
+    protected function createTextType()
+    {
+        return new MediumTextType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_MEDIUMTEXT, $this->mediumTextType->getType());
     }
 }

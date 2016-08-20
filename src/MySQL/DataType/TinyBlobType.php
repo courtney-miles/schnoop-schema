@@ -12,11 +12,6 @@ class TinyBlobType extends AbstractBlobType
 {
     const LENGTH = 255;
 
-    public function __construct()
-    {
-        parent::__construct(self::LENGTH);
-    }
-
     /**
      * @return string
      */

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 19/06/16
- * Time: 9:15 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
@@ -15,8 +9,14 @@ interface PrecisionScaleInterface
      */
     public function getPrecision();
 
+    public function hasPrecision();
+
     /**
      * @return int The number of digits that can be stored following the decimal point.
      */
     public function getScale();
+
+    public function hasScale();
+
+    public function setPrecisionScale($precision, $scale = 0);
 }

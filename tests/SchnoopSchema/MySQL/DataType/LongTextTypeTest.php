@@ -2,63 +2,45 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\LongTextType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
-class LongTextTypeTest extends SchnoopSchemaTestCase
+class LongTextTypeTest extends TextTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param LongTextType $actualLongTextType
+     * @var LongTextType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        LongTextType $actualLongTextType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_LONGTEXT,
-            $expectedLength,
-            $expectedCollation,
-            false,
-            $expectedDDL,
-            $actualLongTextType
-        );
-    }
+    protected $longTextType;
 
-    public function testCast()
+    public function setUp()
     {
-        $longTextType = new LongTextType();
-        $this->assertSame('123', $longTextType->cast(123));
+        parent::setUp();
+
+        $this->longTextType = new LongTextType();
     }
 
     /**
-     * @see testConstructed()
-     * @return array
+     * @return TextTypeInterface
      */
-    public function constructedProvider()
+    protected function getTextType()
     {
-        $length = pow(2, 32) -1;
-        $collation = 'utf8_general_ci';
+        return $this->longTextType;
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "LONGTEXT COLLATE '$collation'",
-                new LongTextType($collation)
-            ],
-            [
-                $length,
-                null,
-                'LONGTEXT',
-                new LongTextType()
-            ]
-        ];
+    /**
+     * @return TextTypeInterface
+     */
+    protected function createTextType()
+    {
+        return new LongTextType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_LONGTEXT, $this->longTextType->getType());
     }
 }

@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 1/07/16
- * Time: 7:11 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-abstract class AbstractBlobType extends AbstractBinaryType implements BlobTypeInterface
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
+
+abstract class AbstractBlobType implements BlobTypeInterface
 {
+    use QuoteTrait;
+
     public function doesAllowDefault()
     {
         return false;
@@ -18,5 +16,10 @@ abstract class AbstractBlobType extends AbstractBinaryType implements BlobTypeIn
     public function __toString()
     {
         return strtoupper($this->getType());
+    }
+
+    public function cast($value)
+    {
+        return (string)$value;
     }
 }

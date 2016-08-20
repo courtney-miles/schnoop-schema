@@ -1,46 +1,58 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 26/06/16
- * Time: 5:58 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\BinaryTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
-class BinaryTypeTest extends SchnoopSchemaTestCase
+class BinaryTypeTest extends BinaryTypeTestCase
 {
     /**
      * @var BinaryType
      */
     protected $binaryType;
 
-    protected $length = 3;
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->binaryType = new BinaryType($this->length);
+        $this->binaryType = new BinaryType();
     }
 
-    public function testConstruct()
+    protected function getBinaryType()
     {
-        $this->binaryTypeAsserts(
-            DataTypeInterface::TYPE_BINARY,
-            $this->length,
-            true,
-            'BINARY(3)',
-            $this->binaryType
-        );
+        return $this->binaryType;
     }
 
-    public function testCast()
+    public function testInitialProperties()
     {
-        $this->assertSame('123', $this->binaryType->cast(123));
+        $this->assertSame(DataTypeInterface::TYPE_BINARY, $this->binaryType->getType());
+        $this->assertFalse($this->binaryType->hasLength());
+        $this->assertNull($this->binaryType->getLength());
+        $this->assertTrue($this->binaryType->doesAllowDefault());
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function DDLProvider()
+    {
+        $binaryType = new BinaryType();
+
+        $binaryTypeExtra = new BinaryType();
+        $binaryTypeExtra->setLength(3);
+
+        return [
+            [
+                'BINARY',
+                $binaryType
+            ],
+            [
+                'BINARY(3)',
+                $binaryTypeExtra
+            ]
+        ];
     }
 }

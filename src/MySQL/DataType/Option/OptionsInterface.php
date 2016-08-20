@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 8/07/16
- * Time: 7:13 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
-
 
 interface OptionsInterface
 {
@@ -15,4 +8,10 @@ interface OptionsInterface
      * @return array
      */
     public function getOptions();
+
+    public function hasOptions();
+
+    public function hasOption($option);
+
+    public function setOptions(array $options);
 }

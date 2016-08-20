@@ -15,4 +15,8 @@ interface TimeTypeInterface extends DataTypeInterface
      * @return int
      */
     public function getPrecision();
+
+    public function hasPrecision();
+
+    public function setPrecision($precision);
 }

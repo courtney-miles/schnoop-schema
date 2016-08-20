@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 11/07/16
- * Time: 4:41 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
@@ -12,78 +6,40 @@ use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTimeType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class AbstractTimeTypeTest extends SchnoopSchemaTestCase
+class AbstractTimeTypeTest extends TimeTypeTestCase
 {
-    /**
-     * @dataProvider abstractTimeTypeProvider
-     * @param string $type
-     * @param int $precision
-     * @param string $expectedDDL
-     */
-    public function testConstruct(
-        $type,
-        $precision,
-        $expectedDDL
-    ) {
-        $abstractTimeType = $this->createMockAbstractTimeType($type, $precision);
+    protected $abstractTimeType;
 
-        $this->timeTypeAsserts(
-            $type,
-            $precision === null ? 0 : $precision,
-            true,
-            $expectedDDL,
-            $abstractTimeType
-        );
+    protected $type = 'foo';
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->abstractTimeType = $this->createMockAbstractTimeType($this->type);
     }
 
-    public function testCast()
+    protected function getTimeType()
     {
-        /** @var AbstractTimeType|PHPUnit_Framework_MockObject_MockObject $abstractTimeType */
-        $abstractTimeType = $abstractTimeType = $this->getMockForAbstractClass(AbstractTimeType::class);
-        $time = '11:59:59';
-
-        $this->assertSame($time, $abstractTimeType->cast($time));
+        return $this->abstractTimeType;
     }
 
-    /**
-     * @see testConstruct
-     */
-    public function abstractTimeTypeProvider()
+    protected function createTimeType()
     {
-        $precision = 3;
-
-        return [
-            [
-                'foo',
-                null,
-                'FOO'
-            ],
-            [
-                'foo',
-                $precision,
-                "FOO($precision)"
-            ]
-        ];
+        return $this->createMockAbstractTimeType($this->type);
     }
 
     /**
      * @param $type
-     * @param null $precision
      * @return AbstractTimeType|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createMockAbstractTimeType($type, $precision)
+    protected function createMockAbstractTimeType($type)
     {
-        $constructArgs = isset($precision) ? [$precision] : [];
-
-        $abstractTimeType = $this->getMockForAbstractClass(
-            AbstractTimeType::class,
-            $constructArgs
-        );
-
-        $abstractTimeType->method('getType')
-            ->willReturn($type);
+        $abstractTimeType = $this->getMockForAbstractClass(AbstractTimeType::class);
+        $abstractTimeType->method('getType')->willReturn($this->type);
 
         return $abstractTimeType;
     }

@@ -6,11 +6,6 @@ class LongTextType extends AbstractTextType
 {
     const LENGTH = 4294967295;
 
-    public function __construct($collation = null)
-    {
-        parent::__construct(self::LENGTH, $collation);
-    }
-
     /**
      * @return string
      */

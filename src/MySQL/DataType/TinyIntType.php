@@ -1,25 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 19/06/16
- * Time: 9:19 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class TinyIntType extends AbstractIntType
 {
-    public function __construct($displayWidth, $isSigned)
-    {
-        $minRange = $isSigned ? -128 : 0;
-        $maxRange = $isSigned ? 127 : 255;
-
-        parent::__construct($displayWidth, $isSigned, $minRange, $maxRange);
-    }
+    const MIN_SIGNED = -128;
+    const MAX_SIGNED = 127;
+    const MIN_UNSIGNED = 0;
+    const MAX_UNSIGNED = 255;
 
     public function getType()
     {
         return self::TYPE_TINYINT;
+    }
+
+    public function getMinRange()
+    {
+        return $this->isSigned() ? self::MIN_SIGNED : self::MIN_UNSIGNED;
+    }
+
+    public function getMaxRange()
+    {
+        return $this->isSigned() ? self::MAX_SIGNED : self::MAX_UNSIGNED;
     }
 }

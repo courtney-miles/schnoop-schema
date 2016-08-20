@@ -5,55 +5,35 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DateTimeType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
 
-class DateTimeTypeTest extends SchnoopSchemaTestCase
+class DateTimeTypeTest extends TimeTypeTestCase
 {
     /**
-     * @dataProvider timeTypeProvider
-     * @param int $expectedPrecision
-     * @param string $expectedDDL
-     * @param DateTimeType $actualTimeType
+     * @var DateTimeType
      */
-    public function testConstruct(
-        $expectedPrecision,
-        $expectedDDL,
-        DateTimeType $actualTimeType
-    ) {
-        $this->timeTypeAsserts(
-            DataTypeInterface::TYPE_DATETIME,
-            $expectedPrecision,
-            true,
-            $expectedDDL,
-            $actualTimeType
-        );
+    protected $dateTimeType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->dateTimeType = new DateTimeType();
     }
 
-    public function testCast()
+    protected function getTimeType()
     {
-        $dateTime = '2016-01-01 11:59:59';
-        $dateTimeType = new DateTimeType();
-
-        $this->assertSame($dateTime, $dateTimeType->cast($dateTime));
+        return $this->dateTimeType;
     }
 
-    /**
-     * @see testConstruct
-     */
-    public function timeTypeProvider()
+    protected function createTimeType()
     {
-        $precision = 3;
+        return new DateTimeType();
+    }
 
-        return [
-            [
-                0,
-                'DATETIME',
-                new DateTimeType()
-            ],
-            [
-                $precision,
-                "DATETIME($precision)",
-                new DateTimeType($precision)
-            ]
-        ];
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_DATETIME, $this->dateTimeType->getType());
     }
 }

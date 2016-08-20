@@ -6,60 +6,41 @@ use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TextType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
-class TextTypeTest extends SchnoopSchemaTestCase
+class TextTypeTest extends TextTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedLength
-     * @param string|null $expectedCollation
-     * @param string $expectedDDL
-     * @param TextType $actualLongTextType
+     * @var TextType
      */
-    public function testConstructed(
-        $expectedLength,
-        $expectedCollation,
-        $expectedDDL,
-        TextType $actualLongTextType
-    ) {
-        $this->stringTypeAsserts(
-            DataTypeInterface::TYPE_TEXT,
-            $expectedLength,
-            $expectedCollation,
-            false,
-            $expectedDDL,
-            $actualLongTextType
-        );
-    }
+    protected $textType;
 
-    public function testCast()
+    public function setUp()
     {
-        $longTextType = new TextType();
-        $this->assertSame('123', $longTextType->cast(123));
+        parent::setUp();
+
+        $this->textType = new TextType();
     }
 
     /**
-     * @see testConstructed()
-     * @return array
+     * @return TextTypeInterface
      */
-    public function constructedProvider()
+    protected function getTextType()
     {
-        $length = pow(2, 16) -1;
-        $collation = 'utf8_general_ci';
+        return $this->textType;
+    }
 
-        return [
-            [
-                $length,
-                $collation,
-                "TEXT COLLATE '$collation'",
-                new TextType($collation)
-            ],
-            [
-                $length,
-                null,
-                'TEXT',
-                new TextType()
-            ]
-        ];
+    /**
+     * @return TextTypeInterface
+     */
+    protected function createTextType()
+    {
+        return new TextType();
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_TEXT, $this->textType->getType());
     }
 }

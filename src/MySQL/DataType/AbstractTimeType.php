@@ -12,12 +12,22 @@ abstract class AbstractTimeType implements TimeTypeInterface
 
     public function __construct($precision = 0)
     {
-        $this->precision = $precision;
+        $this->setPrecision($precision);
     }
 
     public function getPrecision()
     {
         return $this->precision;
+    }
+
+    public function hasPrecision()
+    {
+        return !empty($this->precision);
+    }
+
+    public function setPrecision($precision)
+    {
+        $this->precision = $precision;
     }
 
     /**

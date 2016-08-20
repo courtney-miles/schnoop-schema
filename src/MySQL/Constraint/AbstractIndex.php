@@ -82,7 +82,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         foreach ($this->indexedColumns as $indexedColumn) {
             $columnDDLs[] = '`' . $indexedColumn->getColumnName() . '`'
                 . ($indexedColumn->hasLength() ? '(' . $indexedColumn->getLength() . ')' : null)
-                . ' ' . strtoupper($indexedColumn->getCollation());
+                . ($indexedColumn->hasCollation() ? ' ' . strtoupper($indexedColumn->getCollation()) : null);
         }
 
         return '(' . implode(',', $columnDDLs) . ')';

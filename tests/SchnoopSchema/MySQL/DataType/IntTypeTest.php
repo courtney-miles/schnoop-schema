@@ -2,73 +2,66 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\IntType;
 
-class IntTypeTest extends SchnoopSchemaTestCase
+class IntTypeTest extends IntTypeTestCase
 {
     /**
-     * @dataProvider constructedProvider()
-     * @param int $expectedDisplayWidth
-     * @param bool $expectedIsSigned
-     * @param int $expectedMinRange
-     * @param int $expectedMaxRange
-     * @param string $expectedDDL
-     * @param IntType $actualIntType
+     * @var IntType
      */
-    public function testConstructed(
-        $expectedDisplayWidth,
-        $expectedIsSigned,
-        $expectedMinRange,
-        $expectedMaxRange,
-        $expectedDDL,
-        IntType $actualIntType
-    ) {
-        $this->intTypeAsserts(
-            DataTypeInterface::TYPE_INT,
-            $expectedDisplayWidth,
-            $expectedIsSigned,
-            $expectedMinRange,
-            $expectedMaxRange,
-            true,
-            $expectedDDL,
-            $actualIntType
-        );
+    protected $intType;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->intType = new IntType();
     }
 
-    public function testCast()
+    protected function getIntType()
     {
-        $intType = new IntType(10, true);
-        $this->assertSame(123, $intType->cast('123'));
+        return $this->intType;
+    }
+
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+        $this->assertSame(DataTypeInterface::TYPE_INT, $this->intType->getType());
+        $this->assertSame(IntType::MIN_SIGNED, $this->intType->getMinRange());
+        $this->assertSame(IntType::MAX_SIGNED, $this->intType->getMaxRange());
+    }
+
+    public function testSetUnsigned()
+    {
+        $this->intType->setSigned(false);
+
+        $this->assertFalse($this->intType->isSigned());
+        $this->assertSame(IntType::MIN_UNSIGNED, $this->intType->getMinRange());
+        $this->assertSame(IntType::MAX_UNSIGNED, $this->intType->getMaxRange());
     }
 
     /**
-     * @see testConstructed()
+     * @see testDDL
      * @return array
      */
-    public function constructedProvider()
+    public function DDLProvider()
     {
-        $displayWidth = 10;
-        $signed = true;
-        $notSigned = false;
+        $intTypeDefault = new IntType();
+
+        $intTypeExtra = new IntType();
+        $intTypeExtra->setDisplayWidth(3);
+        $intTypeExtra->setSigned(false);
 
         return [
             [
-                $displayWidth,
-                $signed,
-                -pow(2, 32)/2,
-                pow(2, 32)/2-1,
-                "INT($displayWidth)",
-                new IntType($displayWidth, $signed)
+                'INT',
+                $intTypeDefault
             ],
             [
-                $displayWidth,
-                $notSigned,
-                0,
-                pow(2, 32)-1,
-                "INT($displayWidth) UNSIGNED",
-                new IntType($displayWidth, $notSigned)
+                'INT(3) UNSIGNED',
+                $intTypeExtra
             ]
         ];
     }

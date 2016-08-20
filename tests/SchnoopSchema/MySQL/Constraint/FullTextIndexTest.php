@@ -23,6 +23,11 @@ class FullTextIndexTest extends IndexTestCase
         parent::setUp();
     }
 
+    public function testDDL()
+    {
+        $this->indexDDLAsserts("FULLTEXT INDEX `{$this->constraintName}`");
+    }
+
     /**
      * @return IndexInterface
      */
@@ -38,7 +43,7 @@ class FullTextIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_FULLTEXT;
+        return IndexInterface::CONSTRAINT_FULLTEXT_INDEX;
     }
 
     protected function getIndexType()

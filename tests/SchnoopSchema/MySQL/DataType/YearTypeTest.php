@@ -8,7 +8,7 @@ use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
 class YearTypeTest extends SchnoopSchemaTestCase
 {
-    public function testConstruct()
+    public function testInitialProperties()
     {
         $yearType = new YearType();
         $yearStr = '2016';
