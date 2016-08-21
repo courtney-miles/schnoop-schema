@@ -152,7 +152,6 @@ class Column implements ColumnInterface
         $this->default = $default;
     }
 
-
     /**
      * @return string
      */
@@ -181,14 +180,16 @@ class Column implements ColumnInterface
 
     public function setZeroFill($zeroFill)
     {
-        if ($this->dataType instanceof NumericTypeInterface) {
-            $this->zeroFill = $zeroFill;
-        } else {
+        if ($zeroFill && !($this->dataType instanceof NumericTypeInterface)) {
             trigger_error(
                 "Unable to set zero-fill property on the column as its data-type does not support it.",
                 E_USER_WARNING
             );
+
+            $zeroFill = false;
         }
+
+        $this->zeroFill = $zeroFill;
     }
 
     /**
@@ -201,14 +202,16 @@ class Column implements ColumnInterface
 
     public function setAutoIncrement($autoIncrement)
     {
-        if ($this->dataType instanceof NumericTypeInterface) {
-            $this->autoIncrement = $autoIncrement;
-        } else {
+        if ($autoIncrement && !($this->dataType instanceof NumericTypeInterface)) {
             trigger_error(
                 "Unable to set autoincrement property on the column as its data-type does not support it.",
                 E_USER_WARNING
             );
+
+            $autoIncrement = false;
         }
+
+        $this->autoIncrement = $autoIncrement;
     }
 
     public function __toString()

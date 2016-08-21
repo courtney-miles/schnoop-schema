@@ -163,6 +163,29 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->getDefault());
     }
 
+    /**
+     * Testing that no warning is triggered when setting default to null when a default is not allowed.
+     * This is allowed to reduce the conditions in a column mapper.
+     */
+    public function testSetDefaultNullOkWhenDefaultNotAllowed()
+    {
+        /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
+        $mockDataType = $this->createMock(DataTypeInterface::class);
+        $mockDataType->method('cast')
+            ->willReturn('');
+        $mockDataType->method('doesAllowDefault')
+            ->willReturn(false);
+
+        $column = new Column(
+            'foo',
+            $mockDataType
+        );
+
+        $column->setDefault(null);
+        $this->assertFalse($column->hasDefault());
+        $this->assertNull($this->column->getDefault());
+    }
+
     public function testSetZeroFill()
     {
         $dataType = $this->createMock(NumericTypeInterface::class);
@@ -182,6 +205,23 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->column->setZeroFill(true);
     }
 
+    public function testZeroFillNotSetOnSupportedType()
+    {
+        @$this->column->setZeroFill(true);
+
+        $this->assertFalse($this->column->isZeroFill());
+    }
+
+    /**
+     * Specifically testing that no problem is reported when setting ZeroFill
+     * to false even when the type does not support it.
+     */
+    public function testNoWarningUnsetZeroFillOnUnsupportedType()
+    {
+        $this->column->setZeroFill(false);
+        $this->assertFalse($this->column->isZeroFill());
+    }
+
     public function testSetAutoIncrement()
     {
         $dataType = $this->createMock(NumericTypeInterface::class);
@@ -199,6 +239,23 @@ class ColumnTest extends SchnoopSchemaTestCase
     public function testWarningSetAutoIncrementOnUnsupportedType()
     {
         $this->column->setAutoIncrement(true);
+    }
+
+    public function testAutoIncrementNotSetOnSupportedType()
+    {
+        @$this->column->setAutoIncrement(true);
+
+        $this->assertFalse($this->column->isAutoIncrement());
+    }
+
+    /**
+     * Specifically testing that no problem is reported when setting ZeroFill
+     * to false even when the type does not support it.
+     */
+    public function testNoWarningUnsetAutoIncrementOnUnsupportedType()
+    {
+        $this->column->setAutoIncrement(false);
+        $this->assertFalse($this->column->isAutoIncrement());
     }
 
     public function testSetComment()
