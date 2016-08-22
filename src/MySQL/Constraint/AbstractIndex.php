@@ -17,6 +17,11 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
     protected $table;
 
     /**
+     * @var IndexedColumnInterface[]
+     */
+    protected $indexedColumns = [];
+
+    /**
      * @var string
      */
     protected $indexType;
@@ -33,9 +38,43 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         $this->setIndexType($indexType);
     }
 
-    public function getName()
+    public function getIndexedColumns()
     {
-        return $this->name;
+        return array_values($this->indexedColumns);
+    }
+
+    /**
+     * @param array $indexedColumns
+     * @return mixed
+     */
+    public function setIndexedColumns(array $indexedColumns)
+    {
+        $this->indexedColumns = [];
+
+        foreach ($indexedColumns as $indexedColumn) {
+            $this->addIndexedColumn($indexedColumn);
+        }
+    }
+
+    public function hasIndexedColumns()
+    {
+        return !empty($this->indexedColumns);
+    }
+
+    public function addIndexedColumn(IndexedColumnInterface $indexedColumn)
+    {
+//        if (isset($this->table) && $this->table->hasColumn($indexedColumn)) {
+//            throw new UnknownColumnException(
+//                "A column named {$indexedColumn->getColumnName()} was not found in the table {$this->table->getName()}"
+//            );
+//        }
+
+        $this->indexedColumns[$indexedColumn->getColumnName()] = $indexedColumn;
+    }
+
+    public function getIndexedColumnNames()
+    {
+        return array_keys($this->indexedColumns);
     }
 
     public function getIndexType()
@@ -67,7 +106,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
                 [
                     strtoupper($type),
                     $name !== null ? '`' . $name . '`' : null,
-//                    isset($indexType) ? 'USING ' . $indexType : null,
+                    //isset($indexType) ? 'USING ' . $indexType : null,
                     $this->makeIndexedColumnsDDL(),
                     $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
                 ]

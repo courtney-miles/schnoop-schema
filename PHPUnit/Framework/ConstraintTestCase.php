@@ -29,9 +29,6 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
             'Assertion on ' . get_class($constraint)
         );
 
-        $this->assertFalse($constraint->hasIndexedColumns(), 'Assertion on ' . get_class($constraint));
-        $this->assertSame([], $constraint->getIndexedColumns(), 'Assertion on ' . get_class($constraint));
-
         $this->assertFalse($constraint->hasTable(), 'Assertion on ' . get_class($constraint));
         $this->assertNull($constraint->getTable(), 'Assertion on ' . get_class($constraint));
     }
@@ -44,24 +41,5 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
 
         $this->assertTrue($constraint->hasTable(), 'Assertion on ' . get_class($constraint));
         $this->assertSame($mockTable, $constraint->getTable(), 'Assertion on ' . get_class($constraint));
-    }
-
-    public function testSetIndexedColumns()
-    {
-        $indexedColumnA = $this->createMock(IndexedColumn::class);
-        $indexedColumnA->method('getColumnName')->willReturn('col_a');
-        $indexedColumnB = $this->createMock(IndexedColumn::class);
-        $indexedColumnB->method('getColumnName')->willReturn('col_b');
-
-        $indexedColumns = [
-            $indexedColumnA,
-            $indexedColumnB
-        ];
-
-        $constraint = $this->getConstraint();
-        $constraint->setIndexedColumns($indexedColumns);
-
-        $this->assertTrue($constraint->hasIndexedColumns());
-        $this->assertSame($indexedColumns, $constraint->getIndexedColumns());
     }
 }

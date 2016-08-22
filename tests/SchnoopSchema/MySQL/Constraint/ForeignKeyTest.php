@@ -4,6 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKey;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyColumn;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
@@ -55,6 +56,11 @@ class ForeignKeyTest extends ConstraintTestCase
 
         $this->assertFalse($this->foreignKey->hasReferenceTable());
         $this->assertNull($this->foreignKey->getReferenceTable());
+
+        $this->assertFalse($this->foreignKey->hasForeignKeyColumns());
+        $this->assertSame([], $this->foreignKey->getForeignKeyColumns());
+
+        $this->assertSame([], $this->foreignKey->getColumnNames());
         $this->assertSame([], $this->foreignKey->getReferenceColumnNames());
     }
 
@@ -73,18 +79,30 @@ class ForeignKeyTest extends ConstraintTestCase
     public function testSetReferenceTable()
     {
         $mockReferenceTable = $this->createMock(TableInterface::class);
-        $mockReferenceTable->method('getName')->willReturn('ref_tbl');
+        $this->foreignKey->setReferenceTable($mockReferenceTable);
 
-        $referenceColumnNames = [
-            'ref_col_a',
-            'ref_col_b'
+        $this->assertSame($mockReferenceTable, $this->foreignKey->getReferenceTable());
+    }
+
+    public function testSetForeignKeyColumns()
+    {
+        $fkColumnA = $this->createMock(ForeignKeyColumn::class);
+        $fkColumnA->method('getColumnName')->willReturn('col_a');
+        $fkColumnA->method('getReferenceColumnName')->willReturn('ref_col_a');
+        $fkColumnB = $this->createMock(ForeignKeyColumn::class);
+        $fkColumnB->method('getColumnName')->willReturn('col_b');
+        $fkColumnB->method('getReferenceColumnName')->willReturn('ref_col_b');
+
+        $foreignKeyColumns = [
+            $fkColumnA,
+            $fkColumnB
         ];
 
-        $this->foreignKey->setReferenceColumns($mockReferenceTable, $referenceColumnNames);
+        $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
 
-        $this->assertTrue($this->foreignKey->hasReferenceTable());
-        $this->assertSame($mockReferenceTable, $this->foreignKey->getReferenceTable());
-        $this->assertSame($referenceColumnNames, $this->foreignKey->getReferenceColumnNames());
+        $this->assertSame($foreignKeyColumns, $this->foreignKey->getForeignKeyColumns());
+        $this->assertSame(['col_a','col_b'], $this->foreignKey->getColumnNames());
+        $this->assertSame(['ref_col_a','ref_col_b'], $this->foreignKey->getReferenceColumnNames());
     }
 
     public function testDDL()
@@ -93,27 +111,23 @@ class ForeignKeyTest extends ConstraintTestCase
 CONSTRAINT `{$this->constraintName}` FOREIGN KEY (`col_a`,`col_b`) REFERENCES `ref_tbl` (`ref_col_a`,`ref_col_b`) ON DELETE RESTRICT ON UPDATE RESTRICT
 SQL;
 
-        $indexedColumnA = $this->createMock(IndexedColumn::class);
-        $indexedColumnA->method('getColumnName')->willReturn('col_a');
-        $indexedColumnB = $this->createMock(IndexedColumn::class);
-        $indexedColumnB->method('getColumnName')->willReturn('col_b');
-
-        $indexedColumns = [
-            $indexedColumnA,
-            $indexedColumnB
-        ];
-
-        $this->foreignKey->setIndexedColumns($indexedColumns);
-
         $mockReferenceTable = $this->createMock(TableInterface::class);
         $mockReferenceTable->method('getName')->willReturn('ref_tbl');
 
-        $referenceColumnNames = [
-            'ref_col_a',
-            'ref_col_b'
-        ];
+        $fkColumnA = $this->createMock(ForeignKeyColumn::class);
+        $fkColumnA->method('getColumnName')->willReturn('col_a');
+        $fkColumnA->method('getReferenceColumnName')->willReturn('ref_col_a');
+        $fkColumnB = $this->createMock(ForeignKeyColumn::class);
+        $fkColumnB->method('getColumnName')->willReturn('col_b');
+        $fkColumnB->method('getReferenceColumnName')->willReturn('ref_col_b');
 
-        $this->foreignKey->setReferenceColumns($mockReferenceTable, $referenceColumnNames);
+        $foreignKeyColumns = [
+            $fkColumnA,
+            $fkColumnB
+        ];
+        $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
+
+        $this->foreignKey->setReferenceTable($mockReferenceTable);
 
         $this->assertSame($expectedDDL, (string)$this->foreignKey);
     }

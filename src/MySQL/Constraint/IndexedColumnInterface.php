@@ -4,11 +4,9 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 
-interface IndexedColumnInterface
+interface IndexedColumnInterface extends ConstraintColumnInterface
 {
     const COLLATION_ASC = 'asc';
-
-    public function getColumnName();
 
     public function getLength();
 

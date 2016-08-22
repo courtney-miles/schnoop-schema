@@ -15,12 +15,28 @@ interface ForeignKeyInterface extends ConstraintInterface
 
     public function hasReferenceTable();
 
+    public function setReferenceTable(TableInterface $table);
+
     /**
-     * @return IndexedColumn[]
+     * @return ForeignKeyColumnInterface[]
+     */
+    public function getForeignKeyColumns();
+
+    public function hasForeignKeyColumns();
+
+    /**
+     * @param ForeignKeyColumnInterface[] $foreignKeyColumns
+     */
+    public function setForeignKeyColumns(array $foreignKeyColumns);
+
+    public function addForeignKeyColumn(ForeignKeyColumnInterface $foreignKeyColumn);
+
+    public function getColumnNames();
+
+    /**
+     * @return array
      */
     public function getReferenceColumnNames();
-
-    public function setReferenceColumns(TableInterface $table, array $columnNames);
 
     public function getOnDeleteAction();
 

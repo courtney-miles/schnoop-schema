@@ -24,19 +24,6 @@ interface ConstraintInterface
      */
     public function hasTable();
 
-    public function getIndexedColumns();
-
-    /**
-     * @param array $indexedColumns
-     * @return mixed
-     */
-    public function setIndexedColumns(array $indexedColumns);
-
-    /**
-     * @return bool
-     */
-    public function hasIndexedColumns();
-
     public function __toString();
 
     public function getConstraintType();

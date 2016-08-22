@@ -3,7 +3,6 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface as MySQLTableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
 class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
@@ -16,22 +15,22 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * @var TableInterface
      */
-    private $referenceTable;
+    protected $referenceTable;
 
     /**
-     * @var ColumnInterface[]
+     * @var ForeignKeyColumnInterface[]
      */
-    private $referenceColumnNames = [];
-
-    /**
-     * @var string
-     */
-    private $onDeleteAction;
+    protected $foreignKeyColumns = [];
 
     /**
      * @var string
      */
-    private $onUpdateAction;
+    protected $onDeleteAction;
+
+    /**
+     * @var string
+     */
+    protected $onUpdateAction;
 
     public function __construct($name)
     {
@@ -88,33 +87,57 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         return isset($this->referenceTable);
     }
 
-    public function getReferenceColumnNames()
-    {
-        return array_values($this->referenceColumnNames);
-    }
-
-    public function setReferenceColumns(MySQLTableInterface $referenceTable, array $columnNames)
+    public function setReferenceTable(TableInterface $referenceTable)
     {
         $this->referenceTable = $referenceTable;
-        $this->referenceColumnNames = [];
+    }
 
-        foreach ($columnNames as $columnName) {
-//            if (!$this->referenceTable->hasColumn($columnName)) {
-//                throw new UnknownColumnException(
-//                    "A column named $columnName was not found in reference table, {$this->referenceTable->getName()}"
-//                );
-//            }
+    public function getColumnNames()
+    {
+        return array_keys($this->foreignKeyColumns);
+    }
 
-            $this->referenceColumnNames[$columnName] = $columnName;
+    public function getReferenceColumnNames()
+    {
+        $fkNames = [];
+
+        foreach ($this->foreignKeyColumns as $foreignKeyColumn) {
+            $fkNames[] = $foreignKeyColumn->getReferenceColumnName();
         }
+
+        return $fkNames;
+    }
+
+    public function getForeignKeyColumns()
+    {
+        return array_values($this->foreignKeyColumns);
+    }
+
+    public function hasForeignKeyColumns()
+    {
+        return !empty($this->foreignKeyColumns);
+    }
+
+    public function setForeignKeyColumns(array $foreignKeyColumns)
+    {
+        $this->foreignKeyColumns = [];
+
+        foreach ($foreignKeyColumns as $foreignKeyColumn) {
+            $this->addForeignKeyColumn($foreignKeyColumn);
+        }
+    }
+
+    public function addForeignKeyColumn(ForeignKeyColumnInterface $foreignKeyColumn)
+    {
+        $this->foreignKeyColumns[$foreignKeyColumn->getColumnName()] = $foreignKeyColumn;
     }
 
     protected function makeIndexedColumnsDDL()
     {
         $columnDDLs = [];
 
-        foreach ($this->indexedColumns as $indexedColumn) {
-            $columnDDLs[] = '`' . $indexedColumn->getColumnName() . '`';
+        foreach ($this->foreignKeyColumns as $foreignKeyColumn) {
+            $columnDDLs[] = '`' . $foreignKeyColumn->getColumnName() . '`';
         }
 
         return '(' . implode(',', $columnDDLs) . ')';
@@ -122,6 +145,12 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
 
     protected function makeReferenceColumnDDL()
     {
-        return '`' . $this->referenceTable->getName() . '` (`' . implode('`,`', $this->referenceColumnNames) . '`)';
+        $referenceColumnDDLs = [];
+
+        foreach ($this->foreignKeyColumns as $foreignKeyColumn) {
+            $referenceColumnDDLs[] = '`' . $foreignKeyColumn->getReferenceColumnName() . '`';
+        }
+
+        return '`' . $this->referenceTable->getName() . '` (' . implode(',', $referenceColumnDDLs) . ')';
     }
 }
