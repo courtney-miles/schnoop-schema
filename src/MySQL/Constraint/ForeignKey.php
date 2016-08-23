@@ -13,9 +13,9 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     protected $name;
 
     /**
-     * @var TableInterface
+     * @var string
      */
-    protected $referenceTable;
+    protected $referenceTableName;
 
     /**
      * @var ForeignKeyColumnInterface[]
@@ -77,19 +77,19 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         $this->onUpdateAction = $onUpdateAction;
     }
 
-    public function getReferenceTable()
+    public function getReferenceTableName()
     {
-        return $this->referenceTable;
+        return $this->referenceTableName;
     }
 
-    public function hasReferenceTable()
+    public function hasReferenceTableName()
     {
-        return isset($this->referenceTable);
+        return isset($this->referenceTableName);
     }
 
-    public function setReferenceTable(TableInterface $referenceTable)
+    public function setReferenceTableName($referenceTableName)
     {
-        $this->referenceTable = $referenceTable;
+        $this->referenceTableName = $referenceTableName;
     }
 
     public function getColumnNames()
@@ -151,6 +151,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
             $referenceColumnDDLs[] = '`' . $foreignKeyColumn->getReferenceColumnName() . '`';
         }
 
-        return '`' . $this->referenceTable->getName() . '` (' . implode(',', $referenceColumnDDLs) . ')';
+        return '`' . $this->referenceTableName . '` (' . implode(',', $referenceColumnDDLs) . ')';
     }
 }

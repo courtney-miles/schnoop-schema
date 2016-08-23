@@ -11,11 +11,11 @@ interface ForeignKeyInterface extends ConstraintInterface
     const REFERENCE_ACTION_SET_NULL = 'SET NULL';
     const REFERENCE_ACTION_NO_ACTION = 'NO ACTION';
 
-    public function getReferenceTable();
+    public function getReferenceTableName();
 
-    public function hasReferenceTable();
+    public function hasReferenceTableName();
 
-    public function setReferenceTable(TableInterface $table);
+    public function setReferenceTableName($tableName);
 
     /**
      * @return ForeignKeyColumnInterface[]

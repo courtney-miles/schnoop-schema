@@ -54,8 +54,8 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertSame(ForeignKey::REFERENCE_ACTION_RESTRICT, $this->foreignKey->getOnDeleteAction());
         $this->assertSame(ForeignKey::REFERENCE_ACTION_RESTRICT, $this->foreignKey->getOnUpdateAction());
 
-        $this->assertFalse($this->foreignKey->hasReferenceTable());
-        $this->assertNull($this->foreignKey->getReferenceTable());
+        $this->assertFalse($this->foreignKey->hasReferenceTableName());
+        $this->assertNull($this->foreignKey->getReferenceTableName());
 
         $this->assertFalse($this->foreignKey->hasForeignKeyColumns());
         $this->assertSame([], $this->foreignKey->getForeignKeyColumns());
@@ -76,12 +76,12 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertSame(ForeignKey::REFERENCE_ACTION_CASCADE, $this->foreignKey->getOnUpdateAction());
     }
 
-    public function testSetReferenceTable()
+    public function testSetReferenceTableName()
     {
-        $mockReferenceTable = $this->createMock(TableInterface::class);
-        $this->foreignKey->setReferenceTable($mockReferenceTable);
+        $referenceTableName = 'ref_tbl';
+        $this->foreignKey->setReferenceTableName($referenceTableName);
 
-        $this->assertSame($mockReferenceTable, $this->foreignKey->getReferenceTable());
+        $this->assertSame($referenceTableName, $this->foreignKey->getReferenceTableName());
     }
 
     public function testSetForeignKeyColumns()
@@ -110,10 +110,6 @@ class ForeignKeyTest extends ConstraintTestCase
         $expectedDDL = <<<SQL
 CONSTRAINT `{$this->constraintName}` FOREIGN KEY (`col_a`,`col_b`) REFERENCES `ref_tbl` (`ref_col_a`,`ref_col_b`) ON DELETE RESTRICT ON UPDATE RESTRICT
 SQL;
-
-        $mockReferenceTable = $this->createMock(TableInterface::class);
-        $mockReferenceTable->method('getName')->willReturn('ref_tbl');
-
         $fkColumnA = $this->createMock(ForeignKeyColumn::class);
         $fkColumnA->method('getColumnName')->willReturn('col_a');
         $fkColumnA->method('getReferenceColumnName')->willReturn('ref_col_a');
@@ -127,7 +123,7 @@ SQL;
         ];
         $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
 
-        $this->foreignKey->setReferenceTable($mockReferenceTable);
+        $this->foreignKey->setReferenceTableName('ref_tbl');
 
         $this->assertSame($expectedDDL, (string)$this->foreignKey);
     }
