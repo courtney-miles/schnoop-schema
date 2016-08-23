@@ -47,8 +47,8 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertFalse($this->column->hasDefault());
         $this->assertNull($this->column->getDefault());
 
-        $this->assertFalse($this->column->hasTable());
-        $this->assertNull($this->column->getTable());
+        $this->assertFalse($this->column->hasTableName());
+        $this->assertNull($this->column->getTableName());
 
         $this->assertNull($this->column->isZeroFill());
         $this->assertNull($this->column->isAutoIncrement());
@@ -64,13 +64,13 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertFalse($column->isAutoIncrement());
     }
 
-    public function testSetTable()
+    public function testSetTableName()
     {
-        $mockTable = $this->createMock(TableInterface::class);
-        $this->column->setTable($mockTable);
+        $tableName = 'schnoop_tbl';
+        $this->column->setTableName($tableName);
 
-        $this->assertTrue($this->column->hasTable());
-        $this->assertSame($mockTable, $this->column->getTable());
+        $this->assertTrue($this->column->hasTableName());
+        $this->assertSame($tableName, $this->column->getTableName());
     }
 
     public function testSetNullable()
@@ -274,20 +274,6 @@ class ColumnTest extends SchnoopSchemaTestCase
     public function testDDL(Column $column, $expectedDDL)
     {
         $this->assertSame($expectedDDL, (string)$column);
-    }
-
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\Exception\ColumnException
-     */
-    public function testExceptionWhenTableAlreadySet()
-    {
-        $mockTable1 = $this->createMock(TableInterface::class);
-        $mockTable1->method('getName')->willReturn('tbl_one');
-        $mockTable2 = $this->createMock(TableInterface::class);
-        $mockTable2->method('getName')->willReturn('tbl_two');
-
-        $this->column->setTable($mockTable1);
-        $this->column->setTable($mockTable2);
     }
 
     /**

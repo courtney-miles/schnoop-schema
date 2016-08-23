@@ -15,16 +15,16 @@ interface ColumnInterface
     public function getDataType();
 
     /**
-     * @return TableInterface
+     * @return string
      */
-    public function getTable();
+    public function getTableName();
 
-    public function setTable(TableInterface $table);
+    public function setTableName($tableName);
 
     /**
      * @return bool
      */
-    public function hasTable();
+    public function hasTableName();
 
     public function __toString();
 

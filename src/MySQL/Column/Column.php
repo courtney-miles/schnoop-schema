@@ -20,10 +20,7 @@ class Column implements ColumnInterface
      */
     protected $dataType;
 
-    /**
-     * @var TableInterface
-     */
-    protected $table;
+    protected $tableName;
 
     /**
      * @var bool
@@ -69,30 +66,19 @@ class Column implements ColumnInterface
         return $this->name;
     }
 
-    public function getTable()
+    public function getTableName()
     {
-        return $this->table;
+        return $this->tableName;
     }
 
-    public function setTable(TableInterface $table)
+    public function setTableName($tableName)
     {
-        if (isset($this->table)) {
-            throw new ColumnException(
-                sprintf(
-                    'Attempt made to attach column %s to table %s when it is already attached to %s',
-                    $this->getName(),
-                    $table->getName(),
-                    $this->table->getName()
-                )
-            );
-        }
-
-        $this->table = $table;
+        $this->tableName = $tableName;
     }
 
-    public function hasTable()
+    public function hasTableName()
     {
-        return isset($this->table);
+        return isset($this->tableName);
     }
 
     /**

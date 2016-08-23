@@ -86,7 +86,7 @@ class Table implements TableInterface
      */
     public function addColumn(ColumnInterface $column)
     {
-        $column->setTable($this);
+        $column->setTableName($this);
         $this->columns[$column->getName()] = $column;
     }
 
