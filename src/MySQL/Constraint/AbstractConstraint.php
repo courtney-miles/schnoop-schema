@@ -17,9 +17,9 @@ abstract class AbstractConstraint implements ConstraintInterface
     protected $constraintType;
 
     /**
-     * @var MySQLTableInterface
+     * @var string
      */
-    protected $table;
+    protected $tableName;
 
     public function __construct($name, $constraintType)
     {
@@ -37,30 +37,22 @@ abstract class AbstractConstraint implements ConstraintInterface
         return $this->constraintType;
     }
 
-    public function getTable()
+    public function getTableName()
     {
-        return $this->table;
+        return $this->tableName;
     }
 
-    public function setTable(TableInterface $table)
+    public function setTableName($tableName)
     {
-//        foreach ($this->indexedColumns as $indexedColumn) {
-//            if (!$table->hasColumn($indexedColumn->getColumnName())) {
-//                throw new UnknownColumnException(
-//                    "A column named {$indexedColumn->getColumnName()} was not found in the table {$table->getName()}"
-//                );
-//            }
-//        }
-
-        $this->table = $table;
+        $this->tableName = $tableName;
     }
 
     /**
      * Identify if the index has been attached to a table.
      * @return bool True if the index has been attached to a table.
      */
-    public function hasTable()
+    public function hasTableName()
     {
-        return isset($this->table);
+        return isset($this->tableName);
     }
 }

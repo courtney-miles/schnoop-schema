@@ -10,6 +10,8 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyColumnInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 
 interface TableInterface
 {
@@ -37,21 +39,35 @@ interface TableInterface
 
     public function addColumn(ColumnInterface $column);
 
-    public function getConstraintList();
-    public function getConstraints();
-    public function hasConstraint($constraintName);
-    public function getConstraint($constraintName);
+    public function getIndexList();
+    public function getIndexes();
+    public function hasIndex($indexName);
+    public function getIndex($indexName);
 
     /**
-     * @param ConstraintInterface[] $constraints
+     * @param ConstraintInterface[] $indexes
      * @return mixed
      */
-    public function setConstraints(array $constraints);
+    public function setIndexes(array $indexes);
 
-    public function addConstraint(ConstraintInterface $constraint);
+    public function addIndex(ConstraintInterface $index);
 
     public function hasPrimaryKey();
     public function getPrimaryKey();
+
+    public function getForeignKeyList();
+    public function getForeignKeys();
+    public function getForeignKey($foreignKeyName);
+    public function hasForeignKey($foreignKeyName);
+
+    /**
+     * @param array $foreignKeys
+     * @return ForeignKeyInterface[]
+     */
+    public function setForeignKey(array $foreignKeys);
+
+    public function addForeignKey(ForeignKeyInterface $foreignKey);
+
     public function __toString();
 
     public function getEngine();

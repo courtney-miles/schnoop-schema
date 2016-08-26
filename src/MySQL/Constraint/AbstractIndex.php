@@ -2,19 +2,12 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
-
 abstract class AbstractIndex extends AbstractConstraint implements IndexInterface
 {
     /**
      * @var string
      */
     protected $name;
-
-    /**
-     * @var TableInterface
-     */
-    protected $table;
 
     /**
      * @var IndexedColumnInterface[]
@@ -63,12 +56,6 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
 
     public function addIndexedColumn(IndexedColumnInterface $indexedColumn)
     {
-//        if (isset($this->table) && $this->table->hasColumn($indexedColumn)) {
-//            throw new UnknownColumnException(
-//                "A column named {$indexedColumn->getColumnName()} was not found in the table {$this->table->getName()}"
-//            );
-//        }
-
         $this->indexedColumns[$indexedColumn->getColumnName()] = $indexedColumn;
     }
 

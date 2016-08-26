@@ -50,7 +50,7 @@ class TableTest extends SchnoopSchemaTestCase
 
         $this->assertSame([], $this->table->getColumns());
 
-        $this->assertSame([], $this->table->getConstraints());
+        $this->assertSame([], $this->table->getIndexes());
         $this->assertFalse($this->table->hasPrimaryKey());
         $this->assertNull($this->table->getPrimaryKey());
     }
@@ -105,8 +105,8 @@ class TableTest extends SchnoopSchemaTestCase
 
         $mockColumn = $this->createMockColumn($columnName, $columnDDL);
         $mockColumn->expects($this->once())
-            ->method('setTable')
-            ->with($this->table);
+            ->method('setTableName')
+            ->with($this->table->getName());
 
         $this->table->addColumn($mockColumn);
 
@@ -146,62 +146,106 @@ class TableTest extends SchnoopSchemaTestCase
     {
         $constraintName = 'schnoop_idx';
 
-        $this->assertFalse($this->table->hasConstraint($constraintName));
-        $this->assertNull($this->table->getConstraint($constraintName));
+        $this->assertFalse($this->table->hasIndex($constraintName));
+        $this->assertNull($this->table->getIndex($constraintName));
     }
 
-    public function testAddConstraint()
+    public function testAddIndex()
     {
-        $constraintName = 'schnoop_idx';
-        $constrainDDL = '_IDX_DDL_';
+        $indexName = 'schnoop_idx';
+        $indexDDL = '_IDX_DDL_';
 
-        $mockConstraint = $this->createMockConstraint($constraintName, $constrainDDL);
-        $mockConstraint->expects($this->once())
-            ->method('setTable')
-            ->with($this->table);
+        $mockIndex = $this->createMockIndex($indexName, $indexDDL);
+        $mockIndex->expects($this->once())
+            ->method('setTableName')
+            ->with($this->table->getName());
 
-        $this->table->addConstraint($mockConstraint);
+        $this->table->addIndex($mockIndex);
 
-        $this->assertTrue($this->table->hasConstraint($constraintName));
-        $this->assertSame($mockConstraint, $this->table->getConstraint($constraintName));
-        $this->assertSame([$mockConstraint], $this->table->getConstraints());
-        $this->assertSame([$constraintName], $this->table->getConstraintList());
+        $this->assertTrue($this->table->hasIndex($indexName));
+        $this->assertSame($mockIndex, $this->table->getIndex($indexName));
+        $this->assertSame([$mockIndex], $this->table->getIndexes());
+        $this->assertSame([$indexName], $this->table->getIndexList());
     }
 
     /**
-     * @depends testAddConstraint
+     * @depends testAddIndex
      */
-    public function testSetConstraints()
+    public function testSetIndexes()
     {
-        $constraintNames = [
+        $indexNames = [
             'schnoop_idx1',
             'schnoop_idx2'
         ];
 
-        $constraintDDLs = [
+        $indexDDLs = [
             '_IDX_DDL_1_',
             '_IDX_DDL_2_'
         ];
 
-        $mockConstraints = [
-            $this->createMockConstraint($constraintNames[0], $constraintDDLs[0]),
-            $this->createMockConstraint($constraintNames[1], $constraintDDLs[1])
+        $mockIndexes = [
+            $this->createMockIndex($indexNames[0], $indexDDLs[0]),
+            $this->createMockIndex($indexNames[1], $indexDDLs[1])
         ];
 
-        $this->table->setConstraints($mockConstraints);
+        $this->table->setIndexes($mockIndexes);
 
-        $this->assertSame($mockConstraints, $this->table->getConstraints());
-        $this->assertSame($constraintNames, $this->table->getConstraintList());
+        $this->assertSame($mockIndexes, $this->table->getIndexes());
+        $this->assertSame($indexNames, $this->table->getIndexList());
     }
 
     public function testAddPrimaryKey()
     {
         $mockPrimaryKey = $this->createMock(UniqueIndex::class);
         $mockPrimaryKey->method('getName')->willReturn('primary');
-        $this->table->addConstraint($mockPrimaryKey);
+        $this->table->addIndex($mockPrimaryKey);
 
         $this->assertTrue($this->table->hasPrimaryKey());
         $this->assertSame($mockPrimaryKey, $this->table->getPrimaryKey());
+    }
+
+    public function testAddForeignKey()
+    {
+        $foreignKeyName = 'schnoop_fk';
+        $foreignKeyDDL = '_FK_DDL_';
+
+        $mockForeignKey = $this->createMockForeignKey($foreignKeyName, $foreignKeyDDL);
+        $mockForeignKey->expects($this->once())
+            ->method('setTableName')
+            ->with($this->table->getName());
+
+        $this->table->addForeignKey($mockForeignKey);
+
+        $this->assertTrue($this->table->hasForeignKey($foreignKeyName));
+        $this->assertSame($mockForeignKey, $this->table->getForeignKey($foreignKeyName));
+        $this->assertSame([$mockForeignKey], $this->table->getForeignKeys());
+        $this->assertSame([$foreignKeyName], $this->table->getForeignKeyList());
+    }
+
+    /**
+     * @depends testAddForeignKey
+     */
+    public function testSetForeignKey()
+    {
+        $foreignKeyNames = [
+            'schnoop_fk1',
+            'schnoop_fk2'
+        ];
+
+        $foreignKeyDDLs = [
+            '_FK_DDL_1_',
+            '_FK_DDL_2_'
+        ];
+
+        $mockForeignKeys = [
+            $this->createMockForeignKey($foreignKeyNames[0], $foreignKeyDDLs[0]),
+            $this->createMockForeignKey($foreignKeyNames[1], $foreignKeyDDLs[1])
+        ];
+
+        $this->table->setForeignKey($mockForeignKeys);
+
+        $this->assertSame($mockForeignKeys, $this->table->getForeignKeys());
+        $this->assertSame($foreignKeyNames, $this->table->getForeignKeyList());
     }
 
     public function testDDL()
@@ -217,10 +261,10 @@ class TableTest extends SchnoopSchemaTestCase
                 $this->createMockColumn('schnoop_col2', '_COL_DDL_2_')
             ]
         );
-        $table->setConstraints(
+        $table->setIndexes(
             [
-                $this->createMockConstraint('schnoop_idx1', '_IDX_DDL_1_'),
-                $this->createMockConstraint('schnoop_idx2', '_IDX_DDL_2_')
+                $this->createMockIndex('schnoop_idx1', '_IDX_DDL_1_'),
+                $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_')
             ]
         );
 

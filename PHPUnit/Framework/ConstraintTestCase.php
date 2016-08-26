@@ -29,17 +29,17 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
             'Assertion on ' . get_class($constraint)
         );
 
-        $this->assertFalse($constraint->hasTable(), 'Assertion on ' . get_class($constraint));
-        $this->assertNull($constraint->getTable(), 'Assertion on ' . get_class($constraint));
+        $this->assertFalse($constraint->hasTableName(), 'Assertion on ' . get_class($constraint));
+        $this->assertNull($constraint->getTableName(), 'Assertion on ' . get_class($constraint));
     }
 
-    public function testSetTable()
+    public function testSetTableName()
     {
-        $mockTable = $this->createMock(TableInterface::class);
+        $tableName = 'schnoop_tbl';
         $constraint = $this->getConstraint();
-        $constraint->setTable($mockTable);
+        $constraint->setTableName($tableName);
 
-        $this->assertTrue($constraint->hasTable(), 'Assertion on ' . get_class($constraint));
-        $this->assertSame($mockTable, $constraint->getTable(), 'Assertion on ' . get_class($constraint));
+        $this->assertTrue($constraint->hasTableName(), 'Assertion on ' . get_class($constraint));
+        $this->assertSame($tableName, $constraint->getTableName(), 'Assertion on ' . get_class($constraint));
     }
 }

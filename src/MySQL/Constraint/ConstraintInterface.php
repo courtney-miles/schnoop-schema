@@ -14,15 +14,15 @@ interface ConstraintInterface
 
     public function getName();
 
-    public function getTable();
+    public function getTableName();
 
-    public function setTable(TableInterface $table);
+    public function setTableName($tableName);
 
     /**
      * Identify if the index has been attached to a table.
      * @return bool True if the index has been attached to a table.
      */
-    public function hasTable();
+    public function hasTableName();
 
     public function __toString();
 

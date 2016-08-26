@@ -2,33 +2,41 @@
 
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\IntTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericPointTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\CharTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use PHPUnit\Framework\TestCase;
 
 class SchnoopSchemaTestCase extends TestCase
 {
     /**
-     * @param $constraintName
-     * @param $constraintDDL
-     * @return ConstraintInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param $indexName
+     * @param $indexDDL
+     * @return IndexInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createMockConstraint($constraintName, $constraintDDL)
+    protected function createMockIndex($indexName, $indexDDL)
     {
-        $mockConstraint = $this->createMock(ConstraintInterface::class);
-        $mockConstraint->method('getName')
-            ->willReturn($constraintName);
-        $mockConstraint->method('__toString')
-            ->willReturn($constraintDDL);
+        $mockIndex = $this->createMock(IndexInterface::class);
+        $mockIndex->method('getName')
+            ->willReturn($indexName);
+        $mockIndex->method('__toString')
+            ->willReturn($indexDDL);
 
-        return $mockConstraint;
+        return $mockIndex;
+    }
+
+    /**
+     * @param $foreignKeyName
+     * @param $foreignKeyDDL
+     * @return ForeignKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMockForeignKey($foreignKeyName, $foreignKeyDDL)
+    {
+        $mockForeignKey = $this->createMock(ForeignKeyInterface::class);
+        $mockForeignKey->method('getName')
+            ->willReturn($foreignKeyName);
+        $mockForeignKey->method('__toString')
+            ->willReturn($foreignKeyDDL);
+
+        return $mockForeignKey;
     }
 }

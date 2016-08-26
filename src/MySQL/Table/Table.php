@@ -10,6 +10,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 
 class Table implements TableInterface
 {
@@ -23,7 +24,12 @@ class Table implements TableInterface
     /**
      * @var ConstraintInterface[]
      */
-    protected $constraints = [];
+    protected $indexes = [];
+
+    /**
+     * @var ForeignKeyInterface[]
+     */
+    protected $foreignKeys = [];
 
     protected $engine;
 
@@ -86,60 +92,94 @@ class Table implements TableInterface
      */
     public function addColumn(ColumnInterface $column)
     {
-        $column->setTableName($this);
+        $column->setTableName($this->name);
         $this->columns[$column->getName()] = $column;
     }
 
-    public function getConstraintList()
+    public function getIndexList()
     {
-        return array_keys($this->constraints);
+        return array_keys($this->indexes);
     }
 
-    public function getConstraints()
+    public function getIndexes()
     {
-        return array_values($this->constraints);
+        return array_values($this->indexes);
     }
 
-    public function hasConstraint($constraintName)
+    public function hasIndex($indexName)
     {
-        return isset($this->constraints[$constraintName]);
+        return isset($this->indexes[$indexName]);
     }
 
-    public function getConstraint($constraintName)
+    public function getIndex($indexName)
     {
-        return $this->hasConstraint($constraintName) ? $this->constraints[$constraintName] : null;
+        return $this->hasIndex($indexName) ? $this->indexes[$indexName] : null;
     }
 
-    public function setConstraints(array $constraints)
+    public function setIndexes(array $indexes)
     {
-        $this->constraints = [];
+        $this->indexes = [];
 
-        foreach ($constraints as $index) {
-            $this->addConstraint($index);
+        foreach ($indexes as $index) {
+            $this->addIndex($index);
         }
     }
 
-    public function addConstraint(ConstraintInterface $constraint)
+    public function addIndex(ConstraintInterface $index)
     {
-        $constraint->setTable($this);
-
-        $name = $constraint->getName();
+        $name = $index->getName();
 
         if (strtoupper($name) == 'PRIMARY') {
             $name = strtoupper($name);
         }
 
-        $this->constraints[$name] = $constraint;
+        $this->indexes[$name] = $index;
+        $index->setTableName($this->getName());
     }
 
     public function hasPrimaryKey()
     {
-        return $this->hasConstraint('PRIMARY');
+        return $this->hasIndex('PRIMARY');
     }
 
     public function getPrimaryKey()
     {
-        return $this->getConstraint('PRIMARY');
+        return $this->getIndex('PRIMARY');
+    }
+
+    public function getForeignKeyList()
+    {
+        return array_keys($this->foreignKeys);
+    }
+
+    public function getForeignKeys()
+    {
+        return array_values($this->foreignKeys);
+    }
+
+    public function getForeignKey($foreignKeyName)
+    {
+        return $this->hasForeignKey($foreignKeyName) ? $this->foreignKeys[$foreignKeyName] : null;
+    }
+
+    public function hasForeignKey($foreignKeyName)
+    {
+        return isset($this->foreignKeys[$foreignKeyName]);
+    }
+
+    public function setForeignKey(array $foreignKeys)
+    {
+        $this->foreignKeys = [];
+
+        foreach ($foreignKeys as $foreignKey) {
+            $this->addForeignKey($foreignKey);
+        }
+    }
+
+    public function addForeignKey(ForeignKeyInterface $foreignKey)
+    {
+        $this->foreignKeys[$foreignKey->getName()] = $foreignKey;
+        $foreignKey->setTableName($this->getName());
     }
 
     /**
@@ -235,7 +275,7 @@ class Table implements TableInterface
         }
 
         $indexDefinitions = [];
-        foreach ($this->getConstraints() as $index) {
+        foreach ($this->getIndexes() as $index) {
             $indexDefinitions[] = '  '.(string)$index;
         }
 
