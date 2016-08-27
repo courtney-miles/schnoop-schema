@@ -48,7 +48,6 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertFalse($this->column->hasTableName());
         $this->assertNull($this->column->getTableName());
 
-        $this->assertNull($this->column->isZeroFill());
         $this->assertNull($this->column->isAutoIncrement());
     }
 
@@ -58,7 +57,6 @@ class ColumnTest extends SchnoopSchemaTestCase
         $dataType->method('doesAllowDefault')->willReturn(true);
         $column = new Column($this->name, $dataType);
 
-        $this->assertFalse($column->isZeroFill());
         $this->assertFalse($column->isAutoIncrement());
     }
 
@@ -184,42 +182,6 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->getDefault());
     }
 
-    public function testSetZeroFill()
-    {
-        $dataType = $this->createMock(NumericTypeInterface::class);
-        $dataType->method('doesAllowDefault')->willReturn(true);
-        $column = new Column($this->name, $dataType);
-        $column->setZeroFill(true);
-
-        $this->assertTrue($column->isZeroFill());
-    }
-
-    /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Unable to set zero-fill property on the column as its data-type does not support it.
-     */
-    public function testWarningSetZeroFillOnUnsupportedType()
-    {
-        $this->column->setZeroFill(true);
-    }
-
-    public function testZeroFillNotSetOnSupportedType()
-    {
-        @$this->column->setZeroFill(true);
-
-        $this->assertFalse($this->column->isZeroFill());
-    }
-
-    /**
-     * Specifically testing that no problem is reported when setting ZeroFill
-     * to false even when the type does not support it.
-     */
-    public function testNoWarningUnsetZeroFillOnUnsupportedType()
-    {
-        $this->column->setZeroFill(false);
-        $this->assertFalse($this->column->isZeroFill());
-    }
-
     public function testSetAutoIncrement()
     {
         $dataType = $this->createMock(NumericTypeInterface::class);
@@ -309,7 +271,6 @@ class ColumnTest extends SchnoopSchemaTestCase
                     false,
                     null,
                     false,
-                    false,
                     null
                 ),
                 <<< SQL
@@ -323,11 +284,10 @@ SQL
                     true,
                     $default,
                     true,
-                    true,
                     'Schnoop comment'
                 ),
                 <<< SQL
-`{$this->name}` _DATATYPE_DDL_ ZEROFILL NULL DEFAULT 123 AUTO_INCREMENT COMMENT 'Schnoop comment'
+`{$this->name}` _DATATYPE_DDL_ NULL DEFAULT 123 AUTO_INCREMENT COMMENT 'Schnoop comment'
 SQL
             ],
             [
@@ -336,7 +296,6 @@ SQL
                     $mockSetDataType,
                     true,
                     $defaultArray,
-                    null,
                     null,
                     null
                 ),
@@ -353,9 +312,9 @@ SQL
      * @param bool $nullable
      * @param mixed $default
      * @param bool|null $autoIncrement
-     * @param bool|null $zeroFill
      * @param string $comment
      * @return Column
+     * @internal param bool|null $zeroFill
      */
     protected function createColumn(
         $name,
@@ -363,16 +322,11 @@ SQL
         $nullable,
         $default,
         $autoIncrement,
-        $zeroFill,
         $comment
     ) {
         $column = new Column($name, $dataType);
         $column->setNullable($nullable);
         $column->setDefault($default);
-
-        if ($zeroFill !== null) {
-            $column->setZeroFill($zeroFill);
-        }
 
         if ($autoIncrement !== null) {
             $column->setAutoIncrement($autoIncrement);

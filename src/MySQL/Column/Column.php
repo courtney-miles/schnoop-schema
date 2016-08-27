@@ -184,7 +184,6 @@ class Column implements ColumnInterface
                 [
                     '`' . $this->getName() . '`',
                     (string)$this->getDataType(),
-                    $this->isZeroFill() ? 'ZEROFILL' : null,
                     $this->nullable ? 'NULL' : 'NOT NULL',
                     $this->hasDefault() ? 'DEFAULT ' . $default : null,
                     $this->isAutoIncrement() ? 'AUTO_INCREMENT' : null,
