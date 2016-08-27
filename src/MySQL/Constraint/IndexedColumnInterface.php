@@ -2,8 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-
 interface IndexedColumnInterface extends ConstraintColumnInterface
 {
     const COLLATION_ASC = 'asc';

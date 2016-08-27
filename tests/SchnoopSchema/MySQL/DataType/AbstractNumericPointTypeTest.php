@@ -3,7 +3,6 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractNumericPointType;
 use PHPUnit_Framework_MockObject_MockObject;
 

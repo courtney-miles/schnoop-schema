@@ -2,8 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
-
 interface ForeignKeyInterface extends ConstraintInterface
 {
     const REFERENCE_ACTION_RESTRICT = 'RESTRICT';

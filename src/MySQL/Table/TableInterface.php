@@ -10,7 +10,6 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 
 interface TableInterface

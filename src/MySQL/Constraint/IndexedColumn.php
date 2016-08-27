@@ -2,8 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-
 class IndexedColumn implements IndexedColumnInterface
 {
     /**

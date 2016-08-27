@@ -2,11 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\Exception\UnknownColumnException;
-use MilesAsylum\SchnoopSchema\MySQL\Exception\DBMSMismatchException;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface as MySQLTableInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
-
 abstract class AbstractConstraint implements ConstraintInterface
 {
     /**

@@ -5,13 +5,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKey;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyColumn;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\ConstraintTestCase;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
 class ForeignKeyTest extends ConstraintTestCase
 {

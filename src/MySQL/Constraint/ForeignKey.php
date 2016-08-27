@@ -2,9 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
-
 class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
 {
     /**

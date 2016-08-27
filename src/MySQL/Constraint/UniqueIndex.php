@@ -17,7 +17,7 @@ class UniqueIndex extends AbstractIndex
     public function __toString()
     {
         if (strcasecmp('primary', $this->getName()) == 0) {
-            return $this->makeIndexDDL('PRIMARY KEY', null, $this->getIndexType());
+            return $this->makeIndexDDL('PRIMARY KEY', null);
         }
 
         return $this->makeIndexDDL($this->getConstraintType(), $this->getName());

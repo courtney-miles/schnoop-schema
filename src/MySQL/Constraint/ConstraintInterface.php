@@ -2,8 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
-
 interface ConstraintInterface
 {
     const CONSTRAINT_INDEX = 'INDEX';

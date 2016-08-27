@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 27/06/16
- * Time: 7:43 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\UniqueIndex;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
 
 class TableTest extends SchnoopSchemaTestCase

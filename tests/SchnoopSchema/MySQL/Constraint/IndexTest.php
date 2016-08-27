@@ -2,12 +2,9 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\Index;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 
 class IndexTest extends IndexTestCase
 {

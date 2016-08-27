@@ -2,11 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
-use MilesAsylum\SchnoopSchema\AbstractColumn;
-use MilesAsylum\SchnoopSchema\Exception\ColumnException;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
 class Column implements ColumnInterface
 {

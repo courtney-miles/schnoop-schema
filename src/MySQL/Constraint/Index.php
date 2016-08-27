@@ -11,6 +11,6 @@ class Index extends AbstractIndex
 
     public function __toString()
     {
-        return $this->makeIndexDDL($this->getConstraintType(), $this->getName(), $this->getIndexType());
+        return $this->makeIndexDDL($this->getConstraintType(), $this->getName());
     }
 }

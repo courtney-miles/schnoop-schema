@@ -2,9 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Column;
 
-use MilesAsylum\SchnoopSchema\Exception\ColumnException;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\Column;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;

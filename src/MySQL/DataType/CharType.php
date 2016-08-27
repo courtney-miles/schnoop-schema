@@ -8,7 +8,7 @@ class CharType extends AbstractCharType
 
     public function __construct($length = 1)
     {
-        $this->setLength($length);
+        parent::__construct($length);
     }
 
     /**

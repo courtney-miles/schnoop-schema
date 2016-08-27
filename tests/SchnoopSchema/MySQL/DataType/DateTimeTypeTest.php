@@ -2,7 +2,6 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DateTimeType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;

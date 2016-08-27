@@ -85,7 +85,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         $this->comment = $comment;
     }
 
-    protected function makeIndexDDL($type, $name = null, $indexType = null)
+    protected function makeIndexDDL($type, $name = null)
     {
         return implode(
             ' ',
@@ -93,7 +93,6 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
                 [
                     strtoupper($type),
                     $name !== null ? '`' . $name . '`' : null,
-                    //isset($indexType) ? 'USING ' . $indexType : null,
                     $this->makeIndexedColumnsDDL(),
                     $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
                 ]

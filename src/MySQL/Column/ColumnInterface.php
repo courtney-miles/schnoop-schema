@@ -3,7 +3,6 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
 interface ColumnInterface
 {

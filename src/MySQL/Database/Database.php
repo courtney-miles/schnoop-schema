@@ -1,15 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 4/06/16
- * Time: 6:10 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
-
-use MilesAsylum\SchnoopSchema\AbstractDatabase;
-use MilesAsylum\Schnoop\Schnoop;
 
 class Database implements DatabaseInterface
 {

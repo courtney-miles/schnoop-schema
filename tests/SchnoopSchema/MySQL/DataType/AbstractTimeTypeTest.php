@@ -2,10 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTimeType;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -39,7 +36,7 @@ class AbstractTimeTypeTest extends TimeTypeTestCase
     protected function createMockAbstractTimeType($type)
     {
         $abstractTimeType = $this->getMockForAbstractClass(AbstractTimeType::class);
-        $abstractTimeType->method('getType')->willReturn($this->type);
+        $abstractTimeType->method('getType')->willReturn($type);
 
         return $abstractTimeType;
     }

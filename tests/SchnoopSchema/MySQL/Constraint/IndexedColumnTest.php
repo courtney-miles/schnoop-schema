@@ -2,9 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumnInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
 class IndexedColumnTest extends SchnoopSchemaTestCase

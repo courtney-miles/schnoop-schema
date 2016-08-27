@@ -5,7 +5,6 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\EnumType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\OptionsTypeTestCase;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 
 class EnumTypeTest extends OptionsTypeTestCase
 {

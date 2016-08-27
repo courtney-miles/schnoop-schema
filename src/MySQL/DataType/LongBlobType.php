@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 23/06/16
- * Time: 7:34 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
