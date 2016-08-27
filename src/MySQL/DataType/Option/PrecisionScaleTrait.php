@@ -47,12 +47,12 @@ trait PrecisionScaleTrait
     }
 
     /**
-     * @param int $precision
+     * @param int|null $precision
      * @param int $scale
      */
     public function setPrecisionScale($precision, $scale = 0)
     {
-        $this->precision = (int)$precision;
+        $this->precision = $precision !== null ? (int)$precision : null;
         $this->scale = $scale === null ? 0 : $scale;
     }
 }
