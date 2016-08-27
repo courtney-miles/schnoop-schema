@@ -68,17 +68,6 @@ interface ColumnInterface
      * @return bool|null Returns a boolean if the column is for a numeric
      * data-type, otherwise null for types that do not support this property.
      */
-    public function isZeroFill();
-
-    /**
-     * @param bool $zeroFill
-     */
-    public function setZeroFill($zeroFill);
-
-    /**
-     * @return bool|null Returns a boolean if the column is for a numeric
-     * data-type, otherwise null for types that do not support this property.
-     */
     public function isAutoIncrement();
 
     public function setAutoIncrement($autoIncrement);

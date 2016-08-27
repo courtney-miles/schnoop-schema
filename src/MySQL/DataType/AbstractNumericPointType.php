@@ -5,12 +5,14 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\SignedTrait;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\ZeroFillTrait;
 
 abstract class AbstractNumericPointType implements NumericPointTypeInterface
 {
     use PrecisionScaleTrait;
     use SignedTrait;
     use QuoteTrait;
+    use ZeroFillTrait;
 
     public function __construct()
     {

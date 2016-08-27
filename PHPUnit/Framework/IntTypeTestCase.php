@@ -17,13 +17,12 @@ abstract class IntTypeTestCase extends DataTypeTestCase
 
         $this->assertFalse($intType->hasDisplayWidth());
         $this->assertNull($intType->getDisplayWidth());
-
         $this->assertTrue($intType->isSigned());
-
         $this->assertTrue($intType->doesAllowDefault());
+        $this->assertFalse($intType->isZeroFill());
     }
 
-    public function testDisplayWidth()
+    public function testSetDisplayWidth()
     {
         $displayWidth = 2;
         $intType = $this->getIntType();
@@ -31,6 +30,14 @@ abstract class IntTypeTestCase extends DataTypeTestCase
 
         $this->assertTrue($intType->hasDisplayWidth());
         $this->assertSame($displayWidth, $intType->getDisplayWidth());
+    }
+
+    public function testZeroFill()
+    {
+        $intType = $this->getIntType();
+        $intType->setZeroFill(true);
+
+        $this->assertTrue($intType->isZeroFill());
     }
 
     public function testCast()

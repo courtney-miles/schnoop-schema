@@ -28,12 +28,12 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertNull($numericPointType->getMinRange());
         $this->assertNull($numericPointType->getMaxRange());
         $this->assertTrue($numericPointType->doesAllowDefault());
+        $this->assertFalse($numericPointType->isZeroFill());
     }
 
     public function testSetSigned()
     {
         $numericPointType = $this->getNumericPointType();
-
         $numericPointType->setSigned(false);
 
         $this->assertFalse($numericPointType->isSigned());
@@ -67,6 +67,14 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
 
         $this->assertTrue($numericPointType->hasScale());
         $this->assertSame($scale, $numericPointType->getScale());
+    }
+
+    public function testSetZeroFill()
+    {
+        $numericPointType = $this->getNumericPointType();
+        $numericPointType->setZeroFill(true);
+
+        $this->assertTrue($numericPointType->isZeroFill());
     }
 
     public function testMinRangeSigned()

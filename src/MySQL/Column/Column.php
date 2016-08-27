@@ -37,11 +37,6 @@ class Column implements ColumnInterface
     /**
      * @var bool
      */
-    protected $zeroFill;
-
-    /**
-     * @var bool
-     */
     protected $autoIncrement;
 
     public function __construct($name, DataTypeInterface $dataType)
@@ -151,28 +146,6 @@ class Column implements ColumnInterface
     public function setComment($comment)
     {
         $this->comment = $comment;
-    }
-
-    /**
-     * @return boolean|null
-     */
-    public function isZeroFill()
-    {
-        return $this->zeroFill;
-    }
-
-    public function setZeroFill($zeroFill)
-    {
-        if ($zeroFill && !($this->dataType instanceof NumericTypeInterface)) {
-            trigger_error(
-                "Unable to set zero-fill property on the column as its data-type does not support it.",
-                E_USER_WARNING
-            );
-
-            $zeroFill = false;
-        }
-
-        $this->zeroFill = $zeroFill;
     }
 
     /**

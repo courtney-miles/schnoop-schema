@@ -9,7 +9,8 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\ZeroFillInterface;
 
-interface NumericPointTypeInterface extends NumericTypeInterface, PrecisionScaleInterface
+interface NumericPointTypeInterface extends NumericTypeInterface, PrecisionScaleInterface, ZeroFillInterface
 {
 }
