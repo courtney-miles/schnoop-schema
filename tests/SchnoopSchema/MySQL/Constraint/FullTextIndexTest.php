@@ -39,7 +39,7 @@ class FullTextIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_FULLTEXT_INDEX;
+        return IndexInterface::CONSTRAINT_INDEX_FULLTEXT;
     }
 
     protected function getIndexType()

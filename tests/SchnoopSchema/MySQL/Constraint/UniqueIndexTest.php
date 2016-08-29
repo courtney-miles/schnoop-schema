@@ -43,7 +43,7 @@ class UniqueIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_UNIQUE_INDEX;
+        return IndexInterface::CONSTRAINT_INDEX_UNIQUE;
     }
 
     protected function getIndexType()

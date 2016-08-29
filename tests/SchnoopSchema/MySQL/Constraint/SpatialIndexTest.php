@@ -36,7 +36,7 @@ class SpatialIndexTest extends IndexTestCase
 
     protected function getConstraintType()
     {
-        return IndexInterface::CONSTRAINT_SPATIAL_INDEX;
+        return IndexInterface::CONSTRAINT_INDEX_SPATIAL;
     }
 
     protected function getIndexType()

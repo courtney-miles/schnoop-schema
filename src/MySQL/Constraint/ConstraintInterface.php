@@ -5,9 +5,9 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 interface ConstraintInterface
 {
     const CONSTRAINT_INDEX = 'INDEX';
-    const CONSTRAINT_UNIQUE_INDEX = 'UNIQUE INDEX';
-    const CONSTRAINT_FULLTEXT_INDEX = 'FULLTEXT INDEX';
-    const CONSTRAINT_SPATIAL_INDEX = 'SPATIAL INDEX';
+    const CONSTRAINT_INDEX_UNIQUE = 'UNIQUE INDEX';
+    const CONSTRAINT_INDEX_FULLTEXT = 'FULLTEXT INDEX';
+    const CONSTRAINT_INDEX_SPATIAL = 'SPATIAL INDEX';
     const CONSTRAINT_FOREIGN_KEY = 'FOREIGN KEY';
 
     public function getName();
