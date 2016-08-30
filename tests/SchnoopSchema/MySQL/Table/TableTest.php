@@ -56,6 +56,13 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame(Table::ENGINE_INNODB, $this->table->getEngine());
     }
 
+    public function testSetEngineForcesCase()
+    {
+        $this->table->setEngine('InnoDB');
+
+        $this->assertSame(Table::ENGINE_INNODB, $this->table->getEngine());
+    }
+
     public function testSetDefaultCollation()
     {
         $defaultCollation = 'utf8mb4_general_ci';
@@ -71,6 +78,13 @@ class TableTest extends SchnoopSchemaTestCase
         $this->table->setRowFormat(Table::ROW_FORMAT_COMPACT);
 
         $this->assertTrue($this->table->hasRowFormat());
+        $this->assertSame(Table::ROW_FORMAT_COMPACT, $this->table->getRowFormat());
+    }
+
+    public function testSetRowFormatForcesCase()
+    {
+        $this->table->setRowFormat('ComPacT');
+
         $this->assertSame(Table::ROW_FORMAT_COMPACT, $this->table->getRowFormat());
     }
 

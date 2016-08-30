@@ -200,7 +200,7 @@ class Table implements TableInterface
      */
     public function setEngine($engine)
     {
-        $this->engine = $engine;
+        $this->engine = strtoupper($engine);
     }
 
     /**
@@ -243,7 +243,7 @@ class Table implements TableInterface
      */
     public function setRowFormat($rowFormat)
     {
-        $this->rowFormat = $rowFormat;
+        $this->rowFormat = strtoupper($rowFormat);
     }
 
     /**
