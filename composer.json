@@ -1,6 +1,6 @@
 {
   "name": "milesasylum/schnoop-schema",
-  "description": "Schnoop schema is a PHP representation of the resources defined in a database.",
+  "description": "Schnoop schema is a representation of a database schema using PHP objects.",
   "homepage": "https://github.com/courtney-miles/schnoop-schema",
   "minimum-stability": "stable",
   "license": "MIT",
