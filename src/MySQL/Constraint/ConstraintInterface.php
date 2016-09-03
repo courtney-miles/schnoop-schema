@@ -16,11 +16,13 @@ interface ConstraintInterface
 
     public function setTableName($tableName);
 
-    /**
-     * Identify if the index has been attached to a table.
-     * @return bool True if the index has been attached to a table.
-     */
     public function hasTableName();
+
+    public function getDatabaseName();
+
+    public function hasDatabaseName();
+
+    public function setDatabaseName($databaseName);
 
     public function __toString();
 

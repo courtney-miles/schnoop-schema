@@ -27,6 +27,12 @@ interface ColumnInterface
 
     public function __toString();
 
+    public function getDatabaseName();
+
+    public function setDatabaseName($databaseName);
+
+    public function hasDatabaseName();
+
     /**
      * @return boolean
      */

@@ -29,6 +29,9 @@ class TableTest extends SchnoopSchemaTestCase
     {
         $this->assertSame($this->name, $this->table->getName());
 
+        $this->assertFalse($this->table->hasDatabaseName());
+        $this->assertNull($this->table->getDatabaseName());
+
         $this->assertFalse($this->table->hasEngine());
         $this->assertNull($this->table->getEngine());
 
@@ -46,6 +49,15 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame([], $this->table->getIndexes());
         $this->assertFalse($this->table->hasPrimaryKey());
         $this->assertNull($this->table->getPrimaryKey());
+    }
+
+    public function testSetDatabaseName()
+    {
+        $databaseName = 'schnoop_db';
+        $this->table->setDatabaseName($databaseName);
+
+        $this->assertTrue($this->table->hasDatabaseName());
+        $this->assertSame($databaseName, $this->table->getDatabaseName());
     }
 
     public function testSetEngine()
@@ -257,7 +269,10 @@ class TableTest extends SchnoopSchemaTestCase
 
     public function testDDL()
     {
+        $databaseName = 'schnoop_db';
+
         $table = new Table($this->name);
+        $table->setDatabaseName($databaseName);
         $table->setEngine(Table::ENGINE_INNODB);
         $table->setRowFormat(Table::ROW_FORMAT_COMPACT);
         $table->setDefaultCollation('utf8mb4_general_ci');
@@ -276,7 +291,7 @@ class TableTest extends SchnoopSchemaTestCase
         );
 
         $expectedDDL = <<<SQL
-CREATE TABLE `{$this->name}` (
+CREATE TABLE `{$databaseName}`.`{$this->name}` (
   _COL_DDL_1_,
   _COL_DDL_2_,
   _IDX_DDL_1_,

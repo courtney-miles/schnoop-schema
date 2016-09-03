@@ -16,6 +16,8 @@ class Table implements TableInterface
 {
     protected $name;
 
+    protected $databaseName;
+
     /**
      * @var ColumnInterface[]
      */
@@ -53,6 +55,27 @@ class Table implements TableInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDatabaseName()
+    {
+        return $this->databaseName;
+    }
+
+    public function hasDatabaseName()
+    {
+        return isset($this->databaseName);
+    }
+
+    /**
+     * @param mixed $databaseName
+     */
+    public function setDatabaseName($databaseName)
+    {
+        $this->databaseName = $databaseName;
     }
 
     public function getColumnList()
@@ -269,6 +292,12 @@ class Table implements TableInterface
 
     public function __toString()
     {
+        $fullyQualifiedName = "`{$this->getName()}`";
+
+        if ($this->hasDatabaseName()) {
+            $fullyQualifiedName = "`{$this->getDatabaseName()}`." . $fullyQualifiedName;
+        }
+
         $columnDefinitions = [];
         foreach ($this->getColumns() as $column) {
             $columnDefinitions[] = '  '.(string)$column;
@@ -292,7 +321,7 @@ class Table implements TableInterface
             "\n",
             array_filter(
                 [
-                    'CREATE TABLE `' . $this->name . "` (",
+                    "CREATE TABLE {$fullyQualifiedName} (",
                     implode(
                         ",\n",
                         array_merge($columnDefinitions, $indexDefinitions)

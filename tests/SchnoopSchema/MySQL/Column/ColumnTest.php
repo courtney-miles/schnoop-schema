@@ -48,6 +48,9 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertFalse($this->column->hasTableName());
         $this->assertNull($this->column->getTableName());
 
+        $this->assertFalse($this->column->hasDatabaseName());
+        $this->assertNull($this->column->getDatabaseName());
+
         $this->assertNull($this->column->isAutoIncrement());
     }
 
@@ -67,6 +70,15 @@ class ColumnTest extends SchnoopSchemaTestCase
 
         $this->assertTrue($this->column->hasTableName());
         $this->assertSame($tableName, $this->column->getTableName());
+    }
+
+    public function testSetDatabaseName()
+    {
+        $databaseName = 'schnoop_db';
+        $this->column->setDatabaseName($databaseName);
+
+        $this->assertTrue($this->column->hasDatabaseName());
+        $this->assertSame($databaseName, $this->column->getDatabaseName());
     }
 
     public function testSetNullable()

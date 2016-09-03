@@ -20,6 +20,11 @@ class Column implements ColumnInterface
     protected $tableName;
 
     /**
+     * @var string
+     */
+    protected $databaseName;
+
+    /**
      * @var bool
      */
     protected $nullable = false;
@@ -71,6 +76,27 @@ class Column implements ColumnInterface
     public function hasTableName()
     {
         return isset($this->tableName);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDatabaseName()
+    {
+        return $this->databaseName;
+    }
+
+    /**
+     * @param string $databaseName
+     */
+    public function setDatabaseName($databaseName)
+    {
+        $this->databaseName = $databaseName;
+    }
+
+    public function hasDatabaseName()
+    {
+        return isset($this->databaseName);
     }
 
     /**

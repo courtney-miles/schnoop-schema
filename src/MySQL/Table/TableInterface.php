@@ -26,6 +26,10 @@ interface TableInterface
 
     public function getName();
 
+    public function getDatabaseName();
+    public function hasDatabaseName();
+    public function setDatabaseName($databaseName);
+
     public function getColumnList();
     public function getColumns();
     public function hasColumn($columnName);

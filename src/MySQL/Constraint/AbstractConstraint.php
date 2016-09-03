@@ -16,6 +16,11 @@ abstract class AbstractConstraint implements ConstraintInterface
      */
     protected $tableName;
 
+    /**
+     * @var string
+     */
+    protected $databaseName;
+
     public function __construct($name, $constraintType)
     {
         $this->name = $name;
@@ -49,5 +54,20 @@ abstract class AbstractConstraint implements ConstraintInterface
     public function hasTableName()
     {
         return isset($this->tableName);
+    }
+
+    public function getDatabaseName()
+    {
+        return $this->databaseName;
+    }
+
+    public function hasDatabaseName()
+    {
+        return isset($this->databaseName);
+    }
+
+    public function setDatabaseName($databaseName)
+    {
+        $this->databaseName = $databaseName;
     }
 }

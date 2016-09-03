@@ -3,9 +3,6 @@
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
 abstract class ConstraintTestCase extends SchnoopSchemaTestCase
 {
@@ -31,6 +28,9 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
 
         $this->assertFalse($constraint->hasTableName(), 'Assertion on ' . get_class($constraint));
         $this->assertNull($constraint->getTableName(), 'Assertion on ' . get_class($constraint));
+
+        $this->assertFalse($constraint->hasDatabaseName(), 'Assertion on ' . get_class($constraint));
+        $this->assertNull($constraint->getDatabaseName(), 'Assertion on ' . get_class($constraint));
     }
 
     public function testSetTableName()
@@ -41,5 +41,15 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
 
         $this->assertTrue($constraint->hasTableName(), 'Assertion on ' . get_class($constraint));
         $this->assertSame($tableName, $constraint->getTableName(), 'Assertion on ' . get_class($constraint));
+    }
+
+    public function testSetDatabaseName()
+    {
+        $databaseName = 'schnoop_db';
+        $constraint = $this->getConstraint();
+        $constraint->setDatabaseName($databaseName);
+
+        $this->assertTrue($constraint->hasDatabaseName(), 'Assertion on ' . get_class($constraint));
+        $this->assertSame($databaseName, $constraint->getDatabaseName(), 'Assertion on ' . get_class($constraint));
     }
 }
