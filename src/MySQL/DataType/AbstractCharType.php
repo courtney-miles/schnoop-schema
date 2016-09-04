@@ -17,11 +17,6 @@ abstract class AbstractCharType implements CharTypeInterface
     use CollationTrait;
     use LengthTrait;
     use QuoteTrait;
-    
-    /**
-     * @var int
-     */
-    protected $length;
 
     public function __construct($length)
     {
