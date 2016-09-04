@@ -261,7 +261,7 @@ class TableTest extends SchnoopSchemaTestCase
             $this->createMockForeignKey($foreignKeyNames[1], $foreignKeyDDLs[1])
         ];
 
-        $this->table->setForeignKey($mockForeignKeys);
+        $this->table->setForeignKeys($mockForeignKeys);
 
         $this->assertSame($mockForeignKeys, $this->table->getForeignKeys());
         $this->assertSame($foreignKeyNames, $this->table->getForeignKeyList());

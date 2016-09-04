@@ -190,7 +190,7 @@ class Table implements TableInterface
         return isset($this->foreignKeys[$foreignKeyName]);
     }
 
-    public function setForeignKey(array $foreignKeys)
+    public function setForeignKeys(array $foreignKeys)
     {
         $this->foreignKeys = [];
 

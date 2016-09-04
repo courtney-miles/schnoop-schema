@@ -67,7 +67,7 @@ interface TableInterface
      * @param array $foreignKeys
      * @return ForeignKeyInterface[]
      */
-    public function setForeignKey(array $foreignKeys);
+    public function setForeignKeys(array $foreignKeys);
 
     public function addForeignKey(ForeignKeyInterface $foreignKey);
 
