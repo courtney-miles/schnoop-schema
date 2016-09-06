@@ -10,8 +10,6 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 interface DataTypeInterface
 {
-    const TYPE_BOOL = 'bool';
-
     const TYPE_BIT = 'bit';
 
     const TYPE_INT = 'int';
