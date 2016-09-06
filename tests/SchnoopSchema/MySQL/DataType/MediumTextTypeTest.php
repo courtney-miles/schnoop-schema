@@ -41,5 +41,6 @@ class MediumTextTypeTest extends TextTypeTestCase
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_MEDIUMTEXT, $this->mediumTextType->getType());
+        $this->assertSame(16777215, $this->mediumTextType->getLength());
     }
 }

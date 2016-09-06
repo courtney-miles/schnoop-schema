@@ -41,5 +41,6 @@ class LongTextTypeTest extends TextTypeTestCase
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_LONGTEXT, $this->longTextType->getType());
+        $this->assertSame(4294967295, $this->longTextType->getLength());
     }
 }

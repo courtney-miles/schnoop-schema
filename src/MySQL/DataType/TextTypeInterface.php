@@ -6,4 +6,5 @@ use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationInterface;
 
 interface TextTypeInterface extends DataTypeInterface, CollationInterface
 {
+    public function getLength();
 }

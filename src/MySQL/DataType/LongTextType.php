@@ -13,4 +13,9 @@ class LongTextType extends AbstractTextType
     {
         return self::TYPE_LONGTEXT;
     }
+
+    public function getLength()
+    {
+        return self::LENGTH;
+    }
 }

@@ -41,5 +41,6 @@ class TinyTextTypeTest extends TextTypeTestCase
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_TINYTEXT, $this->tinyTextType->getType());
+        $this->assertSame(255, $this->tinyTextType->getLength());
     }
 }

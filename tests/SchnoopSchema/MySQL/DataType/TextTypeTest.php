@@ -41,5 +41,6 @@ class TextTypeTest extends TextTypeTestCase
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_TEXT, $this->textType->getType());
+        $this->assertSame(65535, $this->textType->getLength());
     }
 }

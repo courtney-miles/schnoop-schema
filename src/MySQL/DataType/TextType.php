@@ -19,4 +19,9 @@ class TextType extends AbstractTextType
     {
         return self::TYPE_TEXT;
     }
+
+    public function getLength()
+    {
+        return self::LENGTH;
+    }
 }

@@ -13,4 +13,9 @@ class MediumTextType extends AbstractTextType
     {
         return self::TYPE_MEDIUMTEXT;
     }
+
+    public function getLength()
+    {
+        return self::LENGTH;
+    }
 }

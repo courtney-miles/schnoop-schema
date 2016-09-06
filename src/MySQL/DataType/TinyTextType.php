@@ -13,4 +13,9 @@ class TinyTextType extends AbstractTextType
     {
         return self::TYPE_TINYTEXT;
     }
+
+    public function getLength()
+    {
+        return self::LENGTH;
+    }
 }
