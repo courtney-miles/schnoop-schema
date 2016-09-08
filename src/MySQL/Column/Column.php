@@ -4,6 +4,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 
 class Column implements ColumnInterface
 {
@@ -33,6 +34,8 @@ class Column implements ColumnInterface
      * @var mixed
      */
     protected $default;
+
+    protected $onUpdateCurrentTimestamp = false;
 
     /**
      * @var string
@@ -150,10 +153,22 @@ class Column implements ColumnInterface
                 $default[$k] = $this->getDataType()->cast($v);
             }
         } elseif ($default !== null) {
-            $default = $this->getDataType()->cast($default);
+            if (!($this->getDataType() instanceof TimeTypeInterface)) {
+                $default = $this->getDataType()->cast($default);
+            }
         }
 
         $this->default = $default;
+    }
+
+    public function isOnUpdateCurrentTimestamp()
+    {
+        return $this->onUpdateCurrentTimestamp;
+    }
+
+    public function setOnUpdateCurrentTimestamp($onUpdateCurrentTimestamp)
+    {
+        $this->onUpdateCurrentTimestamp = $onUpdateCurrentTimestamp;
     }
 
     /**
@@ -212,6 +227,7 @@ class Column implements ColumnInterface
                     (string)$this->getDataType(),
                     $this->nullable ? 'NULL' : 'NOT NULL',
                     $this->hasDefault() ? 'DEFAULT ' . $default : null,
+                    $this->isOnUpdateCurrentTimestamp() ? $this->preparedOnUpdateCurrentTimestamp() : null,
                     $this->isAutoIncrement() ? 'AUTO_INCREMENT' : null,
                     $this->hasComment() ? sprintf("COMMENT '%s'", addslashes($this->getComment())) : null
                 ]
@@ -221,15 +237,41 @@ class Column implements ColumnInterface
 
     protected function prepareDDLDefault($default)
     {
+        $dataType = $this->getDataType();
+
         if (is_array($default)) {
             foreach ($default as $k => $option) {
                 $default[$k] = $this->getDataType()->quote($option);
             }
             $default = '(' . implode(',', $default) . ')';
+        } elseif ($dataType instanceof TimeTypeInterface
+            && $this->getDefault() == self::DEFAULT_CURRENT_TIMESTAMP
+        ) {
+            $precision = $dataType->hasPrecision() ? '(' . $dataType->getPrecision() . ')' : null;
+            $default = self::DEFAULT_CURRENT_TIMESTAMP . $precision;
         } else {
             $default = $this->getDefault() === null ? 'NULL' : $this->getDataType()->quote($default);
         }
 
         return $default;
+    }
+
+    protected function preparedOnUpdateCurrentTimestamp()
+    {
+        $onUpdateDDL = null;
+
+        $dataType = $this->getDataType();
+
+        if ($this->isOnUpdateCurrentTimestamp()) {
+            $precision = null;
+
+            if ($dataType instanceof TimeTypeInterface && $dataType->hasPrecision()) {
+                $precision = '(' . $dataType->getPrecision() . ')';
+            }
+
+            $onUpdateDDL = 'ON UPDATE CURRENT_TIMESTAMP' . $precision;
+        }
+
+        return $onUpdateDDL;
     }
 }

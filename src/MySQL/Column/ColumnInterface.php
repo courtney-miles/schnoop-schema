@@ -6,6 +6,8 @@ use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 
 interface ColumnInterface
 {
+    const DEFAULT_CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
+
     public function getName();
 
     /**
@@ -54,6 +56,16 @@ interface ColumnInterface
     public function getDefault();
 
     public function setDefault($default);
+
+    /**
+     * @return bool
+     */
+    public function isOnUpdateCurrentTimestamp();
+
+    /**
+     * @param bool $onUpdateCurrentTimestamp
+     */
+    public function setOnUpdateCurrentTimestamp($onUpdateCurrentTimestamp);
 
     /**
      * @return string

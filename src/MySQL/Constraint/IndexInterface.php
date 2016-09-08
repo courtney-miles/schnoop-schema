@@ -9,6 +9,9 @@ interface IndexInterface extends ConstraintInterface
     const INDEX_TYPE_FULLTEXT = 'FULLTEXT';
     const INDEX_TYPE_RTREE = 'RTREE';
 
+    /**
+     * @return IndexedColumnInterface[]
+     */
     public function getIndexedColumns();
 
     /**
