@@ -308,6 +308,11 @@ class Table implements TableInterface
             $indexDefinitions[] = '  '.(string)$index;
         }
 
+        $foreignKeyDefinitions = [];
+        foreach ($this->getForeignKeys() as $foreignKey) {
+            $foreignKeyDefinitions[] = '  ' . (string)$foreignKey;
+        }
+
         $tableOptions = array_filter(
             [
                 $this->hasEngine() ? 'ENGINE = ' . strtoupper($this->getEngine()) : null,
@@ -324,7 +329,11 @@ class Table implements TableInterface
                     "CREATE TABLE {$fullyQualifiedName} (",
                     implode(
                         ",\n",
-                        array_merge($columnDefinitions, $indexDefinitions)
+                        array_merge(
+                            $columnDefinitions,
+                            $indexDefinitions,
+                            $foreignKeyDefinitions
+                        )
                     ),
                     ')',
                     implode("\n", $tableOptions),

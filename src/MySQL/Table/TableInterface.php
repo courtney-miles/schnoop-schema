@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 27/06/16
- * Time: 7:14 AM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\PrimaryKey;
 
 interface TableInterface
 {
@@ -26,13 +21,42 @@ interface TableInterface
 
     public function getName();
 
+    /**
+     * @return string
+     */
     public function getDatabaseName();
+
+    /**
+     * @return bool
+     */
     public function hasDatabaseName();
+
+    /**
+     * @param string $databaseName
+     */
     public function setDatabaseName($databaseName);
 
+    /**
+     * Get the names of all columns in the table.
+     * @return array
+     */
     public function getColumnList();
+
+    /**
+     * @return ColumnInterface[]
+     */
     public function getColumns();
+
+    /**
+     * @param $columnName
+     * @return bool
+     */
     public function hasColumn($columnName);
+
+    /**
+     * @param $columnName
+     * @return ColumnInterface
+     */
     public function getColumn($columnName);
 
     /**
@@ -40,6 +64,10 @@ interface TableInterface
      */
     public function setColumns(array $columns);
 
+    /**
+     * @param ColumnInterface $column
+     * @return mixed
+     */
     public function addColumn(ColumnInterface $column);
 
     public function getIndexList();
@@ -56,11 +84,32 @@ interface TableInterface
     public function addIndex(ConstraintInterface $index);
 
     public function hasPrimaryKey();
+
+    /**
+     * @return PrimaryKey
+     */
     public function getPrimaryKey();
 
+    /**
+     * @return array
+     */
     public function getForeignKeyList();
+
+    /**
+     * @return ForeignKeyInterface[]
+     */
     public function getForeignKeys();
+
+    /**
+     * @param $foreignKeyName
+     * @return ForeignKeyInterface
+     */
     public function getForeignKey($foreignKeyName);
+
+    /**
+     * @param $foreignKeyName
+     * @return bool
+     */
     public function hasForeignKey($foreignKeyName);
 
     /**
@@ -69,6 +118,10 @@ interface TableInterface
      */
     public function setForeignKeys(array $foreignKeys);
 
+    /**
+     * @param ForeignKeyInterface $foreignKey
+     * @return mixed
+     */
     public function addForeignKey(ForeignKeyInterface $foreignKey);
 
     public function __toString();

@@ -289,13 +289,21 @@ class TableTest extends SchnoopSchemaTestCase
                 $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_')
             ]
         );
+        $table->setForeignKeys(
+            [
+                $this->createMockForeignKey('schnoop_fk1', '_FK_DDL_1_'),
+                $this->createMockForeignKey('schnoop_fk2', '_FK_DDL_2_')
+            ]
+        );
 
         $expectedDDL = <<<SQL
 CREATE TABLE `{$databaseName}`.`{$this->name}` (
   _COL_DDL_1_,
   _COL_DDL_2_,
   _IDX_DDL_1_,
-  _IDX_DDL_2_
+  _IDX_DDL_2_,
+  _FK_DDL_1_,
+  _FK_DDL_2_
 )
 ENGINE = INNODB
 DEFAULT COLLATE = 'utf8mb4_general_ci'
