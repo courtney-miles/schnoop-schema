@@ -6,6 +6,8 @@ interface IndexedColumnInterface extends ConstraintColumnInterface
 {
     const COLLATION_ASC = 'asc';
 
+    public function getColumnName();
+
     public function getLength();
 
     public function hasLength();
