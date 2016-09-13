@@ -4,6 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameter;
+use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineParameterInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineParameterTestCase;
 use PHPUnit\Framework\TestCase;
@@ -54,8 +55,15 @@ class ProcedureParameterTest extends RoutineParameterTestCase
         return $this->mockDataType;
     }
 
+    public function testInitialProperties()
+    {
+        parent::testInitialProperties();
+
+        $this->assertSame(ProcedureParameterInterface::DIRECTION_IN, $this->procedureParameter->getDirection());
+    }
+
     public function testDDL()
     {
-        $this->assertSame("`param_name` DT_DDL", (string)$this->procedureParameter);
+        $this->assertSame("IN `param_name` DT_DDL", (string)$this->procedureParameter);
     }
 }

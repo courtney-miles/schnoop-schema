@@ -53,15 +53,8 @@ class FunctionParameterTest extends RoutineParameterTestCase
         return $this->mockDataType;
     }
 
-    public function testInitialProperties()
-    {
-        parent::testInitialProperties();
-
-        $this->assertSame(FunctionParameter::DIRECTION_IN, $this->functionParameter->getDirection());
-    }
-
     public function testDDL()
     {
-        $this->assertSame("IN `param_name` DT_DDL", (string)$this->functionParameter);
+        $this->assertSame("`param_name` DT_DDL", (string)$this->functionParameter);
     }
 }
