@@ -65,12 +65,19 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
         $this->returns = $returns;
     }
 
-    public function __toString()
+    public function getDDL($forceSqlMode = false)
     {
+        $forceSqlMode = $forceSqlMode && $this->hasSqlMode();
+        $createDDL = '';
+
+        if ($forceSqlMode) {
+            $createDDL .= $this->sqlMode->getAssignStmt() . "\n";
+        }
+
         $functionSignature = 'FUNCTION ' . $this->getFullyQualifiedRoutineName()
             . ' (' . $this->getParametersDDL() . ')';
 
-        $createDDL = 'CREATE '
+        $createDDL .= 'CREATE '
             . implode(
                 "\n",
                 array_filter(
@@ -86,7 +93,16 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
                 )
             );
 
+        if ($forceSqlMode) {
+            $createDDL .= ";\n" . $this->sqlMode->getRestoreStmt();
+        }
+
         return $createDDL;
+    }
+
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 
     protected function getParametersDDL()

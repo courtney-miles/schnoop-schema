@@ -35,8 +35,15 @@ class ProcedureRoutine extends AbstractRoutine implements ProcedureRoutineInterf
         $this->parameters[] = $parameter;
     }
 
-    public function __toString()
+    public function getDDL($forceSqlMode = false)
     {
+        $forceSqlMode = $forceSqlMode && $this->hasSqlMode();
+        $createDDL = '';
+
+        if ($forceSqlMode) {
+            $createDDL .= $this->sqlMode->getAssignStmt() . "\n";
+        }
+
         $procedureSignature = 'PROCEDURE ' . $this->getFullyQualifiedRoutineName()
             . ' (' . $this->getParametersDDL() . ')';
 
@@ -55,7 +62,16 @@ class ProcedureRoutine extends AbstractRoutine implements ProcedureRoutineInterf
                 )
             );
 
+        if ($forceSqlMode) {
+            $createDDL .= ";\n" . $this->sqlMode->getRestoreStmt();
+        }
+
         return $createDDL;
+    }
+
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 
     protected function getParametersDDL()

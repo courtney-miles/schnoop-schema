@@ -2,6 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
+use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
+
 abstract class AbstractRoutine implements RoutineInterface
 {
     /**
@@ -22,6 +24,11 @@ abstract class AbstractRoutine implements RoutineInterface
     protected $sqlSecurity = self::SECURITY_DEFINER;
 
     protected $body = '';
+
+    /**
+     * @var SqlMode
+     */
+    protected $sqlMode;
 
     public function __construct($name)
     {
@@ -147,6 +154,21 @@ abstract class AbstractRoutine implements RoutineInterface
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    public function getSqlMode()
+    {
+        return $this->sqlMode;
+    }
+
+    public function hasSqlMode()
+    {
+        return isset($this->sqlMode);
+    }
+
+    public function setSqlMode(SqlMode $sqlMode)
+    {
+        $this->sqlMode = $sqlMode;
     }
 
     protected function getFullyQualifiedRoutineName()
