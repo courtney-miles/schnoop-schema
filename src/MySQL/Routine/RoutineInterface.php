@@ -1,17 +1,19 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
+use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
+
 interface RoutineInterface
 {
     const DEFINER_CURRENT_USER = 'CURRENT_USER';
 
-    const CONTAINS_SQL = 'CONTAINS SQL';
+    const DATA_ACCESS_CONTAINS_SQL = 'CONTAINS SQL';
 
-    const CONTAINS_NO_SQL = 'NO SQL';
+    const DATA_ACCESS_NO_SQL = 'NO SQL';
 
-    const CONTAINS_READS_SQL_DATA = 'READS SQL DATA';
+    const DATA_ACCESS_READS_SQL_DATA = 'READS SQL DATA';
 
-    const CONTAINS_MODIFIES_SQL_DATA = 'MODIFIES SQL DATA';
+    const DATA_ACCESS_MODIFIES_SQL_DATA = 'MODIFIES SQL DATA';
 
     const SECURITY_DEFINER = 'DEFINER';
 
@@ -60,12 +62,12 @@ interface RoutineInterface
     /**
      * @return mixed
      */
-    public function getContains();
+    public function getDataAccess();
 
     /**
      * @param mixed $contains
      */
-    public function setContains($contains);
+    public function setDataAccess($contains);
 
     /**
      * @return mixed
@@ -86,6 +88,21 @@ interface RoutineInterface
      * @param mixed $body
      */
     public function setBody($body);
+
+    /**
+     * @return SqlMode
+     */
+    public function getSqlMode();
+
+    /**
+     * @return bool
+     */
+    public function hasSqlMode();
+
+    /**
+     * @param SqlMode $sqlMode
+     */
+    public function setSqlMode(SqlMode $sqlMode);
 
     /**
      * @return string

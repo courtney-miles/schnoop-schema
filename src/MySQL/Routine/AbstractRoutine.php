@@ -19,7 +19,7 @@ abstract class AbstractRoutine implements RoutineInterface
 
     protected $deterministic = false;
 
-    protected $contains = self::CONTAINS_SQL;
+    protected $dataAccess = self::DATA_ACCESS_CONTAINS_SQL;
 
     protected $sqlSecurity = self::SECURITY_DEFINER;
 
@@ -111,17 +111,17 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * @return mixed
      */
-    public function getContains()
+    public function getDataAccess()
     {
-        return $this->contains;
+        return $this->dataAccess;
     }
 
     /**
-     * @param mixed $contains
+     * @param mixed $dataAccess
      */
-    public function setContains($contains)
+    public function setDataAccess($dataAccess)
     {
-        $this->contains = $contains;
+        $this->dataAccess = $dataAccess;
     }
 
     /**
@@ -185,7 +185,7 @@ abstract class AbstractRoutine implements RoutineInterface
             array_filter(
                 [
                     $this->deterministic ? 'DETERMINISTIC' : 'NOT DETERMINISTIC',
-                    $this->contains,
+                    $this->dataAccess,
                     !empty($this->sqlSecurity) ? 'SQL SECURITY ' . $this->sqlSecurity : null,
                     !empty($this->comment) ? "\nCOMMENT '" . addslashes($this->comment) . "'" : null
                 ]

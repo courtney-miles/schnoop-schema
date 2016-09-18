@@ -30,7 +30,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertFalse($routine->hasComment());
         $this->assertNull($routine->getComment());
         $this->assertFalse($routine->isDeterministic());
-        $this->assertSame(RoutineInterface::CONTAINS_SQL, $routine->getContains());
+        $this->assertSame(RoutineInterface::DATA_ACCESS_CONTAINS_SQL, $routine->getDataAccess());
         $this->assertSame(RoutineInterface::SECURITY_DEFINER, $routine->getSqlSecurity());
         $this->assertSame('', $routine->getBody());
     }
@@ -74,9 +74,9 @@ abstract class RoutineTestCase extends TestCase
     public function testSetContains()
     {
         $routine = $this->getRoutine();
-        $routine->setContains(RoutineInterface::CONTAINS_MODIFIES_SQL_DATA);
+        $routine->setDataAccess(RoutineInterface::DATA_ACCESS_MODIFIES_SQL_DATA);
 
-        $this->assertSame(RoutineInterface::CONTAINS_MODIFIES_SQL_DATA, $routine->getContains());
+        $this->assertSame(RoutineInterface::DATA_ACCESS_MODIFIES_SQL_DATA, $routine->getDataAccess());
     }
 
     public function testSetSqlSecurity()
