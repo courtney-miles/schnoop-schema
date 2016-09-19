@@ -33,6 +33,7 @@ abstract class AbstractRoutine implements RoutineInterface
     public function __construct($name)
     {
         $this->name = $name;
+        $this->setDefiner(self::DEFINER_CURRENT_USER);
     }
 
     public function getName()
