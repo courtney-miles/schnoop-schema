@@ -147,7 +147,7 @@ SQL;
 {$setModeStmts}
 CREATE DEFINER = {$definer}
 TRIGGER `{$this->name}` {$this->timing} {$this->event}
-ON `{$databaseName}`.`{$this->tableName}` FOR EACH ROW
+ON `{$this->tableName}` FOR EACH ROW
 {$relation} `{$relativeTo}`
 {$statement}
 @@

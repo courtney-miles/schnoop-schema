@@ -290,12 +290,38 @@ class Table implements TableInterface
         $this->comment = $comment;
     }
 
-    public function __toString()
-    {
-        $fullyQualifiedName = "`{$this->getName()}`";
+    public function getDDL(
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    ) {
+        $dropDDL = $createDDL = '';
 
-        if ($this->hasDatabaseName()) {
-            $fullyQualifiedName = "`{$this->getDatabaseName()}`." . $fullyQualifiedName;
+        if ($fullyQualifiedName) {
+            if (!$this->hasDatabaseName()) {
+                throw new FQNException(
+                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+                );
+            }
+
+            $tableName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
+        } else {
+            $tableName = "`{$this->getName()}`";
+        }
+
+        if ($drop) {
+            switch ($drop) {
+                case self::DDL_DROP_ALWAYS:
+                    $dropDDL = <<<SQL
+DROP TABLE {$tableName}{$delimiter}
+SQL;
+                    break;
+                case self::DDL_DROP_IF_EXISTS:
+                    $dropDDL = <<<SQL
+DROP TABLE IF EXISTS {$tableName}{$delimiter}
+SQL;
+                    break;
+            }
         }
 
         $columnDefinitions = [];
@@ -322,11 +348,11 @@ class Table implements TableInterface
             ]
         );
 
-        return implode(
+        $createDDL = implode(
             "\n",
             array_filter(
                 [
-                    "CREATE TABLE {$fullyQualifiedName} (",
+                    "CREATE TABLE {$tableName} (",
                     implode(
                         ",\n",
                         array_merge(
@@ -339,6 +365,23 @@ class Table implements TableInterface
                     implode("\n", $tableOptions),
                 ]
             )
-        ) . ';';
+        ) . $delimiter;
+
+        $createDDL = implode(
+            "\n",
+            array_filter(
+                [
+                    $dropDDL,
+                    $createDDL
+                ]
+            )
+        );
+
+        return $createDDL;
+    }
+
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

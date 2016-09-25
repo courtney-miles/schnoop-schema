@@ -110,7 +110,7 @@ FUNCTION `schnoop_func` ()
 RETURNS _RET_DATATYPE_DDL_
 NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
 BEGIN
-END
+END;
 SQL;
         $this->assertSame($expectedDDL, (string)$this->function);
     }

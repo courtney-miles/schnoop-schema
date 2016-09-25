@@ -2,6 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
+use MilesAsylum\SchnoopSchema\MySQL\Exception\ForceSqlModeException;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
 class Trigger implements TriggerInterface
@@ -185,13 +187,30 @@ class Trigger implements TriggerInterface
         $this->sqlMode = $sqlMode;
     }
 
-    public function getDDL($forceSqlMode = false, $delimiter = ';')
-    {
-        $forceSqlMode = $forceSqlMode && $this->hasSqlMode();
-        $createDDL = '';
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL(
+        $forceSqlMode = false,
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    ) {
+        $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        $tableName = $this->hasDatabaseName() ? "`{$this->getDatabaseName()}`." : null;
-        $tableName .= "`{$this->getTableName()}`";
+        if ($fullyQualifiedName) {
+            if (!$this->hasDatabaseName()) {
+                throw new FQNException(
+                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+                );
+            }
+
+            $tableName = "`{$this->getDatabaseName()}`.`{$this->getTableName()}`";
+            $triggerName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
+        } else {
+            $tableName = "`{$this->getTableName()}`";
+            $triggerName = "`{$this->getName()}`";
+        }
 
         $triggerOrder = null;
 
@@ -199,8 +218,30 @@ class Trigger implements TriggerInterface
             $triggerOrder = "{$this->getPositionRelation()} `{$this->getPositionRelativeTo()}`";
         }
 
+        if ($drop) {
+            switch ($drop) {
+                case self::DDL_DROP_ALWAYS:
+                    $dropDDL = <<<SQL
+DROP TRIGGER {$triggerName}{$delimiter}
+SQL;
+                    break;
+                case self::DDL_DROP_IF_EXISTS:
+                    $dropDDL = <<<SQL
+DROP TRIGGER IF EXISTS {$triggerName}{$delimiter}
+SQL;
+                    break;
+            }
+        }
+
         if ($forceSqlMode) {
-            $createDDL .= $this->sqlMode->getAssignStmt() . "\n";
+            if (!$this->hasSqlMode()) {
+                throw new ForceSqlModeException(
+                    'Unable to create DDL that forces the SQL mode because an SQL mode has not been set.'
+                );
+            }
+
+            $setSqlMode = $this->sqlMode->getAssignStmt($delimiter);
+            $revertSqlMode = $this->sqlMode->getRestoreStmt($delimiter);
         }
 
         $createDDL .= 'CREATE '
@@ -209,8 +250,8 @@ class Trigger implements TriggerInterface
                 array_filter(
                     [
                         !empty($this->hasDefiner()) ? 'DEFINER = ' . $this->getDefiner() : null,
-                        "TRIGGER `{$this->getName()}` {$this->getTiming()} {$this->getEvent()}",
-                        "ON $tableName FOR EACH ROW",
+                        "TRIGGER {$triggerName} {$this->getTiming()} {$this->getEvent()}",
+                        "ON {$tableName} FOR EACH ROW",
                         $triggerOrder,
                         $this->getStatement(),
                         $delimiter
@@ -218,9 +259,17 @@ class Trigger implements TriggerInterface
                 )
             );
 
-        if ($forceSqlMode) {
-            $createDDL .= "\n" . $this->sqlMode->getRestoreStmt();
-        }
+        $createDDL = implode(
+            "\n",
+            array_filter(
+                [
+                    $dropDDL,
+                    $setSqlMode,
+                    $createDDL,
+                    $revertSqlMode
+                ]
+            )
+        );
 
         return $createDDL;
     }

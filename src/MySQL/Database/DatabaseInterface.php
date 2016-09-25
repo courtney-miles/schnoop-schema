@@ -8,7 +8,9 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
-interface DatabaseInterface
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
+
+interface DatabaseInterface extends MySQLInterface
 {
     public function getName();
 
@@ -17,6 +19,11 @@ interface DatabaseInterface
     public function hasDefaultCollation();
 
     public function setDefaultCollation($defaultCollation);
+
+    public function getDDL(
+        $delimiter = self::DEFAULT_DELIMITER,
+        $drop = self::DDL_DROP_DO_NOT
+    );
 
     public function __toString();
 }

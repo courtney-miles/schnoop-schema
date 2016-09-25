@@ -31,6 +31,9 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         $this->setIndexType($indexType);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIndexedColumns()
     {
         return array_values($this->indexedColumns);

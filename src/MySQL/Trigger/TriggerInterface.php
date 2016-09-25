@@ -1,12 +1,11 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
-interface TriggerInterface
+interface TriggerInterface extends MySQLInterface
 {
-    const DEFINER_CURRENT_USER = 'CURRENT_USER';
-
     const EVENT_INSERT = 'INSERT';
     const EVENT_UPDATE = 'UPDATE';
     const EVENT_DELETE = 'DELETE';
@@ -129,7 +128,12 @@ interface TriggerInterface
      */
     public function setSqlMode(SqlMode $sqlMode);
 
-    public function getDDL($forceSqlMode = false);
+    public function getDDL(
+        $forceSqlMode = false,
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    );
 
     public function __toString();
 }

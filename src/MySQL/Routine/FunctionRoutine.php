@@ -3,6 +3,8 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\ForceSqlModeException;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 
 class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterface
 {
@@ -65,17 +67,56 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
         $this->returns = $returns;
     }
 
-    public function getDDL($forceSqlMode = false)
-    {
-        $forceSqlMode = $forceSqlMode && $this->hasSqlMode();
-        $createDDL = '';
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL(
+        $forceSqlMode = false,
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    ) {
+        $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($forceSqlMode) {
-            $createDDL .= $this->sqlMode->getAssignStmt() . "\n";
+        if ($fullyQualifiedName) {
+            if (!$this->hasDatabaseName()) {
+                throw new FQNException(
+                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+                );
+            }
+
+            $functionName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
+        } else {
+            $functionName = "`{$this->getName()}`";
         }
 
-        $functionSignature = 'FUNCTION ' . $this->getFullyQualifiedRoutineName()
-            . ' (' . $this->getParametersDDL() . ')';
+        if ($drop) {
+            switch ($drop) {
+                case self::DDL_DROP_ALWAYS:
+                    $dropDDL = <<<SQL
+DROP FUNCTION {$functionName}{$delimiter}
+SQL;
+                    break;
+                case self::DDL_DROP_IF_EXISTS:
+                    $dropDDL = <<<SQL
+DROP FUNCTION IF EXISTS {$functionName}{$delimiter}
+SQL;
+                    break;
+            }
+        }
+
+        if ($forceSqlMode) {
+            if (!$this->hasSqlMode()) {
+                throw new ForceSqlModeException(
+                    'Unable to create DDL that forces the SQL mode because an SQL mode has not been set.'
+                );
+            }
+
+            $setSqlMode = $this->sqlMode->getAssignStmt($delimiter);
+            $revertSqlMode = $this->sqlMode->getRestoreStmt($delimiter);
+        }
+
+        $functionSignature = "FUNCTION {$functionName} ({$this->getParametersDDL()})";
 
         $createDDL .= 'CREATE '
             . implode(
@@ -88,14 +129,22 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
                         $this->getCharacteristicsDDL(),
                         'BEGIN',
                         $this->body,
-                        'END'
+                        'END' . $delimiter
                     ]
                 )
             );
 
-        if ($forceSqlMode) {
-            $createDDL .= ";\n" . $this->sqlMode->getRestoreStmt();
-        }
+        $createDDL = implode(
+            "\n",
+            array_filter(
+                [
+                    $dropDDL,
+                    $setSqlMode,
+                    $createDDL,
+                    $revertSqlMode
+                ]
+            )
+        );
 
         return $createDDL;
     }

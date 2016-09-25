@@ -6,8 +6,9 @@ use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\PrimaryKey;
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
-interface TableInterface
+interface TableInterface extends MySQLInterface
 {
     const ENGINE_INNODB = 'INNODB';
     const ENGINE_MEMORY = 'MEMORY';
@@ -124,8 +125,6 @@ interface TableInterface
      */
     public function addForeignKey(ForeignKeyInterface $foreignKey);
 
-    public function __toString();
-
     public function getEngine();
 
     public function hasEngine();
@@ -149,4 +148,12 @@ interface TableInterface
     public function hasComment();
 
     public function setComment($comment);
+
+    public function getDDL(
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    );
+
+    public function __toString();
 }

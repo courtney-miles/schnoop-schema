@@ -297,7 +297,7 @@ class TableTest extends SchnoopSchemaTestCase
         );
 
         $expectedDDL = <<<SQL
-CREATE TABLE `{$databaseName}`.`{$this->name}` (
+CREATE TABLE `{$this->name}` (
   _COL_DDL_1_,
   _COL_DDL_2_,
   _IDX_DDL_1_,

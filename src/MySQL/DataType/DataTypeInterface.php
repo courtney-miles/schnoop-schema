@@ -8,7 +8,9 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
-interface DataTypeInterface
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
+
+interface DataTypeInterface extends MySQLInterface
 {
     const TYPE_BIT = 'bit';
 

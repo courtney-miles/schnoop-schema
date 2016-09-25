@@ -1,12 +1,11 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
-interface RoutineInterface
+interface RoutineInterface extends MySQLInterface
 {
-    const DEFINER_CURRENT_USER = 'CURRENT_USER';
-
     const DATA_ACCESS_CONTAINS_SQL = 'CONTAINS SQL';
 
     const DATA_ACCESS_NO_SQL = 'NO SQL';
@@ -103,6 +102,13 @@ interface RoutineInterface
      * @param SqlMode $sqlMode
      */
     public function setSqlMode(SqlMode $sqlMode);
+
+    public function getDDL(
+        $forceSqlMode = false,
+        $delimiter = self::DEFAULT_DELIMITER,
+        $fullyQualifiedName = false,
+        $drop = self::DDL_DROP_DO_NOT
+    );
 
     /**
      * @return string

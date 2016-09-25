@@ -2,7 +2,9 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\SetVar;
 
-class SqlMode
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
+
+class SqlMode implements MySQLInterface
 {
     protected $mode;
 
@@ -27,19 +29,19 @@ class SqlMode
         $this->mode = $mode;
     }
 
-    public function getAssignStmt()
+    public function getAssignStmt($delimiter = self::DEFAULT_DELIMITER)
     {
         return <<<SQL
-SET @_schnoop_sql_mode = @@session.sql_mode;
-SET @@session.sql_mode = '{$this->mode}';
+SET @_schnoop_sql_mode = @@session.sql_mode{$delimiter}
+SET @@session.sql_mode = '{$this->mode}'{$delimiter}
 SQL;
     }
 
-    public function getRestoreStmt()
+    public function getRestoreStmt($delimiter = self::DEFAULT_DELIMITER)
     {
         return <<<SQL
-SET @@session.sql_mode = @_schnoop_sql_mode;
-SET @_schnoop_sql_mode = NULL;
+SET @@session.sql_mode = @_schnoop_sql_mode{$delimiter}
+SET @_schnoop_sql_mode = NULL{$delimiter}
 SQL;
     }
 }

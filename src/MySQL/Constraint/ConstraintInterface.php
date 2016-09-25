@@ -2,7 +2,9 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
-interface ConstraintInterface
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
+
+interface ConstraintInterface extends MySQLInterface
 {
     const CONSTRAINT_INDEX = 'INDEX';
     const CONSTRAINT_INDEX_UNIQUE = 'UNIQUE INDEX';
