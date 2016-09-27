@@ -41,7 +41,7 @@ class Trigger implements TriggerInterface
     /**
      * @var string
      */
-    protected $statement;
+    protected $body;
 
     protected $positionRelation;
 
@@ -136,19 +136,19 @@ class Trigger implements TriggerInterface
         $this->timing = $timing;
     }
 
-    public function getStatement()
+    public function getBody()
     {
-        return $this->statement;
+        return $this->body;
     }
 
-    public function hasStatement()
+    public function hasBody()
     {
-        return (bool)strlen($this->statement);
+        return (bool)strlen($this->body);
     }
 
-    public function setStatement($statement)
+    public function setBody($body)
     {
-        $this->statement = $statement;
+        $this->body = $body;
     }
 
     public function getPositionRelation()
@@ -253,7 +253,9 @@ SQL;
                         "TRIGGER {$triggerName} {$this->getTiming()} {$this->getEvent()}",
                         "ON {$tableName} FOR EACH ROW",
                         $triggerOrder,
-                        $this->getStatement(),
+                        'BEGIN',
+                        $this->getBody(),
+                        'END',
                         $delimiter
                     ]
                 )

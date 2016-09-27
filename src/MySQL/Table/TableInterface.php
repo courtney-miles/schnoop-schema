@@ -5,6 +5,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\PrimaryKey;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
@@ -21,6 +22,11 @@ interface TableInterface extends MySQLInterface
     const ROW_FORMAT_COMPACT = 'COMPACT';
 
     public function getName();
+
+    /**
+     * @param string $name
+     */
+    public function setName($name);
 
     /**
      * @return string
@@ -49,13 +55,13 @@ interface TableInterface extends MySQLInterface
     public function getColumns();
 
     /**
-     * @param $columnName
+     * @param string $columnName
      * @return bool
      */
     public function hasColumn($columnName);
 
     /**
-     * @param $columnName
+     * @param string $columnName
      * @return ColumnInterface
      */
     public function getColumn($columnName);
@@ -71,19 +77,41 @@ interface TableInterface extends MySQLInterface
      */
     public function addColumn(ColumnInterface $column);
 
+    /**
+     * @return array
+     */
     public function getIndexList();
+
+    /**
+     * @return IndexInterface[]
+     */
     public function getIndexes();
+
+    /**
+     * @param string $indexName
+     * @return bool mixed
+     */
     public function hasIndex($indexName);
+
+    /**
+     * @param string $indexName
+     * @return IndexInterface
+     */
     public function getIndex($indexName);
 
     /**
      * @param ConstraintInterface[] $indexes
-     * @return mixed
      */
     public function setIndexes(array $indexes);
 
+    /**
+     * @param ConstraintInterface $index
+     */
     public function addIndex(ConstraintInterface $index);
 
+    /**
+     * @return bool
+     */
     public function hasPrimaryKey();
 
     /**
@@ -102,20 +130,19 @@ interface TableInterface extends MySQLInterface
     public function getForeignKeys();
 
     /**
-     * @param $foreignKeyName
+     * @param string $foreignKeyName
      * @return ForeignKeyInterface
      */
     public function getForeignKey($foreignKeyName);
 
     /**
-     * @param $foreignKeyName
+     * @param string $foreignKeyName
      * @return bool
      */
     public function hasForeignKey($foreignKeyName);
 
     /**
-     * @param array $foreignKeys
-     * @return ForeignKeyInterface[]
+     * @param ForeignKeyInterface[] $foreignKeys
      */
     public function setForeignKeys(array $foreignKeys);
 
@@ -125,35 +152,80 @@ interface TableInterface extends MySQLInterface
      */
     public function addForeignKey(ForeignKeyInterface $foreignKey);
 
+    /**
+     * @return string
+     */
     public function getEngine();
 
+    /**
+     * @return bool
+     */
     public function hasEngine();
 
+    /**
+     * @param string $engine
+     */
     public function setEngine($engine);
 
+    /**
+     * @return string
+     */
     public function getDefaultCollation();
 
+    /**
+     * @return bool
+     */
     public function hasDefaultCollation();
 
+    /**
+     * @param string $defaultCollation
+     */
     public function setDefaultCollation($defaultCollation);
 
+    /**
+     * @return string
+     */
     public function getRowFormat();
 
+    /**
+     * @return bool
+     */
     public function hasRowFormat();
 
+    /**
+     * @param string $rowFormat
+     */
     public function setRowFormat($rowFormat);
 
+    /**
+     * @return string
+     */
     public function getComment();
 
+    /**
+     * @return bool
+     */
     public function hasComment();
 
+    /**
+     * @param string $comment
+     */
     public function setComment($comment);
 
+    /**
+     * @param string $delimiter
+     * @param bool $fullyQualifiedName
+     * @param int $drop
+     * @return string
+     */
     public function getDDL(
         $delimiter = self::DEFAULT_DELIMITER,
         $fullyQualifiedName = false,
         $drop = self::DDL_DROP_DO_NOT
     );
 
+    /**
+     * @return string
+     */
     public function __toString();
 }

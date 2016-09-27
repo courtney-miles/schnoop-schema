@@ -50,8 +50,8 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->trigger->getPositionRelation());
         $this->assertNull($this->trigger->getPositionRelativeTo());
 
-        $this->assertFalse($this->trigger->hasStatement());
-        $this->assertNull($this->trigger->getStatement());
+        $this->assertFalse($this->trigger->hasBody());
+        $this->assertNull($this->trigger->getBody());
 
         $this->assertFalse($this->trigger->hasSqlMode());
         $this->assertNull($this->trigger->getSqlMode());
@@ -101,10 +101,10 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
     public function testSetStatement()
     {
         $statement = 'SELECT 1;';
-        $this->trigger->setStatement($statement);
+        $this->trigger->setBody($statement);
 
-        $this->assertTrue($this->trigger->hasStatement());
-        $this->assertSame($statement, $this->trigger->getStatement());
+        $this->assertTrue($this->trigger->hasBody());
+        $this->assertSame($statement, $this->trigger->getBody());
     }
 
     public function testSetSqlMode()
@@ -121,6 +121,8 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
         $expectedDDL = <<<SQL
 CREATE TRIGGER `{$this->name}` {$this->timing} {$this->event}
 ON `{$this->tableName}` FOR EACH ROW
+BEGIN
+END
 ;
 SQL;
 
@@ -149,7 +151,9 @@ CREATE DEFINER = {$definer}
 TRIGGER `{$this->name}` {$this->timing} {$this->event}
 ON `{$this->tableName}` FOR EACH ROW
 {$relation} `{$relativeTo}`
+BEGIN
 {$statement}
+END
 @@
 {$restoreModeStmts}
 SQL;
@@ -157,7 +161,7 @@ SQL;
         $this->trigger->setDatabaseName($databaseName);
         $this->trigger->setDefiner($definer);
         $this->trigger->setPosition($relation, $relativeTo);
-        $this->trigger->setStatement($statement);
+        $this->trigger->setBody($statement);
         $this->trigger->setSqlMode($mockSqlMode);
 
         $this->assertSame($expectedDDL, $this->trigger->getDDL(true, '@@'));
@@ -168,6 +172,8 @@ SQL;
         $expectedDDL = <<<SQL
 CREATE TRIGGER `{$this->name}` {$this->timing} {$this->event}
 ON `{$this->tableName}` FOR EACH ROW
+BEGIN
+END
 ;
 SQL;
 

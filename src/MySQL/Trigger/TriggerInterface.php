@@ -83,17 +83,17 @@ interface TriggerInterface extends MySQLInterface
     /**
      * @return string
      */
-    public function getStatement();
+    public function getBody();
 
     /**
      * @return bool
      */
-    public function hasStatement();
+    public function hasBody();
 
     /**
-     * @param string $statement
+     * @param string $body
      */
-    public function setStatement($statement);
+    public function setBody($body);
 
     /**
      * @return string

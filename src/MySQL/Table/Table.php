@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 2/06/16
- * Time: 5:01 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
@@ -50,7 +44,7 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -58,49 +52,72 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getDatabaseName()
     {
         return $this->databaseName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasDatabaseName()
     {
         return isset($this->databaseName);
     }
 
     /**
-     * @param mixed $databaseName
+     * {@inheritdoc}
      */
     public function setDatabaseName($databaseName)
     {
         $this->databaseName = $databaseName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getColumnList()
     {
         return array_keys($this->columns);
     }
 
     /**
-     * @return ColumnInterface[]
+     * {@inheritdoc}
      */
     public function getColumns()
     {
         return array_values($this->columns);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasColumn($columnName)
     {
         return isset($this->columns[$columnName]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getColumn($columnName)
     {
         return $this->hasColumn($columnName) ? $this->columns[$columnName] : null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setColumns(array $columns)
     {
         $this->columns = [];
@@ -111,7 +128,7 @@ class Table implements TableInterface
     }
 
     /**
-     * @param ColumnInterface $column
+     * {@inheritdoc}
      */
     public function addColumn(ColumnInterface $column)
     {
@@ -119,26 +136,41 @@ class Table implements TableInterface
         $this->columns[$column->getName()] = $column;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIndexList()
     {
         return array_keys($this->indexes);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIndexes()
     {
         return array_values($this->indexes);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasIndex($indexName)
     {
         return isset($this->indexes[$indexName]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIndex($indexName)
     {
         return $this->hasIndex($indexName) ? $this->indexes[$indexName] : null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setIndexes(array $indexes)
     {
         $this->indexes = [];
@@ -148,6 +180,9 @@ class Table implements TableInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addIndex(ConstraintInterface $index)
     {
         $name = $index->getName();
@@ -160,36 +195,57 @@ class Table implements TableInterface
         $index->setTableName($this->getName());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasPrimaryKey()
     {
         return $this->hasIndex('PRIMARY');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPrimaryKey()
     {
         return $this->getIndex('PRIMARY');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getForeignKeyList()
     {
         return array_keys($this->foreignKeys);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getForeignKeys()
     {
         return array_values($this->foreignKeys);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getForeignKey($foreignKeyName)
     {
         return $this->hasForeignKey($foreignKeyName) ? $this->foreignKeys[$foreignKeyName] : null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasForeignKey($foreignKeyName)
     {
         return isset($this->foreignKeys[$foreignKeyName]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setForeignKeys(array $foreignKeys)
     {
         $this->foreignKeys = [];
@@ -199,6 +255,9 @@ class Table implements TableInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addForeignKey(ForeignKeyInterface $foreignKey)
     {
         $this->foreignKeys[$foreignKey->getName()] = $foreignKey;
@@ -206,20 +265,23 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getEngine()
     {
         return $this->engine;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasEngine()
     {
         return !empty($this->engine);
     }
 
     /**
-     * @param mixed $engine
+     * {@inheritdoc}
      */
     public function setEngine($engine)
     {
@@ -227,20 +289,23 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getDefaultCollation()
     {
         return $this->defaultCollation;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasDefaultCollation()
     {
         return !empty($this->defaultCollation);
     }
 
     /**
-     * @param mixed $defaultCollation
+     * {@inheritdoc}
      */
     public function setDefaultCollation($defaultCollation)
     {
@@ -248,21 +313,23 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getRowFormat()
     {
         return $this->rowFormat;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasRowFormat()
     {
         return !empty($this->rowFormat);
     }
 
-
     /**
-     * @param mixed $rowFormat
+     * {@inheritdoc}
      */
     public function setRowFormat($rowFormat)
     {
@@ -270,26 +337,32 @@ class Table implements TableInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getComment()
     {
         return $this->comment;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasComment()
     {
         return (bool)strlen($this->comment);
     }
 
     /**
-     * @param mixed $comment
+     * {@inheritdoc}
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDDL(
         $delimiter = self::DEFAULT_DELIMITER,
         $fullyQualifiedName = false,
@@ -380,6 +453,9 @@ SQL;
         return $createDDL;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getDDL();
