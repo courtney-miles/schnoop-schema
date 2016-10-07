@@ -11,25 +11,29 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 trait DisplayWidthTrait
 {
     /**
+     * Display width
      * @var int
      */
     protected $displayWidth;
 
     /**
-     * @return int
+     * @see DisplayWidthInterface::getDisplayWidth()
      */
     public function getDisplayWidth()
     {
         return $this->displayWidth;
     }
 
+    /**
+     * @see DisplayWidthInterface::hasDisplayWidth()
+     */
     public function hasDisplayWidth()
     {
         return !empty($this->displayWidth);
     }
 
     /**
-     * @param int $displayWidth
+     * @see DisplayWidthInterface::setDisplayWidth()
      */
     public function setDisplayWidth($displayWidth)
     {

@@ -11,7 +11,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 class DateTimeType extends AbstractTimeType
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

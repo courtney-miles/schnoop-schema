@@ -3,21 +3,27 @@
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Exception\ForceSqlModeException;
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 
-class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterface
+class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterface
 {
     /**
+     * Function parameters.
      * @var FunctionParameterInterface[]
      */
     protected $parameters = [];
 
     /**
+     * Function return type.
      * @var DataTypeInterface
      */
     protected $returns;
 
+    /**
+     * RoutineFunction constructor.
+     * @param string $name Function name.
+     * @param DataTypeInterface $return Function return type.
+     */
     public function __construct($name, DataTypeInterface $return)
     {
         parent::__construct($name);
@@ -26,33 +32,39 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
     }
 
     /**
-     * @return FunctionParameterInterface[]
+     * {@inheritdoc}
      */
     public function getParameters()
     {
         return $this->parameters;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasParameters()
     {
         return !empty($this->parameters);
     }
 
     /**
-     * @param FunctionParameterInterface[] $parameters
+     * {@inheritdoc}
      */
     public function setParameters(array $parameters)
     {
         $this->parameters = $parameters;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addParameter(FunctionParameterInterface $parameter)
     {
         $this->parameters[] = $parameter;
     }
 
     /**
-     * @return DataTypeInterface
+     * {@inheritdoc}
      */
     public function getReturns()
     {
@@ -60,7 +72,7 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
     }
 
     /**
-     * @param DataTypeInterface $returns
+     * {@inheritdoc}
      */
     public function setReturns(DataTypeInterface $returns)
     {
@@ -70,15 +82,11 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
     /**
      * {@inheritdoc}
      */
-    public function getDDL(
-        $forceSqlMode = false,
-        $delimiter = self::DEFAULT_DELIMITER,
-        $fullyQualifiedName = false,
-        $drop = self::DDL_DROP_DO_NOT
-    ) {
+    public function getDDL()
+    {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($fullyQualifiedName) {
+        if ($this->ddlUseFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
                 throw new FQNException(
                     'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -90,33 +98,27 @@ class FunctionRoutine extends AbstractRoutine implements FunctionRoutineInterfac
             $functionName = "`{$this->getName()}`";
         }
 
-        if ($drop) {
-            switch ($drop) {
-                case self::DDL_DROP_ALWAYS:
+        if ($this->ddlDropPolicy) {
+            switch ($this->ddlDropPolicy) {
+                case self::DDL_DROP_DOES_EXISTS:
                     $dropDDL = <<<SQL
-DROP FUNCTION {$functionName}{$delimiter}
+DROP FUNCTION {$functionName}{$this->ddlDelimiter}
 SQL;
                     break;
                 case self::DDL_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP FUNCTION IF EXISTS {$functionName}{$delimiter}
+DROP FUNCTION IF EXISTS {$functionName}{$this->ddlDelimiter}
 SQL;
                     break;
             }
         }
 
-        if ($forceSqlMode) {
-            if (!$this->hasSqlMode()) {
-                throw new ForceSqlModeException(
-                    'Unable to create DDL that forces the SQL mode because an SQL mode has not been set.'
-                );
-            }
-
-            $setSqlMode = $this->sqlMode->getAssignStmt($delimiter);
-            $revertSqlMode = $this->sqlMode->getRestoreStmt($delimiter);
+        if ($this->hasSqlMode()) {
+            $setSqlMode = $this->sqlMode->getAssignStmt($this->ddlDelimiter);
+            $revertSqlMode = $this->sqlMode->getRestoreStmt($this->ddlDelimiter);
         }
 
-        $functionSignature = "FUNCTION {$functionName} ({$this->getParametersDDL()})";
+        $functionSignature = "FUNCTION {$functionName} ({$this->makeParametersDDL()})";
 
         $createDDL .= 'CREATE '
             . implode(
@@ -126,10 +128,10 @@ SQL;
                         (!empty($this->definer)) ? 'DEFINER = ' . $this->definer : null,
                         $functionSignature,
                         'RETURNS ' . (string)$this->returns,
-                        $this->getCharacteristicsDDL(),
+                        $this->makeCharacteristicsDDL(),
                         'BEGIN',
                         $this->body,
-                        'END' . $delimiter
+                        'END' . $this->ddlDelimiter
                     ]
                 )
             );
@@ -154,7 +156,11 @@ SQL;
         return $this->getDDL();
     }
 
-    protected function getParametersDDL()
+    /**
+     * Make the portion of DDL for describing the parameters.
+     * @return string Parameters DDL.
+     */
+    protected function makeParametersDDL()
     {
         $params = [];
 

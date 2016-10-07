@@ -4,10 +4,15 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
+/**
+ * Interface ConstraintColumnInterface
+ * @package MilesAsylum\SchnoopSchema\MySQL\Constraint
+ */
 interface ConstraintColumnInterface extends MySQLInterface
 {
     /**
-     * @return string
+     * Get the name of the indexed column.
+     * @return string Column name.
      */
     public function getColumnName();
 }

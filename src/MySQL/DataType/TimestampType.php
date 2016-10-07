@@ -5,7 +5,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 class TimestampType extends AbstractTimeType
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

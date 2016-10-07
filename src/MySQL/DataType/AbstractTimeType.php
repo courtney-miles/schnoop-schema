@@ -8,30 +8,46 @@ abstract class AbstractTimeType implements TimeTypeInterface
 {
     use QuoteTrait;
 
+    /**
+     * @var int
+     */
     protected $precision;
 
+    /**
+     * AbstractTimeType constructor.
+     * @param int $precision Decimal precision.
+     */
     public function __construct($precision = 0)
     {
         $this->setPrecision($precision);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPrecision()
     {
         return $this->precision;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasPrecision()
     {
         return !empty($this->precision);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setPrecision($precision)
     {
         $this->precision = $precision;
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function doesAllowDefault()
     {
@@ -46,9 +62,20 @@ abstract class AbstractTimeType implements TimeTypeInterface
         return $value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return strtoupper($this->getType())
             . ($this->getPrecision() > 0 ? '(' . $this->getPrecision() . ')' : null);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

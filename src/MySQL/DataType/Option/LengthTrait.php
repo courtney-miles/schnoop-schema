@@ -10,20 +10,23 @@ trait LengthTrait
     protected $length;
 
     /**
-     * @return int
+     * @see LengthInterface::getLength()
      */
     public function getLength()
     {
         return $this->length;
     }
 
+    /**
+     * @see LengthInterface::hasLength()
+     */
     public function hasLength()
     {
         return !empty($this->length);
     }
 
     /**
-     * @param int $length
+     * @see LengthInterface::setLength()
      */
     public function setLength($length)
     {

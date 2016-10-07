@@ -13,7 +13,7 @@ class TinyBlobType extends AbstractBlobType
     const LENGTH = 255;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

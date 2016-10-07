@@ -10,9 +10,21 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
 interface DisplayWidthInterface
 {
+    /**
+     * Get the display width.
+     * @return int Display width.
+     */
     public function getDisplayWidth();
 
+    /**
+     * Identify if the display width is set.
+     * @return bool
+     */
     public function hasDisplayWidth();
 
+    /**
+     * Set the display width.
+     * @param int $displayWidth Display width
+     */
     public function setDisplayWidth($displayWidth);
 }

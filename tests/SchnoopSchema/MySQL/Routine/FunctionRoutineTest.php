@@ -4,7 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\FunctionParameterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Routine\FunctionRoutine;
+use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineFunction;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -19,7 +19,7 @@ class FunctionRoutineTest extends RoutineTestCase
     protected $returns;
 
     /**
-     * @var FunctionRoutine
+     * @var RoutineFunction
      */
     protected $function;
 
@@ -47,7 +47,7 @@ class FunctionRoutineTest extends RoutineTestCase
      */
     protected function createRoutine()
     {
-        return new FunctionRoutine($this->name, $this->returns);
+        return new RoutineFunction($this->name, $this->returns);
     }
 
     protected function getExpectedName()

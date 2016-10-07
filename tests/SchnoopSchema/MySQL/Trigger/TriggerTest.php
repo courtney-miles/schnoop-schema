@@ -47,7 +47,7 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->trigger->getDefiner());
 
         $this->assertFalse($this->trigger->hasPosition());
-        $this->assertNull($this->trigger->getPositionRelation());
+        $this->assertNull($this->trigger->getPositionContext());
         $this->assertNull($this->trigger->getPositionRelativeTo());
 
         $this->assertFalse($this->trigger->hasBody());
@@ -94,7 +94,7 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
         $this->trigger->setPosition($relation, $relativeTo);
 
         $this->assertTrue($this->trigger->hasPosition());
-        $this->assertSame($relation, $this->trigger->getPositionRelation());
+        $this->assertSame($relation, $this->trigger->getPositionContext());
         $this->assertSame($relativeTo, $this->trigger->getPositionRelativeTo());
     }
 
@@ -154,7 +154,7 @@ ON `{$this->tableName}` FOR EACH ROW
 BEGIN
 {$statement}
 END
-@@
+;
 {$restoreModeStmts}
 SQL;
 
@@ -164,7 +164,7 @@ SQL;
         $this->trigger->setBody($statement);
         $this->trigger->setSqlMode($mockSqlMode);
 
-        $this->assertSame($expectedDDL, $this->trigger->getDDL(true, '@@'));
+        $this->assertSame($expectedDDL, $this->trigger->getDDL());
     }
 
     public function testToString()

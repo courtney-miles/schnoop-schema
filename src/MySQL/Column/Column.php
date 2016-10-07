@@ -2,6 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
+use MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
@@ -9,35 +10,49 @@ use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 class Column implements ColumnInterface
 {
     /**
+     * The name of the column.
      * @var string
      */
     protected $name;
 
     /**
+     * The data type of the column.
      * @var DataTypeInterface
      */
     protected $dataType;
 
+    /**
+     * The name of the table the column belongs to.
+     * @var
+     */
     protected $tableName;
 
     /**
+     * The name of the database the column belongs to.
      * @var string
      */
     protected $databaseName;
 
     /**
+     * Indicates if the column accepts NULL values.
      * @var bool
      */
     protected $nullable = false;
 
     /**
+     * The default value for the column.
      * @var mixed
      */
     protected $default;
 
+    /**
+     * Indicates if the column value should be set to the current time on update.
+     * @var bool
+     */
     protected $onUpdateCurrentTimestamp = false;
 
     /**
+     * The comment for the column.
      * @var string
      */
     protected $comment;
@@ -47,42 +62,55 @@ class Column implements ColumnInterface
      */
     protected $autoIncrement;
 
+    /**
+     * Column constructor.
+     * @param string $name The name of the column.
+     * @param DataTypeInterface $dataType The data type of the column.
+     */
     public function __construct($name, DataTypeInterface $dataType)
     {
         $this->name = $name;
         $this->dataType = $dataType;
 
         if ($this->dataType instanceof NumericTypeInterface) {
-            $this->zeroFill = false;
             $this->autoIncrement = false;
         }
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTableName()
     {
         return $this->tableName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasTableName()
     {
         return isset($this->tableName);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDatabaseName()
     {
@@ -90,20 +118,23 @@ class Column implements ColumnInterface
     }
 
     /**
-     * @param string $databaseName
+     * {@inheritdoc}
      */
     public function setDatabaseName($databaseName)
     {
         $this->databaseName = $databaseName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasDatabaseName()
     {
         return isset($this->databaseName);
     }
 
     /**
-     * @return DataTypeInterface
+     * {@inheritdoc}
      */
     public function getDataType()
     {
@@ -111,18 +142,24 @@ class Column implements ColumnInterface
     }
 
     /**
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isNullable()
     {
         return $this->nullable;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setNullable($nullable)
     {
         $this->nullable = $nullable;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasDefault()
     {
         if (!$this->getDataType()->doesAllowDefault()) {
@@ -132,20 +169,28 @@ class Column implements ColumnInterface
         return $this->default !== null || $this->isNullable();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDefault()
     {
         return $this->default;
     }
 
+    /**
+     * {@inheritdoc}
+     * @throws LogicException Exception when setting a default value when the
+     * data type does not support it.
+     */
     public function setDefault($default)
     {
         if ($default !== null && !$this->getDataType()->doesAllowDefault()) {
-            trigger_error(
-                'Unable to set default value for the column as the data-type does not support a default.',
-                E_USER_WARNING
+            throw new LogicException(
+                sprintf(
+                    'Unable to set default value for the column. The data-type "%s" does not support a default.',
+                    $this->getDataType()->getType()
+                )
             );
-
-            $default = null;
         }
 
         if (is_array($default)) {
@@ -161,62 +206,109 @@ class Column implements ColumnInterface
         $this->default = $default;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function unsetDefault()
+    {
+        $this->default = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isOnUpdateCurrentTimestamp()
     {
         return $this->onUpdateCurrentTimestamp;
     }
 
+    /**
+     * {@inheritdoc}
+     * @throws LogicException Exception when setting this property when the
+     * data type does not support it.
+     */
     public function setOnUpdateCurrentTimestamp($onUpdateCurrentTimestamp)
     {
+        if (!empty($onUpdateCurrentTimestamp) && !($this->dataType instanceof TimeTypeInterface)) {
+            throw new LogicException(
+                sprintf(
+                    'Unable to set that the column value should be set to the current time on update. The data-type "%" does not support a default.',
+                    $this->dataType->getType()
+                )
+            );
+        }
+
         $this->onUpdateCurrentTimestamp = $onUpdateCurrentTimestamp;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getComment()
     {
         return $this->comment;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasComment()
     {
         return (bool)strlen($this->comment);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setComment($comment)
     {
-        $this->comment = $comment;
+        $this->comment = strlen($comment) ? (string)$comment : null;
     }
 
     /**
-     * @return boolean|null
+     * {@inheritdoc}
+     */
+    public function unsetComment()
+    {
+        $this->comment = '';
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function isAutoIncrement()
     {
         return $this->autoIncrement;
     }
 
+    /**
+     * {@inheritdoc}
+     * @throws LogicException Exception when setting this property when the
+     * data type does not support it.
+     */
     public function setAutoIncrement($autoIncrement)
     {
         if ($autoIncrement && !($this->dataType instanceof NumericTypeInterface)) {
-            trigger_error(
-                "Unable to set autoincrement property on the column as its data-type does not support it.",
-                E_USER_WARNING
+            throw new LogicException(
+                sprintf(
+                    'Unable to set auto-increment property on the column. Data-type "%s" does not support an auto-incrementing value.',
+                    $this->getDataType()->getType()
+                )
             );
-
-            $autoIncrement = false;
         }
 
         $this->autoIncrement = $autoIncrement;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         $default = null;
 
         if ($this->hasDefault()) {
-            $default = $this->prepareDDLDefault($this->getDefault());
+            $default = $this->createDefaultDDL($this->getDefault());
         }
 
         return implode(
@@ -227,7 +319,7 @@ class Column implements ColumnInterface
                     (string)$this->getDataType(),
                     $this->nullable ? 'NULL' : 'NOT NULL',
                     $this->hasDefault() ? 'DEFAULT ' . $default : null,
-                    $this->isOnUpdateCurrentTimestamp() ? $this->preparedOnUpdateCurrentTimestamp() : null,
+                    $this->isOnUpdateCurrentTimestamp() ? $this->createOnUpdateCurrentTimestampDDL() : null,
                     $this->isAutoIncrement() ? 'AUTO_INCREMENT' : null,
                     $this->hasComment() ? sprintf("COMMENT '%s'", addslashes($this->getComment())) : null
                 ]
@@ -235,7 +327,20 @@ class Column implements ColumnInterface
         );
     }
 
-    protected function prepareDDLDefault($default)
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
+    }
+
+    /**
+     * Creates the portion of DDL for the column default value.
+     * @param mixed $default
+     * @return string DDL portion for the column default.
+     */
+    protected function createDefaultDDL($default)
     {
         $dataType = $this->getDataType();
 
@@ -256,7 +361,13 @@ class Column implements ColumnInterface
         return $default;
     }
 
-    protected function preparedOnUpdateCurrentTimestamp()
+    /**
+     * Creates the portion of DDL for setting column value to the current
+     * time on update.
+     * @return null|string DDL portion for setting column value to the current
+     * time. NULL if the column is not set to have the value set on update.
+     */
+    protected function createOnUpdateCurrentTimestampDDL()
     {
         $onUpdateDDL = null;
 

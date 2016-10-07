@@ -13,13 +13,16 @@ class TextType extends AbstractTextType
     const LENGTH = 65535;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
         return self::TYPE_TEXT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getLength()
     {
         return self::LENGTH;

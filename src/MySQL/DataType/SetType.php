@@ -5,7 +5,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 class SetType extends AbstractOptionsType
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -14,8 +14,6 @@ class SetType extends AbstractOptionsType
 
     /**
      * {@inheritdoc}
-     * @param array $value
-     * @return array
      */
     public function cast($value)
     {

@@ -4,7 +4,9 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 interface ForeignKeyColumnInterface extends ConstraintColumnInterface
 {
-    public function getColumnName();
-    
+    /**
+     * Get the reference column name for the foreign key column.
+     * @return string Reference column name.
+     */
     public function getReferenceColumnName();
 }

@@ -10,11 +10,17 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class FloatType extends AbstractNumericPointType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return self::TYPE_FLOAT;
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function cast($value)
     {
         return (float)$value;

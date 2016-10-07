@@ -2,37 +2,43 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
-use MilesAsylum\SchnoopSchema\MySQL\Exception\ForceSqlModeException;
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 
-class ProcedureRoutine extends AbstractRoutine implements ProcedureRoutineInterface
+class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterface
 {
     /**
+     * Routine parameters.
      * @var ProcedureParameterInterface[]
      */
     protected $parameters = [];
 
     /**
-     * @return ProcedureParameterInterface[]
+     * {@inheritdoc}
      */
     public function getParameters()
     {
         return $this->parameters;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasParameters()
     {
         return !empty($this->parameters);
     }
 
     /**
-     * @param ProcedureParameterInterface[] $parameters
+     * {@inheritdoc}
      */
     public function setParameters(array $parameters)
     {
         $this->parameters = $parameters;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function addParameter(ProcedureParameterInterface $parameter)
     {
         $this->parameters[] = $parameter;
@@ -41,15 +47,11 @@ class ProcedureRoutine extends AbstractRoutine implements ProcedureRoutineInterf
     /**
      * {@inheritdoc}
      */
-    public function getDDL(
-        $forceSqlMode = false,
-        $delimiter = self::DEFAULT_DELIMITER,
-        $fullyQualifiedName = false,
-        $drop = self::DDL_DROP_DO_NOT
-    ) {
+    public function getDDL()
+    {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($fullyQualifiedName) {
+        if ($this->ddlUseFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
                 throw new FQNException(
                     'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -61,33 +63,27 @@ class ProcedureRoutine extends AbstractRoutine implements ProcedureRoutineInterf
             $functionName = "`{$this->getName()}`";
         }
 
-        if ($drop) {
-            switch ($drop) {
-                case self::DDL_DROP_ALWAYS:
+        if ($this->ddlDropPolicy) {
+            switch ($this->ddlDropPolicy) {
+                case self::DDL_DROP_DOES_EXISTS:
                     $dropDDL = <<<SQL
-DROP PROCEDURE {$functionName}{$delimiter}
+DROP PROCEDURE {$functionName}{$this->ddlDelimiter}
 SQL;
                     break;
                 case self::DDL_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP PROCEDURE IF EXISTS {$functionName}{$delimiter}
+DROP PROCEDURE IF EXISTS {$functionName}{$this->ddlDelimiter}
 SQL;
                     break;
             }
         }
 
-        if ($forceSqlMode) {
-            if (!$this->hasSqlMode()) {
-                throw new ForceSqlModeException(
-                    'Unable to create DDL that forces the SQL mode because an SQL mode has not been set.'
-                );
-            }
-
-            $setSqlMode = $this->sqlMode->getAssignStmt($delimiter);
-            $revertSqlMode = $this->sqlMode->getRestoreStmt($delimiter);
+        if ($this->hasSqlMode()) {
+            $setSqlMode = $this->sqlMode->getAssignStmt($this->ddlDelimiter);
+            $revertSqlMode = $this->sqlMode->getRestoreStmt($this->ddlDelimiter);
         }
 
-        $procedureSignature = "PROCEDURE {$functionName} ({$this->getParametersDDL()})";
+        $procedureSignature = "PROCEDURE {$functionName} ({$this->makeParametersDDL()})";
 
         $createDDL = 'CREATE '
             . implode(
@@ -96,7 +92,7 @@ SQL;
                     [
                         (!empty($this->definer)) ? 'DEFINER = ' . $this->definer : null,
                         $procedureSignature,
-                        $this->getCharacteristicsDDL(),
+                        $this->makeCharacteristicsDDL(),
                         'BEGIN',
                         $this->body,
                         'END'
@@ -111,7 +107,8 @@ SQL;
                     $dropDDL,
                     $setSqlMode,
                     $createDDL,
-                    $revertSqlMode
+                    $revertSqlMode,
+                    $this->ddlDelimiter
                 ]
             )
         );
@@ -119,12 +116,18 @@ SQL;
         return $createDDL;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getDDL();
     }
 
-    protected function getParametersDDL()
+    /**
+     * {@inheritdoc}
+     */
+    protected function makeParametersDDL()
     {
         $params = [];
 

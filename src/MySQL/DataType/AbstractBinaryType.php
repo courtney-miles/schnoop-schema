@@ -20,39 +20,56 @@ abstract class AbstractBinaryType implements BinaryTypeInterface
     private $length;
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLength()
     {
         return $this->length;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasLength()
     {
         return !empty($this->length);
     }
 
     /**
-     * @param int $length
+     * {@inheritdoc}
      */
     public function setLength($length)
     {
         $this->length = (int)$length;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function doesAllowDefault()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cast($value)
     {
         return (string)$value;
     }
 
-    public function __toString()
+    public function getDDL()
     {
         return strtoupper($this->getType())
-        . ($this->length > 0 ? '(' . $this->length . ')' : null);
+            . ($this->length > 0 ? '(' . $this->length . ')' : null);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

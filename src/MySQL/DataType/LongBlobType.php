@@ -7,7 +7,7 @@ class LongBlobType extends AbstractBlobType
     const LENGTH = 4294967295;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

@@ -4,6 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Column;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TimestampType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\Column;
@@ -136,10 +137,10 @@ class ColumnTest extends SchnoopSchemaTestCase
 
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Unable to set default value for the column as the data-type does not support a default.
+     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException
+     * @expectedExceptionMessage Unable to set default value for the column. The data-type "FOO" does not support a default.
      */
-    public function testWarningWhenSetDefaultWhenNotAllowed()
+    public function testExceptionWhenSetDefaultWhenNotAllowed()
     {
         /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
         $mockDataType = $this->createMock(DataTypeInterface::class);
@@ -147,6 +148,9 @@ class ColumnTest extends SchnoopSchemaTestCase
             ->willReturn('');
         $mockDataType->method('doesAllowDefault')
             ->willReturn(false);
+        $mockDataType->method('getType')
+            ->willReturn('FOO');
+
 
         $column = new Column(
             'foo',
@@ -154,25 +158,6 @@ class ColumnTest extends SchnoopSchemaTestCase
         );
 
         $column->setDefault('foo');
-    }
-
-    public function testDefaultNotSetWhenNotAllowed()
-    {
-        /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
-        $mockDataType = $this->createMock(DataTypeInterface::class);
-        $mockDataType->method('cast')
-            ->willReturn('');
-        $mockDataType->method('doesAllowDefault')
-            ->willReturn(false);
-
-        $column = new Column(
-            'foo',
-            $mockDataType
-        );
-
-        @$column->setDefault('foo');
-        $this->assertFalse($column->hasDefault());
-        $this->assertNull($this->column->getDefault());
     }
 
     /**
@@ -200,9 +185,13 @@ class ColumnTest extends SchnoopSchemaTestCase
 
     public function testSetOnUpdateCurrentTimestamp()
     {
-        $this->column->setOnUpdateCurrentTimestamp(true);
+        $mockTimeStamp = $this->createMock(TimestampType::class);
+        $mockTimeStamp->method('doesAllowDefault')
+            ->willReturn(true);
+        $column = new Column($this->name, $mockTimeStamp);
+        $column->setOnUpdateCurrentTimestamp(true);
 
-        $this->assertTrue($this->column->isOnUpdateCurrentTimestamp());
+        $this->assertTrue($column->isOnUpdateCurrentTimestamp());
     }
 
     public function testSetAutoIncrement()
@@ -216,19 +205,15 @@ class ColumnTest extends SchnoopSchemaTestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage Unable to set autoincrement property on the column as its data-type does not support it.
+     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException
+     * @expectedExceptionMessage Unable to set auto-increment property on the column. Data-type "FOO" does not support an auto-incrementing value.
      */
-    public function testWarningSetAutoIncrementOnUnsupportedType()
+    public function testExceptionSetAutoIncrementOnUnsupportedType()
     {
+        $this->dataType->method('getType')
+            ->willReturn('FOO');
+
         $this->column->setAutoIncrement(true);
-    }
-
-    public function testAutoIncrementNotSetOnSupportedType()
-    {
-        @$this->column->setAutoIncrement(true);
-
-        $this->assertFalse($this->column->isAutoIncrement());
     }
 
     /**
@@ -296,7 +281,13 @@ class ColumnTest extends SchnoopSchemaTestCase
         return [
             'Not NULL and no DEFAULT' => [
                 $this->createColumn(
-                    $this->name, $mockNumericDataTypeAllowDefault, false, null, false, false, null
+                    $this->name,
+                    $mockNumericDataTypeAllowDefault,
+                    false,
+                    null,
+                    false,
+                    false,
+                    null
                 ),
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NOT NULL
@@ -304,7 +295,13 @@ SQL
             ],
             'Null with DEFAULT' => [
                 $this->createColumn(
-                    $this->name, $mockNumericDataTypeAllowDefault, true, $default, false, true, 'Schnoop comment'
+                    $this->name,
+                    $mockNumericDataTypeAllowDefault,
+                    true,
+                    $default,
+                    false,
+                    true,
+                    'Schnoop comment'
                 ),
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NULL DEFAULT 123 AUTO_INCREMENT COMMENT 'Schnoop comment'
@@ -312,7 +309,13 @@ SQL
             ],
             'NULL with DEFAULT array' => [
                 $this->createColumn(
-                    $this->name, $mockSetDataType, true, $defaultArray, false, null, null
+                    $this->name,
+                    $mockSetDataType,
+                    true,
+                    $defaultArray,
+                    false,
+                    null,
+                    null
                 ),
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NULL DEFAULT ('foo','bar')
@@ -320,7 +323,13 @@ SQL
             ],
             'Not NULL with TIMESTAMP DEFAULT CURRENT_STAMP' => [
                 $this->createColumn(
-                    $this->name, $mockTimeType, false, ColumnInterface::DEFAULT_CURRENT_TIMESTAMP, false, null, null
+                    $this->name,
+                    $mockTimeType,
+                    false,
+                    ColumnInterface::DEFAULT_CURRENT_TIMESTAMP,
+                    false,
+                    null,
+                    null
                 ),
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -328,7 +337,13 @@ SQL
             ],
             'Not NULL with ON UPDATE CURRENT_STAMP' => [
                 $this->createColumn(
-                    $this->name, $mockTimeType, false, ColumnInterface::DEFAULT_CURRENT_TIMESTAMP, true, null, null
+                    $this->name,
+                    $mockTimeType,
+                    false,
+                    ColumnInterface::DEFAULT_CURRENT_TIMESTAMP,
+                    true,
+                    null,
+                    null
                 ),
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

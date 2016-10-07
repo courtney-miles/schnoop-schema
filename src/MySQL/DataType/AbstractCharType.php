@@ -18,22 +18,35 @@ abstract class AbstractCharType implements CharTypeInterface
     use LengthTrait;
     use QuoteTrait;
 
+    /**
+     * AbstractCharType constructor.
+     * @param int $length Character length.
+     */
     public function __construct($length)
     {
         $this->setLength($length);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cast($value)
     {
         return (string)$value;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return implode(
             ' ',
@@ -44,5 +57,13 @@ abstract class AbstractCharType implements CharTypeInterface
                 ]
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

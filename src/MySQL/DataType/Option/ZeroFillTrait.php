@@ -7,7 +7,7 @@ trait ZeroFillTrait
     protected $zeroFill = false;
 
     /**
-     * @return boolean
+     * @see ZeroFillInterface::isZeroFill()
      */
     public function isZeroFill()
     {
@@ -15,7 +15,7 @@ trait ZeroFillTrait
     }
 
     /**
-     * @param boolean $zeroFill
+     * @see ZeroFillInterface::setZeroFill()
      */
     public function setZeroFill($zeroFill)
     {

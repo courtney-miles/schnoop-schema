@@ -52,14 +52,14 @@ interface DataTypeInterface extends MySQLInterface
     const TYPE_YEAR = 'year';
 
     /**
-     * @return string
+     * Get the data type name
+     * @return string Data type name.  One of the self::TYPE_* constants.
      */
     public function getType();
 
-    public function __toString();
-
     /**
-     * @return bool
+     * Identify if the type allows a default value.
+     * @return bool True if the type allows a default.
      */
     public function doesAllowDefault();
 
@@ -72,10 +72,24 @@ interface DataTypeInterface extends MySQLInterface
 
     /**
      * Quotes a value, based on the type, for use in a DDL statement. Do not
-     * believe for a second that this will make your queries safe.
+     * believe for a second that this will make your queries safe from
+     * injection exploits.
      * @param string|float|int $value The value to quote. If you are passing
      * a number and you need it quoted, cast it to a string.
      * @return mixed
      */
     public function quote($value);
+
+    /**
+     * Get the portion of DDL for describing the data type.
+     * @return string
+     */
+    public function getDDL();
+
+    /**
+     * The portion of DDL for describing the data type.
+     * @uses DataTypeInterface::getDDL()
+     * @return string
+     */
+    public function __toString();
 }

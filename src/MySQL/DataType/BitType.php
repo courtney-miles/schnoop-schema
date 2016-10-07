@@ -18,45 +18,68 @@ class BitType implements BitTypeInterface
 
     const MAX_LENGTH = 64;
 
+    /**
+     * BitType constructor.
+     * @param int $length Number of bits.
+     */
     public function __construct($length = 1)
     {
         $this->setLength($length);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
         return self::TYPE_BIT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function doesAllowDefault()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMinRange()
     {
         return 0;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMaxRange()
     {
         return pow(2, $this->length)-1;
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * {@inheritdoc}
      */
     public function cast($value)
     {
         return (int)$value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return strtoupper($this->getType()) . '(' . $this->getLength() . ')';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

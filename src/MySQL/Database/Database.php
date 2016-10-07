@@ -4,41 +4,66 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
 class Database implements DatabaseInterface
 {
+    /**
+     * The database name.
+     * @var string
+     */
     protected $name;
 
     /**
-     * @var string
-     */
-    protected $defaultCharacterSet;
-
-    /**
+     * The default collation for the database.
      * @var string
      */
     protected $defaultCollation;
 
+    /**
+     * The delimiter to use between statements.
+     * @var string
+     */
+    protected $ddlDelimiter = self::DEFAULT_DELIMITER;
+
+    /**
+     * Whether to include a drop statement with the create statement.
+     * @var bool
+     */
+    protected $ddlDropPolicy = self::DDL_DROP_DO_NOT;
+
+    /**
+     * Database constructor.
+     * @param string $name The database name.
+     */
     public function __construct($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return $this->name;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getDefaultCollation()
     {
         return $this->defaultCollation;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasDefaultCollation()
     {
         return !empty($this->defaultCollation);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultCollation($defaultCollation)
     {
         $this->defaultCollation = $defaultCollation;
@@ -47,22 +72,52 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDL(
-        $delimiter = self::DEFAULT_DELIMITER,
-        $drop = self::DDL_DROP_DO_NOT
-    ) {
+    public function getDDLDelimiter()
+    {
+        return $this->ddlDelimiter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDDLDelimiter($delimiter)
+    {
+        $this->ddlDelimiter = $delimiter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDLDropPolicy()
+    {
+        return $this->ddlDropPolicy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDDLDropPolicy($ddlDropPolicyPolicy)
+    {
+        $this->ddlDropPolicy = $ddlDropPolicyPolicy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
+    {
         $dropDDL = $createDDL = '';
 
-        if ($drop) {
-            switch ($drop) {
-                case self::DDL_DROP_ALWAYS:
+        if ($this->ddlDropPolicy) {
+            switch ($this->ddlDropPolicy) {
+                case self::DDL_DROP_DOES_EXISTS:
                     $dropDDL = <<<SQL
-DROP DATABASE `{$this->getName()}`{$delimiter}\n
+DROP DATABASE `{$this->getName()}`{$this->ddlDelimiter}\n
 SQL;
                     break;
                 case self::DDL_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP DATABASE IF EXISTS `{$this->getName()}`{$delimiter}\n
+DROP DATABASE IF EXISTS `{$this->getName()}`{$this->ddlDelimiter}\n
 SQL;
                     break;
             }
@@ -70,7 +125,7 @@ SQL;
 
         $createDDL = "CREATE DATABASE `{$this->getName()}`"
             . ($this->hasDefaultCollation() ? " DEFAULT COLLATE '{$this->getDefaultCollation()}'" : null)
-            . $delimiter;
+            . $this->ddlDelimiter;
 
         $createDDL = implode(
             "\n",
@@ -85,6 +140,9 @@ SQL;
         return $createDDL;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getDDL();

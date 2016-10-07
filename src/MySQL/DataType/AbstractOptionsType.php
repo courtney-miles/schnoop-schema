@@ -10,55 +10,97 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
     use CollationTrait;
     use QuoteTrait;
 
+    /**
+     * @var array
+     */
     protected $options = [];
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOptions()
     {
         return $this->options;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasOptions()
     {
         return !empty($this->options);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function hasOption($option)
     {
         return in_array($option, $this->options);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setOptions(array $options)
     {
-        $this->options = $options;
+        $this->options = array_values($options);
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
+     */
+    public function addOption($option)
+    {
+        $this->options[] = $option;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function doesAllowDefault()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cast($value)
     {
         return (string)$value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return implode(
             ' ',
             array_filter(
                 [
-                    strtoupper($this->getType()) . "(" . $this->prepareOptionsDDL($this->getOptions()) . ")",
+                    strtoupper($this->getType()) . "(" . $this->makeOptionsDDL($this->getOptions()) . ")",
                     $this->hasCollation() ? 'COLLATE ' . $this->getCollation() : null
                 ]
             )
         );
     }
 
-    protected function prepareOptionsDDL(array $options)
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
+    }
+
+    /**
+     * Make just the portion of the DDL that describes the options
+     * @param array $options
+     * @return string Portion of DDL for options.
+     */
+    protected function makeOptionsDDL(array $options)
     {
         $escapedOptions = [];
 

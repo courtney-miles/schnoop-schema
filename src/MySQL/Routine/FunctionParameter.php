@@ -2,16 +2,25 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-
 class FunctionParameter extends AbstractRoutineParameter implements FunctionParameterInterface
 {
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return sprintf(
             '`%s` %s',
             $this->getName(),
             (string)$this->getDataType()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

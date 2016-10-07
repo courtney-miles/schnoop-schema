@@ -7,8 +7,7 @@ class VarBinaryType extends AbstractBinaryType
     const MAX_LENGTH = 65535;
 
     /**
-     * VarBinaryType constructor.
-     * @param int $length
+     * {@inheritdoc}
      */
     public function __construct($length)
     {
@@ -16,7 +15,7 @@ class VarBinaryType extends AbstractBinaryType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

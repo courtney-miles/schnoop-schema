@@ -15,7 +15,7 @@ class YearType implements DataTypeInterface
     use QuoteTrait;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -23,7 +23,7 @@ class YearType implements DataTypeInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function doesAllowDefault()
     {
@@ -31,17 +31,26 @@ class YearType implements DataTypeInterface
     }
 
     /**
-     * Cast a value from MySQL to a suitable PHP type.
-     * @param mixed $value
-     * @return mixed
+     * {@inheritdoc}
      */
     public function cast($value)
     {
         return (int)$value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return strtoupper($this->getType());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

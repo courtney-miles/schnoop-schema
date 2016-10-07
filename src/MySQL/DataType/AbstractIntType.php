@@ -13,23 +13,35 @@ abstract class AbstractIntType implements IntTypeInterface
     use SignedTrait;
     use QuoteTrait;
     use ZeroFillTrait;
-    
+
+    /**
+     * AbstractIntType constructor.
+     */
     public function __construct()
     {
         $this->setSigned(true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function doesAllowDefault()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cast($value)
     {
         return (int)$value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return implode(
             ' ',
@@ -40,5 +52,13 @@ abstract class AbstractIntType implements IntTypeInterface
                 ]
             )
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }

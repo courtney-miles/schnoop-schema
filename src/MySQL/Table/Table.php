@@ -5,39 +5,86 @@ namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 
 class Table implements TableInterface
 {
+    /**
+     * Table name.
+     * @var string
+     */
     protected $name;
 
+    /**
+     * Database name.
+     * @var string
+     */
     protected $databaseName;
 
     /**
+     * Columns.
      * @var ColumnInterface[]
      */
     protected $columns = array();
 
     /**
+     * Indexes.
      * @var ConstraintInterface[]
      */
     protected $indexes = [];
 
     /**
+     * Foreign keys.
      * @var ForeignKeyInterface[]
      */
     protected $foreignKeys = [];
 
+    /**
+     * Table engine.
+     * @var string
+     */
     protected $engine;
 
+    /**
+     * Default collation.
+     * @var
+     */
     protected $defaultCollation;
 
+    /**
+     * Table row format.
+     * @var string
+     */
     protected $rowFormat;
 
     /**
+     * Table comment.
      * @var string
      */
     protected $comment;
 
+    /**
+     * The delimiter to use between statements.
+     * @var string
+     */
+    protected $ddlDelimiter = self::DEFAULT_DELIMITER;
+
+    /**
+     * Whether to include a drop statement with the create statement.
+     * @var bool
+     */
+    protected $ddlDropPolicy = self::DDL_DROP_DO_NOT;
+
+    /**
+     * Whether the DDL will use the fully qualified name for resources.
+     * @var bool
+     */
+    protected $ddlUseFullyQualifiedName = false;
+
+    /**
+     * Table constructor.
+     * @param $name string The table name.
+     */
     public function __construct($name)
     {
         $this->name = $name;
@@ -363,14 +410,59 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDL(
-        $delimiter = self::DEFAULT_DELIMITER,
-        $fullyQualifiedName = false,
-        $drop = self::DDL_DROP_DO_NOT
-    ) {
+    public function getDDLDelimiter()
+    {
+        return $this->ddlDelimiter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDDLDelimiter($delimiter)
+    {
+        $this->ddlDelimiter = $delimiter;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDLDropPolicy()
+    {
+        return $this->ddlDropPolicy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDDLDropPolicy($ddlDropPolicy)
+    {
+        $this->ddlDropPolicy = $ddlDropPolicy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDDLUseFullyQualifiedName()
+    {
+        return $this->ddlUseFullyQualifiedName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDDLUseFullyQualifiedName($useFullyQualifiedName)
+    {
+        $this->ddlUseFullyQualifiedName = $useFullyQualifiedName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
+    {
         $dropDDL = $createDDL = '';
 
-        if ($fullyQualifiedName) {
+        if ($this->ddlUseFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
                 throw new FQNException(
                     'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -382,16 +474,16 @@ class Table implements TableInterface
             $tableName = "`{$this->getName()}`";
         }
 
-        if ($drop) {
-            switch ($drop) {
-                case self::DDL_DROP_ALWAYS:
+        if ($this->ddlDropPolicy) {
+            switch ($this->ddlDropPolicy) {
+                case self::DDL_DROP_DOES_EXISTS:
                     $dropDDL = <<<SQL
-DROP TABLE {$tableName}{$delimiter}
+DROP TABLE {$tableName}{$this->ddlDelimiter}
 SQL;
                     break;
                 case self::DDL_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP TABLE IF EXISTS {$tableName}{$delimiter}
+DROP TABLE IF EXISTS {$tableName}{$this->ddlDelimiter}
 SQL;
                     break;
             }
@@ -438,7 +530,7 @@ SQL;
                     implode("\n", $tableOptions),
                 ]
             )
-        ) . $delimiter;
+        ) . $this->ddlDelimiter;
 
         $createDDL = implode(
             "\n",

@@ -2,9 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureRoutine;
+use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineProcedure;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -14,7 +13,7 @@ class ProcedureRoutineTest extends RoutineTestCase
     protected $name = 'schnoop_proc';
 
     /**
-     * @var ProcedureRoutine
+     * @var RoutineProcedure
      */
     protected $procedure;
 
@@ -38,7 +37,7 @@ class ProcedureRoutineTest extends RoutineTestCase
      */
     protected function createRoutine()
     {
-        return new ProcedureRoutine($this->name);
+        return new RoutineProcedure($this->name);
     }
 
     protected function getExpectedName()
@@ -100,6 +99,7 @@ PROCEDURE `schnoop_proc` ()
 NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
 BEGIN
 END
+;
 SQL;
         $this->assertSame($expectedDDL, (string)$this->procedure);
     }

@@ -13,7 +13,7 @@ class MediumBlobType extends AbstractBlobType
     const LENGTH = 16777215;
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

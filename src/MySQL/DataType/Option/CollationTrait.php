@@ -11,26 +11,29 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 trait CollationTrait
 {
     /**
+     * Collation.
      * @var string
      */
     protected $collation;
 
     /**
-     * @return string
+     * @see CollationInterface::getCollation()
      */
     public function getCollation()
     {
         return $this->collation;
     }
 
+    /**
+     * @see CollationInterface::hasCollation()
+     */
     public function hasCollation()
     {
         return !empty($this->collation);
     }
 
     /**
-     * @param string $collation
-     * @internal param string $characterSet
+     * @see CollationInterface::setCollation()
      */
     public function setCollation($collation)
     {

@@ -8,18 +8,35 @@ abstract class AbstractBlobType implements BlobTypeInterface
 {
     use QuoteTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public function doesAllowDefault()
     {
         return false;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function cast($value)
+    {
+        return (string)$value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return strtoupper($this->getType());
     }
 
-    public function cast($value)
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
     {
-        return (string)$value;
+        return $this->getDDL();
     }
 }

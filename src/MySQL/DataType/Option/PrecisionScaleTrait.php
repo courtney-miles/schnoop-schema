@@ -21,34 +21,39 @@ trait PrecisionScaleTrait
     protected $scale;
 
     /**
-     * @return int
+     * @see PrecisionScaleInterface::getPrecision()
      */
     public function getPrecision()
     {
         return $this->precision;
     }
 
+    /**
+     * @see PrecisionScaleInterface::hasPrecision()
+     */
     public function hasPrecision()
     {
         return $this->precision !== null;
     }
 
     /**
-     * @return int
+     * @see PrecisionScaleInterface::getScale()
      */
     public function getScale()
     {
         return $this->scale;
     }
 
+    /**
+     * @see PrecisionScaleInterface::hasScale()
+     */
     public function hasScale()
     {
         return !empty($this->scale);
     }
 
     /**
-     * @param int|null $precision
-     * @param int $scale
+     * @see PrecisionScaleInterface::setPrecisionScale()
      */
     public function setPrecisionScale($precision, $scale = 0)
     {

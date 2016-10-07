@@ -5,7 +5,7 @@ namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 class EnumType extends AbstractOptionsType
 {
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

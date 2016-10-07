@@ -7,7 +7,6 @@ use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameter;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineParameterInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineParameterTestCase;
-use PHPUnit\Framework\TestCase;
 
 class ProcedureParameterTest extends RoutineParameterTestCase
 {

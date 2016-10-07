@@ -10,7 +10,7 @@ trait SignedTrait
     protected $signed;
 
     /**
-     * @return boolean
+     * @see SignedInterface::isSigned()
      */
     public function isSigned()
     {
@@ -18,7 +18,7 @@ trait SignedTrait
     }
 
     /**
-     * @param boolean $signed
+     * @see SignedInterface::setSigned()
      */
     public function setSigned($signed)
     {

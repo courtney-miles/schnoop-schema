@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: courtney
- * Date: 11/07/16
- * Time: 4:14 PM
- */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
@@ -23,7 +17,7 @@ class DateType implements DataTypeInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function doesAllowDefault()
     {
@@ -38,8 +32,19 @@ class DateType implements DataTypeInterface
         return $value;
     }
 
-    public function __toString()
+    /**
+     * {@inheritdoc}
+     */
+    public function getDDL()
     {
         return strtoupper($this->getType());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->getDDL();
     }
 }
