@@ -131,7 +131,7 @@ class RoutineFunctionTest extends RoutineTestCase
             $function->setSqlMode($mockSqlMode);
         }
 
-        $this->assertSame($expectedDDL, $function->getDDL());
+        $this->assertSame($expectedDDL, $function->getCreateStatement());
     }
 
     public function testToStringAliasesGetDDL()
@@ -141,10 +141,10 @@ class RoutineFunctionTest extends RoutineTestCase
             ->setConstructorArgs(
                 [$this->name, $this->returns]
             )->setMethods(
-                ['getDDL']
+                ['getCreateStatement']
             )->getMock();
         $mockFunction->expects($this->once())
-            ->method('getDDL')
+            ->method('getCreateStatement')
             ->willReturn($ddl);
 
         $this->assertSame($ddl, (string)$mockFunction);
@@ -252,7 +252,7 @@ SQL
         $routine = $this->getRoutine();
         $routine->setUseFullyQualifiedName(true);
 
-        $routine->getDDL();
+        $routine->getCreateStatement();
     }
 
     /**

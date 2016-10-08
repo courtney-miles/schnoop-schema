@@ -80,7 +80,7 @@ class DatabaseTest extends SchnoopSchemaTestCase
      */
     public function testDDL($database, $expectedDDL)
     {
-        $this->assertSame($expectedDDL, $database->getDDL());
+        $this->assertSame($expectedDDL, $database->getCreateStatement());
     }
 
     public function testToStringAliasesGetDDL()
@@ -91,11 +91,11 @@ class DatabaseTest extends SchnoopSchemaTestCase
             ->setConstructorArgs(
                 [$this->name]
             )->setMethods(
-                ['getDDL']
+                ['getCreateStatement']
             )->getMock();
 
         $mockDatabase->expects($this->once())
-            ->method('getDDL')
+            ->method('getCreateStatement')
             ->willReturn($ddl);
 
         $this->assertSame($ddl, (string)$mockDatabase);

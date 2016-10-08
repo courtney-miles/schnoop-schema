@@ -2,12 +2,12 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
-use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\CreateStatementInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
-interface DatabaseInterface extends MySQLInterface, HasDelimiterInterface, DroppableInterface, DDLStatementInterface
+interface DatabaseInterface extends MySQLInterface, HasDelimiterInterface, DroppableInterface, CreateStatementInterface
 {
     /**
      * Get the database name.
@@ -35,7 +35,7 @@ interface DatabaseInterface extends MySQLInterface, HasDelimiterInterface, Dropp
 
     /**
      * The DDL statement for the database;
-     * @uses DatabaseInterface::getDDL();
+     * @uses DatabaseInterface::getCreateStatement();
      * @return string Create DDL statement for the database.
      */
     public function __toString();

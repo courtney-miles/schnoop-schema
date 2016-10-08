@@ -1,7 +1,7 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
-use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\CreateStatementInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDefinerInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
@@ -14,7 +14,7 @@ interface RoutineInterface extends
     MySQLInterface,
     HasDelimiterInterface,
     DroppableInterface,
-    DDLStatementInterface,
+    CreateStatementInterface,
     FullyQualifiedNameInterface,
     HasSqlModeInterface,
     HasDefinerInterface

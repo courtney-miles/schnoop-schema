@@ -7,7 +7,7 @@ use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\PrimaryKey;
-use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\CreateStatementInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
@@ -16,7 +16,7 @@ interface TableInterface extends
     MySQLInterface,
     HasDelimiterInterface,
     DroppableInterface,
-    DDLStatementInterface
+    CreateStatementInterface
 {
     /**
      * MySQL keyword for the InnoDB table engine.
@@ -289,7 +289,7 @@ interface TableInterface extends
 
     /**
      * The table DDL create statement.
-     * @uses TableInterface::getDDL()
+     * @uses TableInterface::getCreateStatement()
      * @return string The DDL create statement.
      */
     public function __toString();

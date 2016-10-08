@@ -104,7 +104,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDL()
+    public function getCreateStatement()
     {
         $dropDDL = $createDDL = '';
 
@@ -145,6 +145,6 @@ SQL;
      */
     public function __toString()
     {
-        return $this->getDDL();
+        return $this->getCreateStatement();
     }
 }

@@ -313,7 +313,7 @@ class TableTest extends SchnoopSchemaTestCase
      */
     public function testDDL(Table $table, $expectedDDL)
     {
-        $this->assertSame($expectedDDL, $table->getDDL());
+        $this->assertSame($expectedDDL, $table->getCreateStatement());
     }
 
     public function testToStringAliasesGetDDL()
@@ -323,10 +323,10 @@ class TableTest extends SchnoopSchemaTestCase
             ->setConstructorArgs(
                 [$this->name]
             )->setMethods(
-                ['getDDL']
+                ['getCreateStatement']
             )->getMock();
         $mockTable->expects($this->once())
-            ->method('getDDL')
+            ->method('getCreateStatement')
             ->willReturn($ddl);
 
         $this->assertSame($ddl, (string)$mockTable);
@@ -340,7 +340,7 @@ class TableTest extends SchnoopSchemaTestCase
     {
         $this->table->setUseFullyQualifiedName(true);
 
-        $this->table->getDDL();
+        $this->table->getCreateStatement();
     }
 
     /**

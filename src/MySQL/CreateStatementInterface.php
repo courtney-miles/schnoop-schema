@@ -2,11 +2,11 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL;
 
-interface DDLStatementInterface
+interface CreateStatementInterface
 {
     /**
      * Get the DDL statement/s to create the resource.
      * @return mixed
      */
-    public function getDDL();
+    public function getCreateStatement();
 }

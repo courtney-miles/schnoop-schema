@@ -173,7 +173,7 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
             $trigger->setSqlMode($mockSqlMode);
         }
 
-        $this->assertSame($expectedDDL, $trigger->getDDL());
+        $this->assertSame($expectedDDL, $trigger->getCreateStatement());
     }
 
     public function testToStringAliasesGetDDL()
@@ -183,10 +183,10 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs(
                 [$this->name, $this->timing, $this->event, $this->tableName]
             )->setMethods(
-                ['getDDL']
+                ['getCreateStatement']
             )->getMock();
         $mockTrigger->expects($this->once())
-            ->method('getDDL')
+            ->method('getCreateStatement')
             ->willReturn($ddl);
 
         $this->assertSame($ddl, (string)$mockTrigger);
@@ -200,7 +200,7 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->trigger->setUseFullyQualifiedName(true);
 
-        $this->trigger->getDDL();
+        $this->trigger->getCreateStatement();
     }
 
     /**

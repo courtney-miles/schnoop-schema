@@ -82,7 +82,7 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
     /**
      * {@inheritdoc}
      */
-    public function getDDL()
+    public function getCreateStatement()
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
@@ -147,7 +147,7 @@ SQL;
 
     public function __toString()
     {
-        return $this->getDDL();
+        return $this->getCreateStatement();
     }
 
     /**

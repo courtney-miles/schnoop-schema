@@ -1,7 +1,7 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
-use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\CreateStatementInterface;
 use MilesAsylum\SchnoopSchema\MySQL\FullyQualifiedNameInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDefinerInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
@@ -14,7 +14,7 @@ interface TriggerInterface extends
     MySQLInterface,
     HasDelimiterInterface,
     DroppableInterface,
-    DDLStatementInterface,
+    CreateStatementInterface,
     FullyQualifiedNameInterface,
     HasSqlModeInterface,
     HasDefinerInterface
@@ -165,7 +165,7 @@ interface TriggerInterface extends
 
     /**
      * The DDL create statement for the trigger.
-     * @uses TriggerInterface::getDDL()
+     * @uses TriggerInterface::getCreateStatement()
      * @return string
      */
     public function __toString();
