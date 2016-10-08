@@ -2,7 +2,12 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Table;
 
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\UniqueIndex;
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
@@ -49,6 +54,18 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame([], $this->table->getIndexes());
         $this->assertFalse($this->table->hasPrimaryKey());
         $this->assertNull($this->table->getPrimaryKey());
+
+        $this->assertFalse($this->table->useFullyQualifiedName());
+        $this->assertSame(HasDelimiterInterface::DEFAULT_DELIMITER, $this->table->getDelimiter());
+        $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $this->table->getDropPolicy());
+    }
+
+    public function testSetNewName()
+    {
+        $newName = 'new_table_name';
+        $this->table->setName($newName);
+
+        $this->assertSame($newName, $this->table->getName());
     }
 
     public function testSetDatabaseName()
@@ -267,36 +284,123 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($foreignKeyNames, $this->table->getForeignKeyList());
     }
 
-    public function testDDL()
+    public function testSetUseFullyQualifiedName()
+    {
+        $this->table->setUseFullyQualifiedName(true);
+
+        $this->assertTrue($this->table->useFullyQualifiedName());
+    }
+
+    public function testSetDelimiter()
+    {
+        $newDelimiter = '$$';
+        $this->table->setDelimiter($newDelimiter);
+
+        $this->assertSame($newDelimiter, $this->table->getDelimiter());
+    }
+
+    public function testSetDropPolicy()
+    {
+        $this->table->setDropPolicy(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS);
+
+        $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS, $this->table->getDropPolicy());
+    }
+
+    /**
+     * @dataProvider getDDLTestData
+     * @param Table $table
+     * @param string $expectedDDL
+     */
+    public function testDDL(Table $table, $expectedDDL)
+    {
+        $this->assertSame($expectedDDL, $table->getDDL());
+    }
+
+    public function testToStringAliasesGetDDL()
+    {
+        $ddl = '__ddl__';
+        $mockTable = $this->getMockBuilder(Table::class)
+            ->setConstructorArgs(
+                [$this->name]
+            )->setMethods(
+                ['getDDL']
+            )->getMock();
+        $mockTable->expects($this->once())
+            ->method('getDDL')
+            ->willReturn($ddl);
+
+        $this->assertSame($ddl, (string)$mockTable);
+    }
+
+    /**
+     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException
+     * @expectedExceptionMessage Unable to create DDL with fully-qualified-name because the database name has not been set.
+     */
+    public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
+    {
+        $this->table->setUseFullyQualifiedName(true);
+
+        $this->table->getDDL();
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function getDDLTestData()
     {
         $databaseName = 'schnoop_db';
 
-        $table = new Table($this->name);
-        $table->setDatabaseName($databaseName);
-        $table->setEngine(Table::ENGINE_INNODB);
-        $table->setRowFormat(Table::ROW_FORMAT_COMPACT);
-        $table->setDefaultCollation('utf8mb4_general_ci');
-        $table->setComment('Schnoop comment.');
-        $table->setColumns(
-            [
-                $this->createMockColumn('schnoop_col1', '_COL_DDL_1_'),
-                $this->createMockColumn('schnoop_col2', '_COL_DDL_2_')
-            ]
-        );
-        $table->setIndexes(
-            [
-                $this->createMockIndex('schnoop_idx1', '_IDX_DDL_1_'),
-                $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_')
-            ]
-        );
-        $table->setForeignKeys(
-            [
-                $this->createMockForeignKey('schnoop_fk1', '_FK_DDL_1_'),
-                $this->createMockForeignKey('schnoop_fk2', '_FK_DDL_2_')
-            ]
-        );
+        $mockColumns = [
+            $this->createMockColumn('schnoop_col1', '_COL_DDL_1_'),
+            $this->createMockColumn('schnoop_col2', '_COL_DDL_2_')
+        ];
 
-        $expectedDDL = <<<SQL
+        $mockIndexes = [
+            $this->createMockIndex('schnoop_idx1', '_IDX_DDL_1_'),
+            $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_')
+        ];
+
+        $mockForeignKeys = [
+            $this->createMockForeignKey('schnoop_fk1', '_FK_DDL_1_'),
+            $this->createMockForeignKey('schnoop_fk2', '_FK_DDL_2_')
+        ];
+
+        return [
+            [
+                $this->createTable(
+                    $databaseName = 'schnoop_db',
+                    '',
+                    '',
+                    '',
+                    '',
+                    [],
+                    [],
+                    [],
+                    false,
+                    HasDelimiterInterface::DEFAULT_DELIMITER,
+                    DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP
+                ),
+                <<<SQL
+CREATE TABLE `{$this->name}` (
+);
+SQL
+            ],
+            [
+                $this->createTable(
+                    $databaseName = 'schnoop_db',
+                    TableInterface::ENGINE_INNODB,
+                    TableInterface::ROW_FORMAT_COMPACT,
+                    'utf8mb4_general_ci',
+                    'Schnoop comment.',
+                    $mockColumns,
+                    $mockIndexes,
+                    $mockForeignKeys,
+                    false,
+                    HasDelimiterInterface::DEFAULT_DELIMITER,
+                    DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP
+                ),
+                <<<SQL
 CREATE TABLE `{$this->name}` (
   _COL_DDL_1_,
   _COL_DDL_2_,
@@ -309,17 +413,91 @@ ENGINE = INNODB
 DEFAULT COLLATE = 'utf8mb4_general_ci'
 ROW_FORMAT = COMPACT
 COMMENT = 'Schnoop comment.';
-SQL;
-
-        $this->assertSame($expectedDDL, (string)$table);
+SQL
+            ],
+            [
+                $this->createTable(
+                    $databaseName = 'schnoop_db',
+                    '',
+                    '',
+                    '',
+                    '',
+                    [],
+                    [],
+                    [],
+                    true,
+                    '$$',
+                    DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS
+                ),
+                <<<SQL
+DROP TABLE IF EXISTS `{$databaseName}`.`{$this->name}`$$
+CREATE TABLE `{$databaseName}`.`{$this->name}` (
+)$$
+SQL
+            ],
+            [
+                $this->createTable(
+                    $databaseName = 'schnoop_db',
+                    '',
+                    '',
+                    '',
+                    '',
+                    [],
+                    [],
+                    [],
+                    true,
+                    '$$',
+                    DroppableInterface::DDL_DROP_POLICY_DROP
+                ),
+                <<<SQL
+DROP TABLE `{$databaseName}`.`{$this->name}`$$
+CREATE TABLE `{$databaseName}`.`{$this->name}` (
+)$$
+SQL
+            ],
+        ];
     }
 
-    protected function createMockColumn($columnName, $columnDDL)
-    {
-        $mockColumn = $this->createMock(ColumnInterface::class);
-        $mockColumn->method('getName')->willReturn($columnName);
-        $mockColumn->method('__toString')->willReturn($columnDDL);
+    /**
+     * @param string $databaseName
+     * @param string $engine
+     * @param string $rowFormat
+     * @param string $defaultCollation
+     * @param string $comment
+     * @param ColumnInterface[] $columns
+     * @param IndexInterface[] $indexes
+     * @param ForeignKeyInterface[] $foreignKeys
+     * @param bool $useFQN
+     * @param string $delimiter
+     * @param string $dropPolicy
+     * @return Table
+     */
+    protected function createTable(
+        $databaseName,
+        $engine,
+        $rowFormat,
+        $defaultCollation,
+        $comment,
+        array $columns,
+        array $indexes,
+        array $foreignKeys,
+        $useFQN,
+        $delimiter,
+        $dropPolicy
+    ) {
+        $table = new Table($this->name);
+        $table->setDatabaseName($databaseName);
+        $table->setEngine($engine);
+        $table->setRowFormat($rowFormat);
+        $table->setDefaultCollation($defaultCollation);
+        $table->setComment($comment);
+        $table->setColumns($columns);
+        $table->setIndexes($indexes);
+        $table->setForeignKeys($foreignKeys);
+        $table->setUseFullyQualifiedName($useFQN);
+        $table->setDelimiter($delimiter);
+        $table->setDropPolicy($dropPolicy);
 
-        return $mockColumn;
+        return $table;
     }
 }

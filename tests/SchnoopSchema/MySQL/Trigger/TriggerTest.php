@@ -2,6 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Trigger;
 
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\MySQL\Trigger\Trigger;
 use MilesAsylum\SchnoopSchema\MySQL\Trigger\TriggerInterface;
@@ -55,6 +57,10 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->trigger->hasSqlMode());
         $this->assertNull($this->trigger->getSqlMode());
+
+        $this->assertFalse($this->trigger->useFullyQualifiedName());
+        $this->assertSame(HasDelimiterInterface::DEFAULT_DELIMITER, $this->trigger->getDelimiter());
+        $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $this->trigger->getDropPolicy());
     }
 
     public function testConstants()
@@ -114,69 +120,214 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->trigger->hasSqlMode());
         $this->assertSame($mockSqlMode, $this->trigger->getSqlMode());
+
+        return $this->trigger;
     }
 
-    public function testGetBasicDDL()
+    /**
+     * @depends testSetSqlMode
+     * @param Trigger $triggerWithSetSqlMode
+     */
+    public function testUnsetSqlMode(Trigger $triggerWithSetSqlMode)
     {
-        $expectedDDL = <<<SQL
-CREATE TRIGGER `{$this->name}` {$this->timing} {$this->event}
-ON `{$this->tableName}` FOR EACH ROW
-BEGIN
-END
-;
-SQL;
+        $triggerWithSetSqlMode->unsetSqlMode();
 
-        $this->assertSame($expectedDDL, $this->trigger->getDDL());
+        $this->assertFalse($triggerWithSetSqlMode->hasSqlMode());
+        $this->assertNull($triggerWithSetSqlMode->getSqlMode());
     }
 
-    public function testGetFullDDL()
+    public function testSetUseFullyQualifiedName()
+    {
+        $this->trigger->setUseFullyQualifiedName(true);
+
+        $this->assertTrue($this->trigger->useFullyQualifiedName());
+    }
+
+    public function testSetDelimiter()
+    {
+        $newDelimiter = '$$';
+        $this->trigger->setDelimiter($newDelimiter);
+
+        $this->assertSame($newDelimiter, $this->trigger->getDelimiter());
+    }
+
+    public function testSetDropPolicy()
+    {
+        $this->trigger->setDropPolicy(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS);
+
+        $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS, $this->trigger->getDropPolicy());
+    }
+
+    /**
+     * @dataProvider getDDLTestData
+     * @param Trigger $trigger
+     * @param $doMockSqlMode
+     * @param $expectedDDL
+     */
+    public function testDDL(Trigger $trigger, $doMockSqlMode, $expectedDDL)
+    {
+        if ($doMockSqlMode) {
+            $mockSqlMode = $this->createMock(SqlMode::class);
+            $mockSqlMode->method('getSetStatements')->willReturn('__sql_mode_set__');
+            $mockSqlMode->method('getRestoreStatements')->willReturn('__sql_mode_restore__');
+            $trigger->setSqlMode($mockSqlMode);
+        }
+
+        $this->assertSame($expectedDDL, $trigger->getDDL());
+    }
+
+    public function testToStringAliasesGetDDL()
+    {
+        $ddl = '__ddl__';
+        $mockTrigger = $this->getMockBuilder(Trigger::class)
+            ->setConstructorArgs(
+                [$this->name, $this->timing, $this->event, $this->tableName]
+            )->setMethods(
+                ['getDDL']
+            )->getMock();
+        $mockTrigger->expects($this->once())
+            ->method('getDDL')
+            ->willReturn($ddl);
+
+        $this->assertSame($ddl, (string)$mockTrigger);
+    }
+
+    /**
+     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException
+     * @expectedExceptionMessage Unable to create DDL with fully-qualified-name because the database name has not been set.
+     */
+    public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
+    {
+        $this->trigger->setUseFullyQualifiedName(true);
+
+        $this->trigger->getDDL();
+    }
+
+    /**
+     * @see testDDL
+     * @return array
+     */
+    public function getDDLTestData()
     {
         $databaseName = 'schnoop_db';
-        $definer = 'root@localhost';
-        $relation = 'FOLLOWS';
-        $relativeTo = 'schnoop_other_trigger';
-        $statement = 'SELECT 1;';
-        $setModeStmts = '_SET_MODE_;';
-        $restoreModeStmts = '_RESTORE_MODE_;';
-
-        $mockSqlMode = $this->createMock(SqlMode::class);
-        $mockSqlMode->method('getAssignStmt')
-            ->willReturn($setModeStmts);
-        $mockSqlMode->method('getRestoreStmt')
-            ->willReturn($restoreModeStmts);
-
-        $expectedDDL = <<<SQL
-{$setModeStmts}
-CREATE DEFINER = {$definer}
-TRIGGER `{$this->name}` {$this->timing} {$this->event}
-ON `{$this->tableName}` FOR EACH ROW
-{$relation} `{$relativeTo}`
+        return [
+            [
+                $this->createTrigger(
+                    $this->name,
+                    TriggerInterface::TIMING_BEFORE,
+                    TriggerInterface::EVENT_INSERT,
+                    'schnoop_tbl',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    false,
+                    HasDelimiterInterface::DEFAULT_DELIMITER,
+                    DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP
+                ),
+                false,
+                <<<SQL
+CREATE TRIGGER `{$this->name}` BEFORE INSERT
+ON `schnoop_tbl` FOR EACH ROW
 BEGIN
-{$statement}
-END
-;
-{$restoreModeStmts}
-SQL;
-
-        $this->trigger->setDatabaseName($databaseName);
-        $this->trigger->setDefiner($definer);
-        $this->trigger->setPosition($relation, $relativeTo);
-        $this->trigger->setBody($statement);
-        $this->trigger->setSqlMode($mockSqlMode);
-
-        $this->assertSame($expectedDDL, $this->trigger->getDDL());
+END;
+SQL
+            ],
+            [
+                $this->createTrigger(
+                    $this->name,
+                    TriggerInterface::TIMING_AFTER,
+                    TriggerInterface::EVENT_UPDATE,
+                    'schnoop_tbl',
+                    $databaseName,
+                    'root@localhost',
+                    TriggerInterface::POSITION_FOLLOWS,
+                    'schnoop_other_trigger',
+                    'SELECT * FROM tbl;',
+                    true,
+                    '$$',
+                    DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS
+                ),
+                true,
+                <<<SQL
+__sql_mode_set__
+DROP TRIGGER IF EXISTS `{$databaseName}`.`{$this->name}`$$
+CREATE DEFINER = root@localhost
+TRIGGER `{$databaseName}`.`{$this->name}` AFTER UPDATE
+ON `{$databaseName}`.`schnoop_tbl` FOR EACH ROW
+FOLLOWS `schnoop_other_trigger`
+BEGIN
+SELECT * FROM tbl;
+END$$
+__sql_mode_restore__
+SQL
+            ],
+            [
+                $this->createTrigger(
+                    $this->name,
+                    TriggerInterface::TIMING_BEFORE,
+                    TriggerInterface::EVENT_DELETE,
+                    'schnoop_tbl',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    false,
+                    HasDelimiterInterface::DEFAULT_DELIMITER,
+                    DroppableInterface::DDL_DROP_POLICY_DROP
+                ),
+                false,
+                <<<SQL
+DROP TRIGGER `{$this->name}`;
+CREATE TRIGGER `{$this->name}` BEFORE DELETE
+ON `schnoop_tbl` FOR EACH ROW
+BEGIN
+END;
+SQL
+            ],
+        ];
     }
 
-    public function testToString()
-    {
-        $expectedDDL = <<<SQL
-CREATE TRIGGER `{$this->name}` {$this->timing} {$this->event}
-ON `{$this->tableName}` FOR EACH ROW
-BEGIN
-END
-;
-SQL;
+    /**
+     * @param $name
+     * @param string $timing
+     * @param string $event
+     * @param string $tableName
+     * @param string $databaseName
+     * @param string $definer
+     * @param string $positionContext
+     * @param string $relativeTo
+     * @param string $statement
+     * @param bool $useFQN
+     * @param string $delimiter
+     * @param string $dropPolicy
+     * @return Trigger
+     */
+    public function createTrigger(
+        $name,
+        $timing,
+        $event,
+        $tableName,
+        $databaseName,
+        $definer,
+        $positionContext,
+        $relativeTo,
+        $statement,
+        $useFQN,
+        $delimiter,
+        $dropPolicy
+    ) {
+        $trigger = new Trigger($name, $timing, $event, $tableName);
+        $trigger->setDatabaseName($databaseName);
+        $trigger->setDefiner($definer);
+        $trigger->setPosition($positionContext, $relativeTo);
+        $trigger->setBody($statement);
+        $trigger->setUseFullyQualifiedName($useFQN);
+        $trigger->setDelimiter($delimiter);
+        $trigger->setDropPolicy($dropPolicy);
 
-        $this->assertSame($expectedDDL, (string)$this->trigger);
+        return $trigger;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\SetVar;
 
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +25,7 @@ class SqlModeTest extends TestCase
     public function testInitialProperties()
     {
         $this->assertSame($this->mode, $this->sqlMode->getMode());
+        $this->assertSame(HasDelimiterInterface::DEFAULT_DELIMITER, $this->sqlMode->getDelimiter());
     }
 
     public function testSetMode()
@@ -31,5 +34,33 @@ class SqlModeTest extends TestCase
         $this->sqlMode->setMode($newMode);
 
         $this->assertSame($newMode, $this->sqlMode->getMode());
+    }
+
+    public function testSetDelimiter()
+    {
+        $delimiter = '@@';
+        $this->sqlMode->setDelimiter($delimiter);
+
+        $this->assertSame($delimiter, $this->sqlMode->getDelimiter());
+    }
+
+    public function testGetSetStatements()
+    {
+        $expectedStatements = <<<SQL
+SET @_schnoop_sql_mode = @@session.sql_mode;
+SET @@session.sql_mode = '{$this->mode}';
+SQL;
+
+        $this->assertSame($expectedStatements, $this->sqlMode->getSetStatements());
+    }
+
+    public function testGetRestoreStatements()
+    {
+        $expectedStatements = <<<SQL
+SET @@session.sql_mode = @_schnoop_sql_mode;
+SET @_schnoop_sql_mode = NULL;
+SQL;
+
+        $this->assertSame($expectedStatements, $this->sqlMode->getRestoreStatements());
     }
 }

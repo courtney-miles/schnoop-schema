@@ -61,6 +61,13 @@ class ProcedureParameterTest extends RoutineParameterTestCase
         $this->assertSame(ProcedureParameterInterface::DIRECTION_IN, $this->procedureParameter->getDirection());
     }
 
+    public function testSetDirection()
+    {
+        $this->procedureParameter->setDirection(ProcedureParameterInterface::DIRECTION_INOUT);
+
+        $this->assertSame(ProcedureParameterInterface::DIRECTION_INOUT, $this->procedureParameter->getDirection());
+    }
+
     public function testDDL()
     {
         $this->assertSame("IN `param_name` DT_DDL", (string)$this->procedureParameter);
