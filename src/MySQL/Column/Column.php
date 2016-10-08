@@ -232,8 +232,9 @@ class Column implements ColumnInterface
         if (!empty($onUpdateCurrentTimestamp) && !($this->dataType instanceof TimeTypeInterface)) {
             throw new LogicException(
                 sprintf(
-                    'Unable to set that the column value should be set to the current time on update. The data-type "%" does not support a default.',
-                    $this->dataType->getType()
+                    'Data type "%s" for column "%s" does not support setting current time on update.',
+                    $this->dataType->getType(),
+                    $this->name
                 )
             );
         }
