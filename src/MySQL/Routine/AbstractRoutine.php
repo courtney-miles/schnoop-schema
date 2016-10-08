@@ -69,7 +69,7 @@ abstract class AbstractRoutine implements RoutineInterface
      * Whether to include a drop statement with the create statement.
      * @var bool
      */
-    protected $ddlDropPolicy = self::DDL_DROP_DO_NOT;
+    protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.

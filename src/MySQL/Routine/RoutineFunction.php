@@ -100,12 +100,12 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
 
         if ($this->ddlDropPolicy) {
             switch ($this->ddlDropPolicy) {
-                case self::DDL_DROP_DOES_EXISTS:
+                case self::DDL_DROP_POLICY_DROP:
                     $dropDDL = <<<SQL
 DROP FUNCTION {$functionName}{$this->ddlDelimiter}
 SQL;
                     break;
-                case self::DDL_DROP_IF_EXISTS:
+                case self::DDL_DROP_POLICY_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
 DROP FUNCTION IF EXISTS {$functionName}{$this->ddlDelimiter}
 SQL;

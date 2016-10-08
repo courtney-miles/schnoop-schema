@@ -73,7 +73,7 @@ class Table implements TableInterface
      * Whether to include a drop statement with the create statement.
      * @var bool
      */
-    protected $ddlDropPolicy = self::DDL_DROP_DO_NOT;
+    protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
@@ -476,12 +476,12 @@ class Table implements TableInterface
 
         if ($this->ddlDropPolicy) {
             switch ($this->ddlDropPolicy) {
-                case self::DDL_DROP_DOES_EXISTS:
+                case self::DDL_DROP_POLICY_DROP:
                     $dropDDL = <<<SQL
 DROP TABLE {$tableName}{$this->ddlDelimiter}
 SQL;
                     break;
-                case self::DDL_DROP_IF_EXISTS:
+                case self::DDL_DROP_POLICY_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
 DROP TABLE IF EXISTS {$tableName}{$this->ddlDelimiter}
 SQL;
