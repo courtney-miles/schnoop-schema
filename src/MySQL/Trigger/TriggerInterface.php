@@ -1,10 +1,23 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
+use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\FullyQualifiedNameInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDefinerInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasSqlModeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
-interface TriggerInterface extends MySQLInterface
+interface TriggerInterface extends
+    MySQLInterface,
+    HasDelimiterInterface,
+    DroppableInterface,
+    DDLStatementInterface,
+    FullyQualifiedNameInterface,
+    HasSqlModeInterface,
+    HasDefinerInterface
 {
     /**
      * MySQL keyword for insert event.
@@ -108,24 +121,6 @@ interface TriggerInterface extends MySQLInterface
     public function setTiming($timing);
 
     /**
-     * Get the trigger definer.
-     * @return string Trigger definer.
-     */
-    public function getDefiner();
-
-    /**
-     * Identify if a definer is set for the trigger.
-     * @return mixed True if a definer is set.
-     */
-    public function hasDefiner();
-
-    /**
-     * Set the definer for trigger.
-     * @param string $definer Trigger definer.
-     */
-    public function setDefiner($definer);
-
-    /**
      * Get the logic for the body of trigger.
      * @return string Trigger body.
      */
@@ -167,71 +162,6 @@ interface TriggerInterface extends MySQLInterface
      * @param string $relativeTo Other trigger name.
      */
     public function setPosition($positionContext, $relativeTo);
-
-    /**
-     * Set an explicit SQL mode for the trigger.
-     * @return SqlMode SQL mode.
-     */
-    public function getSqlMode();
-
-    /**
-     * Identify if an SQL mode is set for the trigger.
-     * @return bool True if the SQL mode is set.
-     */
-    public function hasSqlMode();
-
-    /**
-     * Set an explicit SQL mode for the trigger.
-     * @param SqlMode $sqlMode The SQL mode.
-     */
-    public function setSqlMode(SqlMode $sqlMode);
-
-    /**
-     * Unset the SQL mode for the trigger.
-     */
-    public function unsetSqlMode();
-
-    /**
-     * Get the delimiter used between DDL statements.
-     * @return string
-     */
-    public function getDDLDelimiter();
-
-    /**
-     * Set the delimiter to use between DDL statements.
-     * @param string $delimiter
-     */
-    public function setDDLDelimiter($delimiter);
-
-    /**
-     * Identify if drop statement will be included with DDL create statement.
-     * @return int Will return the value of one of the self::DDL_DROP_* constants.
-     */
-    public function getDDLDropPolicy();
-
-    /**
-     * Set if the DDL should include a statement to drop the database.
-     * @param int $ddlDropPolicy Supply one of the self::DDL_DROP_* constants.
-     */
-    public function setDDLDropPolicy($ddlDropPolicy);
-
-    /**
-     * Indicates if the DDL will use the fully qualified name for the table.
-     * @return bool
-     */
-    public function isDDLUseFullyQualifiedName();
-
-    /**
-     * Set if the DDL should use the fully qualified name for the table.
-     * @param bool $useFullyQualifiedName
-     */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName);
-
-    /**
-     * Get the DDL create statement for the trigger.
-     * @return string
-     */
-    public function getDDL();
 
     /**
      * The DDL create statement for the trigger.

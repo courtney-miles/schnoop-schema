@@ -2,9 +2,12 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
+use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
-interface DatabaseInterface extends MySQLInterface
+interface DatabaseInterface extends MySQLInterface, HasDelimiterInterface, DroppableInterface, DDLStatementInterface
 {
     /**
      * Get the database name.
@@ -29,36 +32,6 @@ interface DatabaseInterface extends MySQLInterface
      * @param string $defaultCollation
      */
     public function setDefaultCollation($defaultCollation);
-
-    /**
-     * Get the delimiter used between DDL statements.
-     * @return string
-     */
-    public function getDDLDelimiter();
-
-    /**
-     * Set the delimiter to use between DDL statements.
-     * @param string $delimiter
-     */
-    public function setDDLDelimiter($delimiter);
-
-    /**
-     * Identify if drop statement will be included with DDL create statement.
-     * @return int Will return the value of one of the self::DDL_DROP_* constants.
-     */
-    public function getDDLDropPolicy();
-
-    /**
-     * Set if the DDL should include a statement to drop the database.
-     * @param int $ddlDropPolicy Supply one of the self::DDL_DROP_* constants.
-     */
-    public function setDDLDropPolicy($ddlDropPolicy);
-
-    /**
-     * Gets the DDL statement for the database.
-     * @return string Create DDL statement for the database.
-     */
-    public function getDDL();
 
     /**
      * The DDL statement for the database;

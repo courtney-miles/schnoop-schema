@@ -51,39 +51,34 @@ class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterf
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($this->ddlUseFullyQualifiedName) {
-            if (!$this->hasDatabaseName()) {
-                throw new FQNException(
-                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
-                );
-            }
+        $procedureName = $this->makeRoutineName();
 
-            $functionName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
-        } else {
-            $functionName = "`{$this->getName()}`";
-        }
-
-        if ($this->ddlDropPolicy) {
-            switch ($this->ddlDropPolicy) {
+        if ($this->dropPolicy) {
+            switch ($this->dropPolicy) {
                 case self::DDL_DROP_POLICY_DROP:
                     $dropDDL = <<<SQL
-DROP PROCEDURE {$functionName}{$this->ddlDelimiter}
+DROP PROCEDURE {$procedureName}{$this->delimiter}
 SQL;
                     break;
                 case self::DDL_DROP_POLICY_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP PROCEDURE IF EXISTS {$functionName}{$this->ddlDelimiter}
+DROP PROCEDURE IF EXISTS {$procedureName}{$this->delimiter}
 SQL;
                     break;
             }
         }
 
         if ($this->hasSqlMode()) {
-            $setSqlMode = $this->sqlMode->getAssignStmt($this->ddlDelimiter);
-            $revertSqlMode = $this->sqlMode->getRestoreStmt($this->ddlDelimiter);
+            $prevDelimiter = $this->sqlMode->getDelimiter();
+            $this->sqlMode->setDelimiter($this->delimiter);
+
+            $setSqlMode = $this->sqlMode->getSetStatements();
+            $revertSqlMode = $this->sqlMode->getRestoreStatements();
+
+            $this->sqlMode->setDelimiter($prevDelimiter);
         }
 
-        $procedureSignature = "PROCEDURE {$functionName} ({$this->makeParametersDDL()})";
+        $procedureSignature = "PROCEDURE {$procedureName} ({$this->makeParametersDDL()})";
 
         $createDDL = 'CREATE '
             . implode(
@@ -95,7 +90,7 @@ SQL;
                         $this->makeCharacteristicsDDL(),
                         'BEGIN',
                         $this->body,
-                        'END'
+                        'END' . $this->delimiter
                     ]
                 )
             );
@@ -104,11 +99,10 @@ SQL;
             "\n",
             array_filter(
                 [
-                    $dropDDL,
                     $setSqlMode,
+                    $dropDDL,
                     $createDDL,
-                    $revertSqlMode,
-                    $this->ddlDelimiter
+                    $revertSqlMode
                 ]
             )
         );
@@ -132,7 +126,7 @@ SQL;
         $params = [];
 
         foreach ($this->parameters as $parameter) {
-            $params[] = (string)$parameter;
+            $params[] = $parameter->getDDL();
         }
 
         return implode(',', $params);

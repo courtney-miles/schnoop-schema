@@ -1,10 +1,23 @@
 <?php
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
+use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDefinerInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\FullyQualifiedNameInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasSqlModeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
-interface RoutineInterface extends MySQLInterface
+interface RoutineInterface extends
+    MySQLInterface,
+    HasDelimiterInterface,
+    DroppableInterface,
+    DDLStatementInterface,
+    FullyQualifiedNameInterface,
+    HasSqlModeInterface,
+    HasDefinerInterface
 {
     const DATA_ACCESS_CONTAINS_SQL = 'CONTAINS SQL';
     const DATA_ACCESS_NO_SQL = 'NO SQL';
@@ -36,18 +49,6 @@ interface RoutineInterface extends MySQLInterface
      * @param string $databaseName
      */
     public function setDatabaseName($databaseName);
-
-    /**
-     * Get the routine definer.
-     * @return string
-     */
-    public function getDefiner();
-
-    /**
-     * Set the routine definer.
-     * @param string $definer
-     */
-    public function setDefiner($definer);
 
     /**
      * Get the routine comment.
@@ -114,71 +115,6 @@ interface RoutineInterface extends MySQLInterface
      * @param string $body
      */
     public function setBody($body);
-
-    /**
-     * Get the SQL Mode.
-     * @return SqlMode
-     */
-    public function getSqlMode();
-
-    /**
-     * Identify if the SQL mode is set.
-     * @return bool
-     */
-    public function hasSqlMode();
-
-    /**
-     * Set the SQL Mode.
-     * @param SqlMode $sqlMode
-     */
-    public function setSqlMode(SqlMode $sqlMode);
-
-    /**
-     * Unset the SQL mode for the routine.
-     */
-    public function unsetSqlMode();
-
-    /**
-     * Get the delimiter used between DDL statements.
-     * @return string
-     */
-    public function getDDLDelimiter();
-
-    /**
-     * Set the delimiter to use between DDL statements.
-     * @param string $delimiter
-     */
-    public function setDDLDelimiter($delimiter);
-
-    /**
-     * Identify if drop statement will be included with DDL create statement.
-     * @return int Will return the value of one of the self::DDL_DROP_* constants.
-     */
-    public function getDDLDropPolicy();
-
-    /**
-     * Set if the DDL should include a statement to drop the database.
-     * @param int $ddlDropPolicy Supply one of the self::DDL_DROP_* constants.
-     */
-    public function setDDLDropPolicy($ddlDropPolicy);
-
-    /**
-     * Indicates if the DDL will use the fully qualified name for the table.
-     * @return bool
-     */
-    public function isDDLUseFullyQualifiedName();
-
-    /**
-     * Set if the DDL should use the fully qualified name for the table.
-     * @param bool $useFullyQualifiedName
-     */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName);
-
-    /**
-     * Get the DDL statement for the routine.
-     * @return string DDL statement
-     */
-    public function getDDL();
 
     /**
      * DDL statement for the routine.

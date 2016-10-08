@@ -34,11 +34,11 @@ interface RoutineFunctionInterface extends RoutineInterface
      * Get the return type for the function
      * @return DataTypeInterface Data type.
      */
-    public function getReturns();
+    public function getReturnType();
 
     /**
      * Sets the return type for the function.
      * @param DataTypeInterface $return
      */
-    public function setReturns(DataTypeInterface $return);
+    public function setReturnType(DataTypeInterface $return);
 }

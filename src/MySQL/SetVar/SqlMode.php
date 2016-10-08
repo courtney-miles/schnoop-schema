@@ -2,11 +2,14 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\SetVar;
 
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
-class SqlMode implements MySQLInterface
+class SqlMode implements MySQLInterface, HasDelimiterInterface
 {
     protected $mode;
+
+    protected $delimiter = self::DEFAULT_DELIMITER;
 
     /**
      * SqlMode constructor.
@@ -36,28 +39,44 @@ class SqlMode implements MySQLInterface
     }
 
     /**
-     * Get the DDL statements for setting the SQL mode whilst preserving the original SQL mode.
-     * @param string $delimiter The delimiter to use between statements.
+     * Get the delimiter to use between statements.
      * @return string
      */
-    public function getAssignStmt($delimiter = self::DEFAULT_DELIMITER)
+    public function getDelimiter()
+    {
+        return $this->delimiter;
+    }
+
+    /**
+     * Set the delimiter to use between statements.
+     * @param $delimiter
+     */
+    public function setDelimiter($delimiter)
+    {
+        $this->delimiter = $delimiter;
+    }
+
+    /**
+     * Get the DDL statements for setting the SQL mode whilst preserving the original SQL mode.
+     * @return string
+     */
+    public function getSetStatements()
     {
         return <<<SQL
-SET @_schnoop_sql_mode = @@session.sql_mode{$delimiter}
-SET @@session.sql_mode = '{$this->mode}'{$delimiter}
+SET @_schnoop_sql_mode = @@session.sql_mode{$this->delimiter}
+SET @@session.sql_mode = '{$this->mode}'{$this->delimiter}
 SQL;
     }
 
     /**
      * Get the DDL statements for restoring the previously changed SQL mode.
-     * @param string $delimiter The delimiter to use between statements.
      * @return string
      */
-    public function getRestoreStmt($delimiter = self::DEFAULT_DELIMITER)
+    public function getRestoreStatements()
     {
         return <<<SQL
-SET @@session.sql_mode = @_schnoop_sql_mode{$delimiter}
-SET @_schnoop_sql_mode = NULL{$delimiter}
+SET @@session.sql_mode = @_schnoop_sql_mode{$this->delimiter}
+SET @_schnoop_sql_mode = NULL{$this->delimiter}
 SQL;
     }
 }

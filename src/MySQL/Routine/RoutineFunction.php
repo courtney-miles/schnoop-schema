@@ -66,7 +66,7 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
     /**
      * {@inheritdoc}
      */
-    public function getReturns()
+    public function getReturnType()
     {
         return $this->returns;
     }
@@ -74,7 +74,7 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
     /**
      * {@inheritdoc}
      */
-    public function setReturns(DataTypeInterface $returns)
+    public function setReturnType(DataTypeInterface $returns)
     {
         $this->returns = $returns;
     }
@@ -86,62 +86,56 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($this->ddlUseFullyQualifiedName) {
-            if (!$this->hasDatabaseName()) {
-                throw new FQNException(
-                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
-                );
-            }
+        $functionName = $this->makeRoutineName();
 
-            $functionName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
-        } else {
-            $functionName = "`{$this->getName()}`";
-        }
-
-        if ($this->ddlDropPolicy) {
-            switch ($this->ddlDropPolicy) {
+        if ($this->dropPolicy) {
+            switch ($this->dropPolicy) {
                 case self::DDL_DROP_POLICY_DROP:
                     $dropDDL = <<<SQL
-DROP FUNCTION {$functionName}{$this->ddlDelimiter}
+DROP FUNCTION {$functionName}{$this->delimiter}
 SQL;
                     break;
                 case self::DDL_DROP_POLICY_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP FUNCTION IF EXISTS {$functionName}{$this->ddlDelimiter}
+DROP FUNCTION IF EXISTS {$functionName}{$this->delimiter}
 SQL;
                     break;
             }
         }
 
         if ($this->hasSqlMode()) {
-            $setSqlMode = $this->sqlMode->getAssignStmt($this->ddlDelimiter);
-            $revertSqlMode = $this->sqlMode->getRestoreStmt($this->ddlDelimiter);
+            $prevDelimiter = $this->sqlMode->getDelimiter();
+            $this->sqlMode->setDelimiter($this->delimiter);
+
+            $setSqlMode = $this->sqlMode->getSetStatements();
+            $revertSqlMode = $this->sqlMode->getRestoreStatements();
+
+            $this->sqlMode->setDelimiter($prevDelimiter);
         }
 
         $functionSignature = "FUNCTION {$functionName} ({$this->makeParametersDDL()})";
 
-        $createDDL .= 'CREATE '
-            . implode(
-                "\n",
-                array_filter(
-                    [
-                        (!empty($this->definer)) ? 'DEFINER = ' . $this->definer : null,
-                        $functionSignature,
-                        'RETURNS ' . (string)$this->returns,
-                        $this->makeCharacteristicsDDL(),
-                        'BEGIN',
-                        $this->body,
-                        'END' . $this->ddlDelimiter
-                    ]
-                )
-            );
+        $createDDL .= 'CREATE ' . implode(
+            "\n",
+            array_filter(
+                [
+                    (!empty($this->definer)) ? 'DEFINER = ' . $this->definer : null,
+                    $functionSignature,
+                    'RETURNS ' . $this->returns->getDDL(),
+                    $this->makeCharacteristicsDDL(),
+                    'BEGIN',
+                    $this->body,
+                    'END' . $this->delimiter
+                ]
+            )
+        );
 
         $createDDL = implode(
             "\n",
             array_filter(
                 [
-                    $dropDDL,
                     $setSqlMode,
+                    $dropDDL,
                     $createDDL,
                     $revertSqlMode
                 ]
@@ -165,7 +159,7 @@ SQL;
         $params = [];
 
         foreach ($this->parameters as $parameter) {
-            $params[] = (string)$parameter;
+            $params[] = $parameter->getDDL();
         }
 
         return implode(',', $params);

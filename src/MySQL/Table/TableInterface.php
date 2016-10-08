@@ -7,9 +7,16 @@ use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\PrimaryKey;
+use MilesAsylum\SchnoopSchema\MySQL\DDLStatementInterface;
+use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 
-interface TableInterface extends MySQLInterface
+interface TableInterface extends
+    MySQLInterface,
+    HasDelimiterInterface,
+    DroppableInterface,
+    DDLStatementInterface
 {
     /**
      * MySQL keyword for the InnoDB table engine.
@@ -279,48 +286,6 @@ interface TableInterface extends MySQLInterface
      * @param string $comment The comment.
      */
     public function setComment($comment);
-
-    /**
-     * Get the delimiter used between DDL statements.
-     * @return string
-     */
-    public function getDDLDelimiter();
-
-    /**
-     * Set the delimiter to use between DDL statements.
-     * @param string $delimiter
-     */
-    public function setDDLDelimiter($delimiter);
-
-    /**
-     * Identify if drop statement will be included with DDL create statement.
-     * @return int Will return the value of one of the self::DDL_DROP_* constants.
-     */
-    public function getDDLDropPolicy();
-
-    /**
-     * Set if the DDL should include a statement to drop the database.
-     * @param int $ddlDropPolicy Supply one of the self::DDL_DROP_* constants.
-     */
-    public function setDDLDropPolicy($ddlDropPolicy);
-
-    /**
-     * Indicates if the DDL will use the fully qualified name for the table.
-     * @return bool
-     */
-    public function isDDLUseFullyQualifiedName();
-
-    /**
-     * Set if the DDL should use the fully qualified name for the table.
-     * @param bool $useFullyQualifiedName
-     */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName);
-
-    /**
-     * Get the DDL create statement for the table.
-     * @return string The DDL create statement.
-     */
-    public function getDDL();
 
     /**
      * The table DDL create statement.

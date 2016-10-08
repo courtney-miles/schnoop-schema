@@ -38,7 +38,34 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
 
         $this->assertTrue($optionsType->hasOptions());
         $this->assertSame($options, $optionsType->getOptions());
-        $this->assertTrue($optionsType->hasOption($options[0]));
+
+        foreach ($options as $k => $value) {
+            $this->assertTrue($optionsType->hasOption($options[$k]));
+        }
+
+        return [$optionsType, $options];
+    }
+
+    /**
+     * @depends testSetOptions
+     * @param array $testData
+     */
+    public function testAddOption(array $testData)
+    {
+        /** @var OptionsTypeInterface $optionsType */
+        list($optionsType, $presetOptions) = $testData;
+
+        $newOption = 'foo';
+        $expectedOptions = $presetOptions;
+        $expectedOptions[] = $newOption;
+
+        $optionsType->addOption($newOption);
+
+        $this->assertSame($expectedOptions, $optionsType->getOptions());
+
+        foreach ($expectedOptions as $k => $value) {
+            $this->assertTrue($optionsType->hasOption($expectedOptions[$k]));
+        }
     }
 
     public function testSetCollation()

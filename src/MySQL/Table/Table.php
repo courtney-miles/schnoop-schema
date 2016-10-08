@@ -410,7 +410,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDelimiter()
+    public function getDelimiter()
     {
         return $this->ddlDelimiter;
     }
@@ -418,7 +418,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDDLDelimiter($delimiter)
+    public function setDelimiter($delimiter)
     {
         $this->ddlDelimiter = $delimiter;
     }
@@ -426,7 +426,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDropPolicy()
+    public function getDropPolicy()
     {
         return $this->ddlDropPolicy;
     }
@@ -434,7 +434,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDDLDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy)
     {
         $this->ddlDropPolicy = $ddlDropPolicy;
     }
@@ -442,7 +442,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function isDDLUseFullyQualifiedName()
+    public function useFullyQualifiedName()
     {
         return $this->ddlUseFullyQualifiedName;
     }
@@ -450,7 +450,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName)
     {
         $this->ddlUseFullyQualifiedName = $useFullyQualifiedName;
     }

@@ -72,7 +72,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDelimiter()
+    public function getDelimiter()
     {
         return $this->ddlDelimiter;
     }
@@ -80,7 +80,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function setDDLDelimiter($delimiter)
+    public function setDelimiter($delimiter)
     {
         $this->ddlDelimiter = $delimiter;
     }
@@ -88,7 +88,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDropPolicy()
+    public function getDropPolicy()
     {
         return $this->ddlDropPolicy;
     }
@@ -96,7 +96,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function setDDLDropPolicy($ddlDropPolicyPolicy)
+    public function setDropPolicy($ddlDropPolicyPolicy)
     {
         $this->ddlDropPolicy = $ddlDropPolicyPolicy;
     }

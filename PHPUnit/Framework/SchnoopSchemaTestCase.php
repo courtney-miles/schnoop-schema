@@ -2,12 +2,27 @@
 
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
+use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use PHPUnit\Framework\TestCase;
 
 class SchnoopSchemaTestCase extends TestCase
 {
+    /**
+     * @param string $columnName
+     * @param string $columnDDL
+     * @return ColumnInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createMockColumn($columnName, $columnDDL)
+    {
+        $mockColumn = $this->createMock(ColumnInterface::class);
+        $mockColumn->method('getName')->willReturn($columnName);
+        $mockColumn->method('__toString')->willReturn($columnDDL);
+
+        return $mockColumn;
+    }
+
     /**
      * @param $indexName
      * @param $indexDDL

@@ -2,6 +2,7 @@
 
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 
 abstract class AbstractRoutine implements RoutineInterface
@@ -63,19 +64,19 @@ abstract class AbstractRoutine implements RoutineInterface
      * The delimiter to use between statements.
      * @var string
      */
-    protected $ddlDelimiter = self::DEFAULT_DELIMITER;
+    protected $delimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
      * @var bool
      */
-    protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
+    protected $dropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
      * @var bool
      */
-    protected $ddlUseFullyQualifiedName = false;
+    protected $useFullyQualifiedName = false;
 
 
     /**
@@ -134,6 +135,14 @@ abstract class AbstractRoutine implements RoutineInterface
     public function setDefiner($definer)
     {
         $this->definer = $definer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasDefiner()
+    {
+        return !empty($this->definer);
     }
 
     /**
@@ -256,60 +265,70 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDelimiter()
+    public function getDelimiter()
     {
-        return $this->ddlDelimiter;
+        return $this->delimiter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLDelimiter($delimiter)
+    public function setDelimiter($delimiter)
     {
-        $this->ddlDelimiter = $delimiter;
+        $this->delimiter = $delimiter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDDLDropPolicy()
+    public function getDropPolicy()
     {
-        return $this->ddlDropPolicy;
+        return $this->dropPolicy;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy)
     {
-        $this->ddlDropPolicy = $ddlDropPolicy;
+        $this->dropPolicy = $ddlDropPolicy;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isDDLUseFullyQualifiedName()
+    public function useFullyQualifiedName()
     {
-        return $this->ddlUseFullyQualifiedName;
+        return $this->useFullyQualifiedName;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName)
     {
-        $this->ddlUseFullyQualifiedName = $useFullyQualifiedName;
+        $this->useFullyQualifiedName = $useFullyQualifiedName;
     }
 
     /**
-     * Make the fully qualified name for the routine.
-     * @return string Fully qualified name
+     * Resolve the routine name to an enclosed name.
+     * @return string Routine name
      */
-    protected function makeFullyQualifiedRoutineName()
+    protected function makeRoutineName()
     {
-        $databasePre = !empty($this->databaseName) ? '`' . $this->databaseName . '`.' : null;
+        if ($this->useFullyQualifiedName()) {
+            if (!$this->hasDatabaseName()) {
+                throw new FQNException(
+                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+                );
+            }
 
-        return $databasePre . '`' . $this->name . '`';
+            $routineName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
+        } else {
+            $routineName = "`{$this->getName()}`";
+        }
+
+        return $routineName;
     }
 
     /**

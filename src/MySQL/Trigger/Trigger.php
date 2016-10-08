@@ -65,19 +65,19 @@ class Trigger implements TriggerInterface
      * The delimiter to use between statements.
      * @var string
      */
-    protected $ddlDelimiter = self::DEFAULT_DELIMITER;
+    protected $delimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
      * @var bool
      */
-    protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
+    protected $dropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
      * @var bool
      */
-    protected $ddlUseFullyQualifiedName = false;
+    protected $useFullyQualifiedName = false;
 
     /**
      * Trigger SQL mode.
@@ -301,49 +301,49 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function getDDLDelimiter()
+    public function getDelimiter()
     {
-        return $this->ddlDelimiter;
+        return $this->delimiter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLDelimiter($delimiter)
+    public function setDelimiter($delimiter)
     {
-        $this->ddlDelimiter = $delimiter;
+        $this->delimiter = $delimiter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDDLDropPolicy()
+    public function getDropPolicy()
     {
-        return $this->ddlDropPolicy;
+        return $this->dropPolicy;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy)
     {
-        $this->ddlDropPolicy = $ddlDropPolicy;
+        $this->dropPolicy = $ddlDropPolicy;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isDDLUseFullyQualifiedName()
+    public function useFullyQualifiedName()
     {
-        return $this->ddlUseFullyQualifiedName;
+        return $this->useFullyQualifiedName;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDDLUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName)
     {
-        $this->ddlUseFullyQualifiedName = $useFullyQualifiedName;
+        $this->useFullyQualifiedName = $useFullyQualifiedName;
     }
 
     /**
@@ -353,7 +353,7 @@ class Trigger implements TriggerInterface
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
 
-        if ($this->ddlUseFullyQualifiedName) {
+        if ($this->useFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
                 throw new FQNException(
                     'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -373,24 +373,29 @@ class Trigger implements TriggerInterface
             $triggerOrder = "{$this->getPositionContext()} `{$this->getPositionRelativeTo()}`";
         }
 
-        if ($this->ddlDropPolicy) {
-            switch ($this->ddlDropPolicy) {
+        if ($this->dropPolicy) {
+            switch ($this->dropPolicy) {
                 case self::DDL_DROP_POLICY_DROP:
                     $dropDDL = <<<SQL
-DROP TRIGGER {$triggerName}{$this->ddlDelimiter}
+DROP TRIGGER {$triggerName}{$this->delimiter}
 SQL;
                     break;
                 case self::DDL_DROP_POLICY_DROP_IF_EXISTS:
                     $dropDDL = <<<SQL
-DROP TRIGGER IF EXISTS {$triggerName}{$this->ddlDelimiter}
+DROP TRIGGER IF EXISTS {$triggerName}{$this->delimiter}
 SQL;
                     break;
             }
         }
 
         if ($this->hasSqlMode()) {
-            $setSqlMode = $this->sqlMode->getAssignStmt($this->ddlDelimiter);
-            $revertSqlMode = $this->sqlMode->getRestoreStmt($this->ddlDelimiter);
+            $prevDelimiter = $this->sqlMode->getDelimiter();
+            $this->sqlMode->setDelimiter($this->delimiter);
+
+            $setSqlMode = $this->sqlMode->getSetStatements();
+            $revertSqlMode = $this->sqlMode->getRestoreStatements();
+
+            $this->sqlMode->setDelimiter($prevDelimiter);
         }
 
         $createDDL .= 'CREATE '
@@ -404,8 +409,7 @@ SQL;
                         $triggerOrder,
                         'BEGIN',
                         $this->getBody(),
-                        'END',
-                        $this->ddlDelimiter
+                        'END' . $this->delimiter
                     ]
                 )
             );
@@ -414,8 +418,8 @@ SQL;
             "\n",
             array_filter(
                 [
-                    $dropDDL,
                     $setSqlMode,
+                    $dropDDL,
                     $createDDL,
                     $revertSqlMode
                 ]
