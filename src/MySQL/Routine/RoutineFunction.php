@@ -113,7 +113,10 @@ SQL;
             $this->sqlMode->setDelimiter($prevDelimiter);
         }
 
-        $functionSignature = "FUNCTION {$functionName} ({$this->makeParametersDDL()})";
+        $paramsDDL = count($this->parameters) > 1
+            ? "\n  " . $this->makeParametersDDL("\n  ") . "\n"
+            : $this->makeParametersDDL();
+        $functionSignature = "FUNCTION {$functionName} ({$paramsDDL})";
 
         $createDDL .= 'CREATE ' . implode(
             "\n",
@@ -152,9 +155,10 @@ SQL;
 
     /**
      * Make the portion of DDL for describing the parameters.
+     * @param string $separator String to apply between parameters.
      * @return string Parameters DDL.
      */
-    protected function makeParametersDDL()
+    protected function makeParametersDDL($separator = " ")
     {
         $params = [];
 
@@ -162,6 +166,6 @@ SQL;
             $params[] = $parameter->getDDL();
         }
 
-        return implode(',', $params);
+        return implode(',' . $separator, $params);
     }
 }

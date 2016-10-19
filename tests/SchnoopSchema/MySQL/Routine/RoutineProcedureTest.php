@@ -96,7 +96,7 @@ class RoutineProcedureTest extends RoutineTestCase
     }
 
     /**
-     * @dataProvider getDdlTestData
+     * @dataProvider getDDLTestData
      * @param RoutineProcedure $procedure
      * @param $doMockSqlMode
      * @param $expectedDDL
@@ -129,7 +129,7 @@ class RoutineProcedureTest extends RoutineTestCase
         $this->assertSame($ddl, (string)$mockProcedure);
     }
 
-    public function getDdlTestData()
+    public function getDDLTestData()
     {
         $databaseName = 'schnoop_db';
 
@@ -174,7 +174,10 @@ SQL
                 <<<SQL
 DROP PROCEDURE IF EXISTS `{$databaseName}`.`{$this->name}`@@
 CREATE DEFINER = CURRENT_USER
-PROCEDURE `{$databaseName}`.`{$this->name}` (__param_1__,__param_2__)
+PROCEDURE `{$databaseName}`.`{$this->name}` (
+  __param_1__,
+  __param_2__
+)
 NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
 BEGIN
 SELECT * FROM table;

@@ -117,7 +117,7 @@ class RoutineFunctionTest extends RoutineTestCase
     }
 
     /**
-     * @dataProvider getDdlTestData
+     * @dataProvider getDDLTestData
      * @param RoutineFunction $function
      * @param bool $doMockSqlMode
      * @param $expectedDDL
@@ -154,7 +154,7 @@ class RoutineFunctionTest extends RoutineTestCase
      * @see testGetDDL
      * @return array
      */
-    public function getDdlTestData()
+    public function getDDLTestData()
     {
         $name = 'schnoop_func';
         $databaseName = 'schnoop_db';
@@ -208,7 +208,10 @@ SQL
                 <<<SQL
 DROP FUNCTION IF EXISTS `{$databaseName}`.`{$name}`@@
 CREATE DEFINER = CURRENT_USER
-FUNCTION `{$databaseName}`.`{$name}` (__param_1__,__param_2__)
+FUNCTION `{$databaseName}`.`{$name}` (
+  __param_1__,
+  __param_2__
+)
 RETURNS __return_ddl__
 NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER
 BEGIN
