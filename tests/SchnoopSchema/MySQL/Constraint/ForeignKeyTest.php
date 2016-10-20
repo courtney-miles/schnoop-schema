@@ -56,6 +56,9 @@ class ForeignKeyTest extends ConstraintTestCase
 
         $this->assertSame([], $this->foreignKey->getColumnNames());
         $this->assertSame([], $this->foreignKey->getReferenceColumnNames());
+
+        $this->assertFalse($this->foreignKey->hasForeignKeyColumn('bogus'));
+        $this->assertFalse($this->foreignKey->hasReferenceColumnName('bogus'));
     }
 
     public function testSetOnDeleteAction()
@@ -80,12 +83,15 @@ class ForeignKeyTest extends ConstraintTestCase
 
     public function testSetForeignKeyColumns()
     {
+        $columnNames = ['col_a','col_b'];
+        $refColumnNames = ['ref_col_a','ref_col_b'];
+
         $fkColumnA = $this->createMock(ForeignKeyColumn::class);
-        $fkColumnA->method('getColumnName')->willReturn('col_a');
-        $fkColumnA->method('getReferenceColumnName')->willReturn('ref_col_a');
+        $fkColumnA->method('getColumnName')->willReturn($columnNames[0]);
+        $fkColumnA->method('getReferenceColumnName')->willReturn($refColumnNames[0]);
         $fkColumnB = $this->createMock(ForeignKeyColumn::class);
-        $fkColumnB->method('getColumnName')->willReturn('col_b');
-        $fkColumnB->method('getReferenceColumnName')->willReturn('ref_col_b');
+        $fkColumnB->method('getColumnName')->willReturn($columnNames[1]);
+        $fkColumnB->method('getReferenceColumnName')->willReturn($refColumnNames[1]);
 
         $foreignKeyColumns = [
             $fkColumnA,
@@ -95,8 +101,30 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
 
         $this->assertSame($foreignKeyColumns, $this->foreignKey->getForeignKeyColumns());
-        $this->assertSame(['col_a','col_b'], $this->foreignKey->getColumnNames());
-        $this->assertSame(['ref_col_a','ref_col_b'], $this->foreignKey->getReferenceColumnNames());
+        $this->assertSame($columnNames, $this->foreignKey->getColumnNames());
+        $this->assertSame($refColumnNames, $this->foreignKey->getReferenceColumnNames());
+
+        foreach ($columnNames as $columnName) {
+            $this->assertTrue($this->foreignKey->hasForeignKeyColumn($columnName));
+        }
+
+        foreach ($refColumnNames as $refColumnName) {
+            $this->assertTrue($this->foreignKey->hasReferenceColumnName($refColumnName));
+        }
+    }
+
+    public function testHasReferenceColumnNameWithRefTable()
+    {
+        $refTableName = 'ref_tbl';
+        $refColumnName = 'ref_col';
+        $fkColumn = $this->createMock(ForeignKeyColumn::class);
+        $fkColumn->method('getReferenceColumnName')->willReturn($refColumnName);
+
+        $this->foreignKey->setForeignKeyColumns([$fkColumn]);
+        $this->foreignKey->setReferenceTableName('ref_tbl');
+
+        $this->assertTrue($this->foreignKey->hasReferenceColumnName($refColumnName, $refTableName));
+        $this->assertFalse($this->foreignKey->hasReferenceColumnName($refColumnName, 'bogus'));
     }
 
     public function testDDL()

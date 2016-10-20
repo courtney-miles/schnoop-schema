@@ -34,10 +34,17 @@ interface ForeignKeyInterface extends ConstraintInterface
     public function getForeignKeyColumns();
 
     /**
-     * Identify if foreign key columns have been set.
-     * @return bool
+     * Identify if any foreign key columns have been set.
+     * @return bool True if at least one column has been set for the foreign key.
      */
     public function hasForeignKeyColumns();
+
+    /**
+     * Identifies if the foreign key includes the specified column.
+     * @param $columnName
+     * @return bool True if the column exists in the foreign key.
+     */
+    public function hasForeignKeyColumn($columnName);
 
     /**
      * Set the foreign key columns.
@@ -62,6 +69,14 @@ interface ForeignKeyInterface extends ConstraintInterface
      * @return array Reference column names.
      */
     public function getReferenceColumnNames();
+
+    /**
+     * Identify if the supplied column name is one of the reference columns for the foreign key.
+     * @param string $columnName
+     * @param string|null $tableName Optionally include the table name with the check.
+     * @return bool
+     */
+    public function hasReferenceColumnName($columnName, $tableName = null);
 
     /**
      * Get the action to perform against the reference table when a row is deleted.

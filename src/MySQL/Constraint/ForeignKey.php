@@ -120,6 +120,24 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
+    public function hasReferenceColumnName($columnName, $tableName = null)
+    {
+        if ($this->getReferenceTableName() !== $tableName) {
+            return false;
+        }
+
+        foreach ($this->foreignKeyColumns as $foreignKeyColumn) {
+            if ($foreignKeyColumn->getReferenceColumnName() == $columnName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getForeignKeyColumns()
     {
         return array_values($this->foreignKeyColumns);
@@ -131,6 +149,20 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     public function hasForeignKeyColumns()
     {
         return !empty($this->foreignKeyColumns);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasForeignKeyColumn($columnName)
+    {
+        foreach ($this->foreignKeyColumns as $fkColumn) {
+            if ($fkColumn->getColumnName() == $columnName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
