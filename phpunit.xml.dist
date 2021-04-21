@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <phpunit bootstrap="./PHPUnit/bootstrap.php">
-    <testsuite name="SchnoopSchema Test Suite">
-        <directory>./tests/SchnoopSchema/</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="unit_tests">
+            <directory>./tests/SchnoopSchema/</directory>
+        </testsuite>
+    </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
