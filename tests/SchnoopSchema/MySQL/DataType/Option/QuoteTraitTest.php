@@ -3,8 +3,9 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType\Option;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
+use PHPUnit\Framework\TestCase;
 
-class QuoteTraitTest extends \PHPUnit_Framework_TestCase
+class QuoteTraitTest extends TestCase
 {
     /**
      * @var QuoteTrait

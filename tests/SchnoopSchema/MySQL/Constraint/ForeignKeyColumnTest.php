@@ -3,8 +3,9 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyColumn;
+use PHPUnit\Framework\TestCase;
 
-class ForeignKeyColumnTest extends \PHPUnit_Framework_TestCase
+class ForeignKeyColumnTest extends TestCase
 {
     protected $columnName = 'schnoop_col';
 

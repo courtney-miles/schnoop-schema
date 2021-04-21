@@ -7,8 +7,9 @@ use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\MySQL\Trigger\Trigger;
 use MilesAsylum\SchnoopSchema\MySQL\Trigger\TriggerInterface;
+use PHPUnit\Framework\TestCase;
 
-class TriggerTest extends \PHPUnit_Framework_TestCase
+class TriggerTest extends TestCase
 {
     /**
      * @var Trigger
