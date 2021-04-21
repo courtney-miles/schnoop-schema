@@ -13,5 +13,6 @@
     <php>
         <ini name="display_errors" value="On" />
         <ini name="error_reporting" value="E_ALL" />
+        <ini name="xdebug.mode" value="coverage" />
     </php>
 </phpunit>
