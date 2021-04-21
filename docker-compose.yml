@@ -1,0 +1,14 @@
+version: "2"
+services:
+    schnoop-schema:
+        build: .
+        volumes:
+            - .:/src
+        links:
+            - mysql
+        command: bash
+    mysql:
+        image: mysql:5.7
+        environment:
+            - MYSQL_DATABASE=slurp_testing
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
