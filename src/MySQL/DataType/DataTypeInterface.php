@@ -34,6 +34,8 @@ interface DataTypeInterface extends MySQLInterface
     const TYPE_MEDIUMTEXT = 'mediumtext';
     const TYPE_LONGTEXT = 'longtext';
 
+    const TYPE_JSON = 'json';
+
     const TYPE_BINARY = 'binary';
     const TYPE_VARBINARY = 'varbinary';
 
