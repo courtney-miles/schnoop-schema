@@ -1,6 +1,8 @@
 /.idea/
 /.vagrant/
 /vendor/
+/build/
 composer.phar
 phpunit.xml
 Vagrantfile
+.php_cs.dist

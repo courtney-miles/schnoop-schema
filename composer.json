@@ -33,7 +33,7 @@
   },
   "scripts": {
     "test": [
-      "vendor/bin/phpunit -c phpunit.xml.dist --testsuite unit_tests --coverage-html build/coverage-report"
+      "vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
     ],
     "style-check": "vendor/bin/php-cs-fixer fix --dry-run --verbose --diff --allow-risky=yes --ansi",
     "style-fix": "vendor/bin/php-cs-fixer fix --verbose --allow-risky=yes --ansi"
