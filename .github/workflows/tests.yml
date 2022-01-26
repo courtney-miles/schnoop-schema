@@ -1,0 +1,54 @@
+name: Tests
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-version: ['7.2', '7.3', '7.4']
+                composer-flag:
+                    - '--prefer-dist'
+#                    - '--prefer-stable --prefer-lowest'
+
+        name: Test PHP ${{ matrix.php-version }} / composer ${{ matrix.composer-flag }}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup PHP version ${{ matrix.php-version }}
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+
+            - name: Confirm PHP Version
+              run: php -v
+
+            - name: Validate composer.json and composer.lock
+              run: composer validate --strict
+
+            - name: Cache Composer packages
+              id: composer-cache
+              uses: actions/cache@v2
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-
+            - name: Install Composer dependencies
+              run: composer update ${{ matrix.composer-flag }} --no-interaction --no-progress
+
+#            - name: Run Code Style Check for PHP ${{ matrix.php-version }}
+#              run: composer run-script style-check
+
+            - name: Run tests for PHP ${{ matrix.php-version }}
+              run: composer run-script test
+
+            - name: Submit test coverage to Coveralls
+              run: vendor/bin/php-coveralls
+              env:
+                  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: success() && matrix.php-version == '7.4' && matrix.composer-flag == '--prefer-dist'
