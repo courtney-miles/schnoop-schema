@@ -3,6 +3,7 @@
 /vendor/
 /build/
 composer.phar
+composer.lock
 phpunit.xml
 Vagrantfile
 .php_cs.dist
