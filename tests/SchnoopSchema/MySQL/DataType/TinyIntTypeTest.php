@@ -13,7 +13,7 @@ class TinyIntTypeTest extends IntTypeTestCase
      */
     protected $tinyIntType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

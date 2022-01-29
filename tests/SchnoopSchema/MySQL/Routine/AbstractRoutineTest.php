@@ -13,7 +13,7 @@ class AbstractRoutineTest extends RoutineTestCase
      */
     protected $routine;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

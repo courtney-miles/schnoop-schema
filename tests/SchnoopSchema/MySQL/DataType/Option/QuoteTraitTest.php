@@ -12,7 +12,7 @@ class QuoteTraitTest extends TestCase
      */
     protected $quoteTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

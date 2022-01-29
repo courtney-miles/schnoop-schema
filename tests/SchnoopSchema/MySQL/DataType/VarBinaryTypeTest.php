@@ -15,7 +15,7 @@ class VarBinaryTypeTest extends BinaryTypeTestCase
 
     protected $length = 5;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

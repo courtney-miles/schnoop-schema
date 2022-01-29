@@ -13,7 +13,7 @@ class FloatTypeTest extends NumericPointTypeTestCase
      */
     protected $floatType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

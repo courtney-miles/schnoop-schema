@@ -16,7 +16,7 @@ class ForeignKeyColumnTest extends TestCase
      */
     protected $foreignKeyColumn;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

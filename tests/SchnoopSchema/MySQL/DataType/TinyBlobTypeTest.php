@@ -19,7 +19,7 @@ class TinyBlobTypeTest extends DataTypeTestCase
      */
     protected $tinyBlobType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

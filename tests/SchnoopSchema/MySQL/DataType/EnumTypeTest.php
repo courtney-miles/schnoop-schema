@@ -13,7 +13,7 @@ class EnumTypeTest extends OptionsTypeTestCase
      */
     protected $enumType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

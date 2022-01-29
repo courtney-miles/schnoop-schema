@@ -17,7 +17,7 @@ class AbstractConstraintTest extends ConstraintTestCase
 
     protected $constraintType = ConstraintInterface::CONSTRAINT_INDEX;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

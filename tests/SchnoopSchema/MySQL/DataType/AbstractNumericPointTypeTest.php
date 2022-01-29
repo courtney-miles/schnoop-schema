@@ -4,7 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractNumericPointType;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractNumericPointTypeTest extends NumericPointTypeTestCase
 {
@@ -15,7 +15,7 @@ class AbstractNumericPointTypeTest extends NumericPointTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class AbstractNumericPointTypeTest extends NumericPointTypeTestCase
 
     /**
      * @param $type
-     * @return AbstractNumericPointType|PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractNumericPointType|MockObject
      */
     protected function createMockAbstractNumericPointType($type)
     {

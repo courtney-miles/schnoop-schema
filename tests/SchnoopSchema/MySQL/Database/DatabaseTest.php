@@ -4,7 +4,6 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Database;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Database\Database;
 
@@ -24,7 +23,7 @@ class DatabaseTest extends SchnoopSchemaTestCase
         'schnoop_table_two'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

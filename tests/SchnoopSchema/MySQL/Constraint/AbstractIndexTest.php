@@ -20,7 +20,7 @@ class AbstractIndexTest extends IndexTestCase
 
     protected $indexType = IndexInterface::INDEX_TYPE_BTREE;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractIndex = $this->getMockForAbstractClass(
             AbstractIndex::class,

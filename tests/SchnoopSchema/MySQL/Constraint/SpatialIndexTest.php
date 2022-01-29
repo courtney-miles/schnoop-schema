@@ -17,7 +17,7 @@ class SpatialIndexTest extends IndexTestCase
 
     protected $indexedColumns = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

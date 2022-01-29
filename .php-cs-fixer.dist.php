@@ -2,8 +2,8 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__);
-$config = PhpCsFixer\Config::create()
-    ->setRules([
+$config = new PhpCsFixer\Config();
+$config->setRules([
         '@PSR2' => true,
         '@Symfony' => true,
         'strict_param' => true,

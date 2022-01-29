@@ -16,7 +16,7 @@ class ForeignKeyTest extends ConstraintTestCase
      */
     protected $foreignKey;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

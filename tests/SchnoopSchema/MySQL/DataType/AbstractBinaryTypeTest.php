@@ -23,7 +23,7 @@ class AbstractBinaryTypeTest extends BinaryTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

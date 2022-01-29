@@ -13,7 +13,7 @@ class SetTypeTest extends OptionsTypeTestCase
      */
     protected $setType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

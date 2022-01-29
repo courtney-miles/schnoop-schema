@@ -15,7 +15,7 @@ class SqlModeTest extends TestCase
     protected $sqlMode;
     protected $mode = 'FOO';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

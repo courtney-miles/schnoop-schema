@@ -13,7 +13,7 @@ class TimeTypeTest extends TimeTypeTestCase
      */
     protected $timeType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -3,6 +3,7 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Trigger;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\MySQL\Trigger\Trigger;
@@ -24,7 +25,7 @@ class TriggerTest extends TestCase
 
     protected $tableName = 'schnoop_tbl';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -193,12 +194,13 @@ class TriggerTest extends TestCase
         $this->assertSame($ddl, (string)$mockTrigger);
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException
-     * @expectedExceptionMessage Unable to create DDL with fully-qualified-name because the database name has not been set.
-     */
     public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
     {
+        $this->expectExceptionMessage(
+            'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+        );
+        $this->expectException(FQNException::class);
+
         $this->trigger->setUseFullyQualifiedName(true);
 
         $this->trigger->getCreateStatement();

@@ -6,11 +6,12 @@ use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimestampType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Column\Column;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ColumnTest extends SchnoopSchemaTestCase
 {
@@ -22,11 +23,11 @@ class ColumnTest extends SchnoopSchemaTestCase
     protected $name = 'schnoop_col';
 
     /**
-     * @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var DataTypeInterface|MockObject
      */
     protected $dataType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -149,12 +150,11 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->getDefault());
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException
-     * @expectedExceptionMessage Unable to set default value for the column. The data-type "FOO" does not support a default.
-     */
     public function testExceptionWhenSetDefaultWhenNotAllowed()
     {
+        $this->expectExceptionMessage("Unable to set default value for the column. The data-type \"FOO\" does not support a default.");
+        $this->expectException(LogicException::class);
+
         /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
         $mockDataType = $this->createMock(DataTypeInterface::class);
         $mockDataType->method('cast')
@@ -173,12 +173,13 @@ class ColumnTest extends SchnoopSchemaTestCase
         $column->setDefault('foo');
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException
-     * @expectedExceptionMessage Data type "FOOTYPE" for column "schnoop_col" does not support setting current time on update.
-     */
     public function testExceptionWhenSetOnUpdateCurrentTimestapForUnsupportedDataType()
     {
+        $this->expectExceptionMessage(
+            'Data type "FOOTYPE" for column "schnoop_col" does not support setting current time on update.'
+        );
+        $this->expectException(LogicException::class);
+
         /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
         $mockDataType = $this->createMock(DataTypeInterface::class);
         $mockDataType->method('getType')
@@ -236,12 +237,13 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertTrue($column->isAutoIncrement());
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException
-     * @expectedExceptionMessage Unable to set auto-increment property on the column. Data-type "FOO" does not support an auto-incrementing value.
-     */
     public function testExceptionSetAutoIncrementOnUnsupportedType()
     {
+        $this->expectExceptionMessage(
+            'Unable to set auto-increment property on the column. Data-type "FOO" does not support an auto-incrementing value.'
+        );
+        $this->expectException(LogicException::class);
+
         $this->dataType->method('getType')
             ->willReturn('FOO');
 

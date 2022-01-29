@@ -14,7 +14,7 @@ class LongTextTypeTest extends TextTypeTestCase
      */
     protected $longTextType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -14,7 +14,7 @@ class AbstractOptionsTypeTest extends OptionsTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
