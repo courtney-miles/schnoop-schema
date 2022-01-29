@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Column;
 
 use MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException;
@@ -255,7 +257,7 @@ class Column implements ColumnInterface
      */
     public function hasComment()
     {
-        return (bool)strlen($this->comment);
+        return $this->comment !== null && $this->comment !== '';
     }
 
     /**
@@ -263,7 +265,7 @@ class Column implements ColumnInterface
      */
     public function setComment($comment)
     {
-        $this->comment = strlen($comment) ? (string)$comment : null;
+        $this->comment = $comment !== null && $comment !== '' ? $comment : null;
     }
 
     /**

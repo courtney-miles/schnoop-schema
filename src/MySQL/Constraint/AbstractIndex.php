@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 abstract class AbstractIndex extends AbstractConstraint implements IndexInterface
@@ -100,7 +102,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
      */
     public function hasComment()
     {
-        return (bool)strlen($this->comment);
+        return $this->comment !== null && $this->comment !== '';
     }
 
     /**

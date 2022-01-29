@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Table;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
@@ -396,7 +398,7 @@ class Table implements TableInterface
      */
     public function hasComment()
     {
-        return (bool)strlen($this->comment);
+        return $this->comment !== null && $this->comment !== '';
     }
 
     /**

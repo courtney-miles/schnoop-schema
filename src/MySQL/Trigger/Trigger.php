@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
@@ -225,7 +227,7 @@ class Trigger implements TriggerInterface
      */
     public function hasBody()
     {
-        return (bool)strlen($this->body);
+        return $this->body !== null && $this->body !== '';
     }
 
     /**
