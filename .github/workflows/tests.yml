@@ -41,8 +41,8 @@ jobs:
             - name: Install Composer dependencies
               run: composer update ${{ matrix.composer-flag }} --no-interaction --no-progress
 
-#            - name: Run Code Style Check for PHP ${{ matrix.php-version }}
-#              run: composer run-script style-check
+            - name: Run Code Style Check for PHP ${{ matrix.php-version }}
+              run: composer run-script style-check
 
             - name: Run tests for PHP ${{ matrix.php-version }}
               run: composer run-script test
