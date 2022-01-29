@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\IntType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 
 class IntTypeTest extends IntTypeTestCase
 {
@@ -25,7 +27,7 @@ class IntTypeTest extends IntTypeTestCase
         return $this->intType;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_INT, $this->intType->getType());
@@ -33,7 +35,7 @@ class IntTypeTest extends IntTypeTestCase
         $this->assertSame(IntType::MAX_SIGNED, $this->intType->getMaxRange());
     }
 
-    public function testSetUnsigned()
+    public function testSetUnsigned(): void
     {
         $this->intType->setSigned(false);
 
@@ -44,6 +46,7 @@ class IntTypeTest extends IntTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -57,12 +60,12 @@ class IntTypeTest extends IntTypeTestCase
         return [
             [
                 'INT',
-                $intTypeDefault
+                $intTypeDefault,
             ],
             [
                 'INT(3) UNSIGNED',
-                $intTypeExtra
-            ]
+                $intTypeExtra,
+            ],
         ];
     }
 }

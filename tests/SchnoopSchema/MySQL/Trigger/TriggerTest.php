@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Trigger;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
@@ -37,7 +39,7 @@ class TriggerTest extends TestCase
         );
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame($this->name, $this->trigger->getName());
         $this->assertSame($this->timing, $this->trigger->getTiming());
@@ -46,7 +48,7 @@ class TriggerTest extends TestCase
 
         $this->assertFalse($this->trigger->hasDatabaseName());
         $this->assertNull($this->trigger->getDatabaseName());
-        
+
         $this->assertFalse($this->trigger->hasDefiner());
         $this->assertNull($this->trigger->getDefiner());
 
@@ -65,7 +67,7 @@ class TriggerTest extends TestCase
         $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $this->trigger->getDropPolicy());
     }
 
-    public function testConstants()
+    public function testConstants(): void
     {
         $this->assertSame('CURRENT_USER', TriggerInterface::DEFINER_CURRENT_USER);
         $this->assertSame('BEFORE', TriggerInterface::TIMING_BEFORE);
@@ -76,26 +78,26 @@ class TriggerTest extends TestCase
         $this->assertSame('FOLLOWS', TriggerInterface::POSITION_FOLLOWS);
         $this->assertSame('PRECEDES', TriggerInterface::POSITION_PRECEDES);
     }
-    
-    public function testSetDatabaseName()
+
+    public function testSetDatabaseName(): void
     {
         $databaseName = 'schnoop_db';
         $this->trigger->setDatabaseName($databaseName);
-        
+
         $this->assertTrue($this->trigger->hasDatabaseName());
         $this->assertSame($databaseName, $this->trigger->getDatabaseName());
     }
 
-    public function testSetDefiner()
+    public function testSetDefiner(): void
     {
         $definer = 'root@localhost';
         $this->trigger->setDefiner($definer);
-        
+
         $this->assertTrue($this->trigger->hasDefiner());
         $this->assertSame($definer, $this->trigger->getDefiner());
     }
 
-    public function testSetPosition()
+    public function testSetPosition(): void
     {
         $relation = 'FOLLOWS';
         $relativeTo = 'schnoop_other_trigger';
@@ -106,7 +108,7 @@ class TriggerTest extends TestCase
         $this->assertSame($relativeTo, $this->trigger->getPositionRelativeTo());
     }
 
-    public function testSetStatement()
+    public function testSetStatement(): void
     {
         $statement = 'SELECT 1;';
         $this->trigger->setBody($statement);
@@ -128,9 +130,8 @@ class TriggerTest extends TestCase
 
     /**
      * @depends testSetSqlMode
-     * @param Trigger $triggerWithSetSqlMode
      */
-    public function testUnsetSqlMode(Trigger $triggerWithSetSqlMode)
+    public function testUnsetSqlMode(Trigger $triggerWithSetSqlMode): void
     {
         $triggerWithSetSqlMode->unsetSqlMode();
 
@@ -138,14 +139,14 @@ class TriggerTest extends TestCase
         $this->assertNull($triggerWithSetSqlMode->getSqlMode());
     }
 
-    public function testSetUseFullyQualifiedName()
+    public function testSetUseFullyQualifiedName(): void
     {
         $this->trigger->setUseFullyQualifiedName(true);
 
         $this->assertTrue($this->trigger->useFullyQualifiedName());
     }
 
-    public function testSetDelimiter()
+    public function testSetDelimiter(): void
     {
         $newDelimiter = '$$';
         $this->trigger->setDelimiter($newDelimiter);
@@ -153,7 +154,7 @@ class TriggerTest extends TestCase
         $this->assertSame($newDelimiter, $this->trigger->getDelimiter());
     }
 
-    public function testSetDropPolicy()
+    public function testSetDropPolicy(): void
     {
         $this->trigger->setDropPolicy(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS);
 
@@ -162,11 +163,11 @@ class TriggerTest extends TestCase
 
     /**
      * @dataProvider getDDLTestData
-     * @param Trigger $trigger
+     *
      * @param $doMockSqlMode
      * @param $expectedDDL
      */
-    public function testDDL(Trigger $trigger, $doMockSqlMode, $expectedDDL)
+    public function testDDL(Trigger $trigger, $doMockSqlMode, $expectedDDL): void
     {
         if ($doMockSqlMode) {
             $mockSqlMode = $this->createMock(SqlMode::class);
@@ -178,7 +179,7 @@ class TriggerTest extends TestCase
         $this->assertSame($expectedDDL, $trigger->getCreateStatement());
     }
 
-    public function testToStringAliasesGetDDL()
+    public function testToStringAliasesGetDDL(): void
     {
         $ddl = '__ddl__';
         $mockTrigger = $this->getMockBuilder(Trigger::class)
@@ -191,10 +192,10 @@ class TriggerTest extends TestCase
             ->method('getCreateStatement')
             ->willReturn($ddl);
 
-        $this->assertSame($ddl, (string)$mockTrigger);
+        $this->assertSame($ddl, (string) $mockTrigger);
     }
 
-    public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
+    public function testExceptionOnUseFQNWhenDatabaseNameNotSet(): void
     {
         $this->expectExceptionMessage(
             'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -208,11 +209,13 @@ class TriggerTest extends TestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function getDDLTestData()
     {
         $databaseName = 'schnoop_db';
+
         return [
             [
                 $this->createTrigger(
@@ -306,6 +309,7 @@ SQL
      * @param bool $useFQN
      * @param string $delimiter
      * @param string $dropPolicy
+     *
      * @return Trigger
      */
     public function createTrigger(

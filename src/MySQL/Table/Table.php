@@ -13,79 +13,92 @@ class Table implements TableInterface
 {
     /**
      * Table name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Database name.
+     *
      * @var string
      */
     protected $databaseName;
 
     /**
      * Columns.
+     *
      * @var ColumnInterface[]
      */
-    protected $columns = array();
+    protected $columns = [];
 
     /**
      * Indexes.
+     *
      * @var ConstraintInterface[]
      */
     protected $indexes = [];
 
     /**
      * Foreign keys.
+     *
      * @var ForeignKeyInterface[]
      */
     protected $foreignKeys = [];
 
     /**
      * Table engine.
+     *
      * @var string
      */
     protected $engine;
 
     /**
      * Default collation.
+     *
      * @var
      */
     protected $defaultCollation;
 
     /**
      * Table row format.
+     *
      * @var string
      */
     protected $rowFormat;
 
     /**
      * Table comment.
+     *
      * @var string
      */
     protected $comment;
 
     /**
      * The delimiter to use between statements.
+     *
      * @var string
      */
     protected $ddlDelimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
+     *
      * @var bool
      */
     protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
+     *
      * @var bool
      */
     protected $ddlUseFullyQualifiedName = false;
 
     /**
      * Table constructor.
-     * @param $name string The table name.
+     *
+     * @param $name string The table name
      */
     public function __construct($name)
     {
@@ -103,7 +116,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -127,7 +140,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDatabaseName($databaseName)
+    public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
@@ -167,7 +180,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setColumns(array $columns)
+    public function setColumns(array $columns): void
     {
         $this->columns = [];
 
@@ -179,7 +192,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function addColumn(ColumnInterface $column)
+    public function addColumn(ColumnInterface $column): void
     {
         $column->setTableName($this->name);
         $this->columns[$column->getName()] = $column;
@@ -220,7 +233,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setIndexes(array $indexes)
+    public function setIndexes(array $indexes): void
     {
         $this->indexes = [];
 
@@ -232,11 +245,11 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function addIndex(ConstraintInterface $index)
+    public function addIndex(ConstraintInterface $index): void
     {
         $name = $index->getName();
 
-        if (strtoupper($name) == 'PRIMARY') {
+        if ('PRIMARY' == strtoupper($name)) {
             $name = strtoupper($name);
         }
 
@@ -295,7 +308,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setForeignKeys(array $foreignKeys)
+    public function setForeignKeys(array $foreignKeys): void
     {
         $this->foreignKeys = [];
 
@@ -307,7 +320,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function addForeignKey(ForeignKeyInterface $foreignKey)
+    public function addForeignKey(ForeignKeyInterface $foreignKey): void
     {
         $this->foreignKeys[$foreignKey->getName()] = $foreignKey;
         $foreignKey->setTableName($this->getName());
@@ -332,7 +345,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setEngine($engine)
+    public function setEngine($engine): void
     {
         $this->engine = strtoupper($engine);
     }
@@ -356,7 +369,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefaultCollation($defaultCollation)
+    public function setDefaultCollation($defaultCollation): void
     {
         $this->defaultCollation = $defaultCollation;
     }
@@ -380,7 +393,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setRowFormat($rowFormat)
+    public function setRowFormat($rowFormat): void
     {
         $this->rowFormat = strtoupper($rowFormat);
     }
@@ -404,7 +417,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setComment($comment)
+    public function setComment($comment): void
     {
         $this->comment = $comment;
     }
@@ -420,7 +433,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
         $this->ddlDelimiter = $delimiter;
     }
@@ -436,7 +449,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy): void
     {
         $this->ddlDropPolicy = $ddlDropPolicy;
     }
@@ -452,7 +465,7 @@ class Table implements TableInterface
     /**
      * {@inheritdoc}
      */
-    public function setUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName): void
     {
         $this->ddlUseFullyQualifiedName = $useFullyQualifiedName;
     }
@@ -466,9 +479,7 @@ class Table implements TableInterface
 
         if ($this->ddlUseFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
-                throw new FQNException(
-                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
-                );
+                throw new FQNException('Unable to create DDL with fully-qualified-name because the database name has not been set.');
             }
 
             $tableName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
@@ -493,17 +504,17 @@ SQL;
 
         $columnDefinitions = [];
         foreach ($this->getColumns() as $column) {
-            $columnDefinitions[] = '  '.(string)$column;
+            $columnDefinitions[] = '  ' . (string) $column;
         }
 
         $indexDefinitions = [];
         foreach ($this->getIndexes() as $index) {
-            $indexDefinitions[] = '  '.(string)$index;
+            $indexDefinitions[] = '  ' . (string) $index;
         }
 
         $foreignKeyDefinitions = [];
         foreach ($this->getForeignKeys() as $foreignKey) {
-            $foreignKeyDefinitions[] = '  ' . (string)$foreignKey;
+            $foreignKeyDefinitions[] = '  ' . (string) $foreignKey;
         }
 
         $tableOptions = array_filter(
@@ -511,7 +522,7 @@ SQL;
                 $this->hasEngine() ? 'ENGINE = ' . strtoupper($this->getEngine()) : null,
                 $this->hasDefaultCollation() ? "DEFAULT COLLATE = '" . $this->getDefaultCollation() . "'" : null,
                 $this->hasRowFormat() ? 'ROW_FORMAT = ' . strtoupper($this->getRowFormat()) : null,
-                $this->hasComment() ? "COMMENT = '" . addslashes($this->getComment()) . "'" : null
+                $this->hasComment() ? "COMMENT = '" . addslashes($this->getComment()) . "'" : null,
             ]
         );
 
@@ -539,7 +550,7 @@ SQL;
             array_filter(
                 [
                     $dropDDL,
-                    $createDDL
+                    $createDDL,
                 ]
             )
         );

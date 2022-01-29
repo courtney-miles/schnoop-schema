@@ -1,25 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 class ForeignKeyColumn implements ForeignKeyColumnInterface
 {
     /**
-     * Column name
+     * Column name.
+     *
      * @var
      */
     protected $columnName;
 
     /**
      * Reference column name.
+     *
      * @var
      */
     protected $referenceColumnName;
 
     /**
      * ForeignKeyColumn constructor.
-     * @param string $columnName Name of indexed column.
-     * @param string $referenceColumnName Name of reference column.
+     *
+     * @param string $columnName name of indexed column
+     * @param string $referenceColumnName name of reference column
      */
     public function __construct($columnName, $referenceColumnName)
     {

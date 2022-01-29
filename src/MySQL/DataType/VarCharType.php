@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class VarCharType extends AbstractCharType
 {
-    const MAX_LENGTH = 65535;
+    public const MAX_LENGTH = 65535;
 
     /**
      * {@inheritdoc}

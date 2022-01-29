@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Table;
 
+use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ForeignKeyInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\UniqueIndex;
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
 use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\Table;
 
 class TableTest extends SchnoopSchemaTestCase
 {
@@ -30,7 +32,7 @@ class TableTest extends SchnoopSchemaTestCase
         );
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame($this->name, $this->table->getName());
 
@@ -60,7 +62,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $this->table->getDropPolicy());
     }
 
-    public function testSetNewName()
+    public function testSetNewName(): void
     {
         $newName = 'new_table_name';
         $this->table->setName($newName);
@@ -68,7 +70,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($newName, $this->table->getName());
     }
 
-    public function testSetDatabaseName()
+    public function testSetDatabaseName(): void
     {
         $databaseName = 'schnoop_db';
         $this->table->setDatabaseName($databaseName);
@@ -77,7 +79,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($databaseName, $this->table->getDatabaseName());
     }
 
-    public function testSetEngine()
+    public function testSetEngine(): void
     {
         $this->table->setEngine(Table::ENGINE_INNODB);
 
@@ -85,14 +87,14 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame(Table::ENGINE_INNODB, $this->table->getEngine());
     }
 
-    public function testSetEngineForcesCase()
+    public function testSetEngineForcesCase(): void
     {
         $this->table->setEngine('InnoDB');
 
         $this->assertSame(Table::ENGINE_INNODB, $this->table->getEngine());
     }
 
-    public function testSetDefaultCollation()
+    public function testSetDefaultCollation(): void
     {
         $defaultCollation = 'utf8mb4_general_ci';
 
@@ -102,7 +104,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($defaultCollation, $this->table->getDefaultCollation());
     }
 
-    public function testSetRowFormat()
+    public function testSetRowFormat(): void
     {
         $this->table->setRowFormat(Table::ROW_FORMAT_COMPACT);
 
@@ -110,14 +112,14 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame(Table::ROW_FORMAT_COMPACT, $this->table->getRowFormat());
     }
 
-    public function testSetRowFormatForcesCase()
+    public function testSetRowFormatForcesCase(): void
     {
         $this->table->setRowFormat('ComPacT');
 
         $this->assertSame(Table::ROW_FORMAT_COMPACT, $this->table->getRowFormat());
     }
 
-    public function testSetComment()
+    public function testSetComment(): void
     {
         $comment = 'Schnoop comment';
         $this->table->setComment($comment);
@@ -126,7 +128,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($comment, $this->table->getComment());
     }
 
-    public function testUndefinedColumn()
+    public function testUndefinedColumn(): void
     {
         $columnName = 'schnoop_col';
 
@@ -134,7 +136,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertNull($this->table->getColumn($columnName));
     }
 
-    public function testAddColumn()
+    public function testAddColumn(): void
     {
         $columnName = 'schnoop_col';
         $columnDDL = '_COL_DDL_';
@@ -155,21 +157,21 @@ class TableTest extends SchnoopSchemaTestCase
     /**
      * @depends testAddColumn
      */
-    public function testSetColumns()
+    public function testSetColumns(): void
     {
         $columnNames = [
             'schnoop_col1',
-            'schnoop_col2'
+            'schnoop_col2',
         ];
 
         $columnDDLs = [
             '_COL_DDL_1_',
-            '_COL_DDL_2_'
+            '_COL_DDL_2_',
         ];
 
         $mockColumns = [
             $this->createMockColumn($columnNames[0], $columnDDLs[0]),
-            $this->createMockColumn($columnNames[1], $columnDDLs[1])
+            $this->createMockColumn($columnNames[1], $columnDDLs[1]),
         ];
 
         $this->table->setColumns($mockColumns);
@@ -178,7 +180,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($columnNames, $this->table->getColumnList());
     }
 
-    public function testUndefinedConstraint()
+    public function testUndefinedConstraint(): void
     {
         $constraintName = 'schnoop_idx';
 
@@ -186,7 +188,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertNull($this->table->getIndex($constraintName));
     }
 
-    public function testAddIndex()
+    public function testAddIndex(): void
     {
         $indexName = 'schnoop_idx';
         $indexDDL = '_IDX_DDL_';
@@ -207,21 +209,21 @@ class TableTest extends SchnoopSchemaTestCase
     /**
      * @depends testAddIndex
      */
-    public function testSetIndexes()
+    public function testSetIndexes(): void
     {
         $indexNames = [
             'schnoop_idx1',
-            'schnoop_idx2'
+            'schnoop_idx2',
         ];
 
         $indexDDLs = [
             '_IDX_DDL_1_',
-            '_IDX_DDL_2_'
+            '_IDX_DDL_2_',
         ];
 
         $mockIndexes = [
             $this->createMockIndex($indexNames[0], $indexDDLs[0]),
-            $this->createMockIndex($indexNames[1], $indexDDLs[1])
+            $this->createMockIndex($indexNames[1], $indexDDLs[1]),
         ];
 
         $this->table->setIndexes($mockIndexes);
@@ -230,7 +232,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($indexNames, $this->table->getIndexList());
     }
 
-    public function testAddPrimaryKey()
+    public function testAddPrimaryKey(): void
     {
         $mockPrimaryKey = $this->createMock(UniqueIndex::class);
         $mockPrimaryKey->method('getName')->willReturn('primary');
@@ -240,7 +242,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($mockPrimaryKey, $this->table->getPrimaryKey());
     }
 
-    public function testAddForeignKey()
+    public function testAddForeignKey(): void
     {
         $foreignKeyName = 'schnoop_fk';
         $foreignKeyDDL = '_FK_DDL_';
@@ -261,21 +263,21 @@ class TableTest extends SchnoopSchemaTestCase
     /**
      * @depends testAddForeignKey
      */
-    public function testSetForeignKey()
+    public function testSetForeignKey(): void
     {
         $foreignKeyNames = [
             'schnoop_fk1',
-            'schnoop_fk2'
+            'schnoop_fk2',
         ];
 
         $foreignKeyDDLs = [
             '_FK_DDL_1_',
-            '_FK_DDL_2_'
+            '_FK_DDL_2_',
         ];
 
         $mockForeignKeys = [
             $this->createMockForeignKey($foreignKeyNames[0], $foreignKeyDDLs[0]),
-            $this->createMockForeignKey($foreignKeyNames[1], $foreignKeyDDLs[1])
+            $this->createMockForeignKey($foreignKeyNames[1], $foreignKeyDDLs[1]),
         ];
 
         $this->table->setForeignKeys($mockForeignKeys);
@@ -284,14 +286,14 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($foreignKeyNames, $this->table->getForeignKeyList());
     }
 
-    public function testSetUseFullyQualifiedName()
+    public function testSetUseFullyQualifiedName(): void
     {
         $this->table->setUseFullyQualifiedName(true);
 
         $this->assertTrue($this->table->useFullyQualifiedName());
     }
 
-    public function testSetDelimiter()
+    public function testSetDelimiter(): void
     {
         $newDelimiter = '$$';
         $this->table->setDelimiter($newDelimiter);
@@ -299,7 +301,7 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($newDelimiter, $this->table->getDelimiter());
     }
 
-    public function testSetDropPolicy()
+    public function testSetDropPolicy(): void
     {
         $this->table->setDropPolicy(DroppableInterface::DDL_DROP_POLICY_DROP_IF_EXISTS);
 
@@ -308,15 +310,15 @@ class TableTest extends SchnoopSchemaTestCase
 
     /**
      * @dataProvider getDDLTestData
-     * @param Table $table
+     *
      * @param string $expectedDDL
      */
-    public function testDDL(Table $table, $expectedDDL)
+    public function testDDL(Table $table, $expectedDDL): void
     {
         $this->assertSame($expectedDDL, $table->getCreateStatement());
     }
 
-    public function testToStringAliasesGetDDL()
+    public function testToStringAliasesGetDDL(): void
     {
         $ddl = '__ddl__';
         $mockTable = $this->getMockBuilder(Table::class)
@@ -329,10 +331,10 @@ class TableTest extends SchnoopSchemaTestCase
             ->method('getCreateStatement')
             ->willReturn($ddl);
 
-        $this->assertSame($ddl, (string)$mockTable);
+        $this->assertSame($ddl, (string) $mockTable);
     }
 
-    public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
+    public function testExceptionOnUseFQNWhenDatabaseNameNotSet(): void
     {
         $this->expectExceptionMessage(
             'Unable to create DDL with fully-qualified-name because the database name has not been set.'
@@ -346,6 +348,7 @@ class TableTest extends SchnoopSchemaTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function getDDLTestData()
@@ -354,17 +357,17 @@ class TableTest extends SchnoopSchemaTestCase
 
         $mockColumns = [
             $this->createMockColumn('schnoop_col1', '_COL_DDL_1_'),
-            $this->createMockColumn('schnoop_col2', '_COL_DDL_2_')
+            $this->createMockColumn('schnoop_col2', '_COL_DDL_2_'),
         ];
 
         $mockIndexes = [
             $this->createMockIndex('schnoop_idx1', '_IDX_DDL_1_'),
-            $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_')
+            $this->createMockIndex('schnoop_idx2', '_IDX_DDL_2_'),
         ];
 
         $mockForeignKeys = [
             $this->createMockForeignKey('schnoop_fk1', '_FK_DDL_1_'),
-            $this->createMockForeignKey('schnoop_fk2', '_FK_DDL_2_')
+            $this->createMockForeignKey('schnoop_fk2', '_FK_DDL_2_'),
         ];
 
         return [
@@ -471,6 +474,7 @@ SQL
      * @param bool $useFQN
      * @param string $delimiter
      * @param string $dropPolicy
+     *
      * @return Table
      */
     protected function createTable(

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\MySQL\DataType\BigIntType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\BigIntType;
 
 class BigIntTypeTest extends IntTypeTestCase
 {
@@ -30,7 +32,7 @@ class BigIntTypeTest extends IntTypeTestCase
         return new BigIntType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_BIGINT, $this->bigIntType->getType());
@@ -38,7 +40,7 @@ class BigIntTypeTest extends IntTypeTestCase
         $this->assertSame(BigIntType::MAX_SIGNED, $this->bigIntType->getMaxRange());
     }
 
-    public function testSetUnsigned()
+    public function testSetUnsigned(): void
     {
         $this->bigIntType->setSigned(false);
 
@@ -49,6 +51,7 @@ class BigIntTypeTest extends IntTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -62,12 +65,12 @@ class BigIntTypeTest extends IntTypeTestCase
         return [
             [
                 'BIGINT',
-                $bigIntTypeDefault
+                $bigIntTypeDefault,
             ],
             [
                 'BIGINT(3) UNSIGNED',
-                $BigIntTypeExtra
-            ]
+                $BigIntTypeExtra,
+            ],
         ];
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class TinyIntType extends AbstractIntType
 {
-    const MIN_SIGNED = -128;
-    const MAX_SIGNED = 127;
-    const MIN_UNSIGNED = 0;
-    const MAX_UNSIGNED = 255;
+    public const MIN_SIGNED = -128;
+    public const MAX_SIGNED = 127;
+    public const MIN_UNSIGNED = 0;
+    public const MAX_UNSIGNED = 255;
 
     /**
      * {@inheritdoc}

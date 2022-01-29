@@ -1,13 +1,14 @@
 <?php
 
-namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
+declare(strict_types=1);
 
-use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
+namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
 class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterface
 {
     /**
      * Routine parameters.
+     *
      * @var ProcedureParameterInterface[]
      */
     protected $parameters = [];
@@ -31,7 +32,7 @@ class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterf
     /**
      * {@inheritdoc}
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
     }
@@ -39,7 +40,7 @@ class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterf
     /**
      * {@inheritdoc}
      */
-    public function addParameter(ProcedureParameterInterface $parameter)
+    public function addParameter(ProcedureParameterInterface $parameter): void
     {
         $this->parameters[] = $parameter;
     }
@@ -93,7 +94,7 @@ SQL;
                         $this->makeCharacteristicsDDL(),
                         'BEGIN',
                         $this->body,
-                        'END' . $this->delimiter
+                        'END' . $this->delimiter,
                     ]
                 )
             );
@@ -105,7 +106,7 @@ SQL;
                     $setSqlMode,
                     $dropDDL,
                     $createDDL,
-                    $revertSqlMode
+                    $revertSqlMode,
                 ]
             )
         );
@@ -123,10 +124,12 @@ SQL;
 
     /**
      * Make the portion of DDL for describing the parameters.
-     * @param string $separator String to apply between parameters.
-     * @return string Parameters DDL.
+     *
+     * @param string $separator string to apply between parameters
+     *
+     * @return string parameters DDL
      */
-    protected function makeParametersDDL($separator = " ")
+    protected function makeParametersDDL($separator = ' ')
     {
         $params = [];
 

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractIntType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractIntTypeTest extends IntTypeTestCase
@@ -27,7 +29,7 @@ class AbstractIntTypeTest extends IntTypeTestCase
         return $this->abstractIntType;
     }
 
-    public function testSetUnsigned()
+    public function testSetUnsigned(): void
     {
         $this->abstractIntType->setSigned(false);
 
@@ -36,6 +38,7 @@ class AbstractIntTypeTest extends IntTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -49,17 +52,18 @@ class AbstractIntTypeTest extends IntTypeTestCase
         return [
             [
                 'FOO',
-                $abstractIntType
+                $abstractIntType,
             ],
             [
                 'FOO(3) UNSIGNED',
-                $abstractIntTypeExtra
-            ]
+                $abstractIntTypeExtra,
+            ],
         ];
     }
 
     /**
      * @param string $type
+     *
      * @return AbstractIntType|MockObject
      */
     protected function createMockAbstractIntType($type)

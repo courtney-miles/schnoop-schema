@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
@@ -23,7 +25,7 @@ abstract class AbstractTextType implements TextTypeInterface
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -36,7 +38,7 @@ abstract class AbstractTextType implements TextTypeInterface
             array_filter(
                 [
                     strtoupper($this->getType()),
-                    $this->hasCollation() ? "COLLATE '" . addslashes($this->getCollation()) . "'" : null
+                    $this->hasCollation() ? "COLLATE '" . addslashes($this->getCollation()) . "'" : null,
                 ]
             )
         );

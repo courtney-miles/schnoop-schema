@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\OptionsTypeInterface;
@@ -16,7 +18,7 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
      */
     abstract protected function createOptionsType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $optionsType = $this->getOptionsType();
 
@@ -48,9 +50,8 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
 
     /**
      * @depends testSetOptions
-     * @param array $testData
      */
-    public function testAddOption(array $testData)
+    public function testAddOption(array $testData): void
     {
         /** @var OptionsTypeInterface $optionsType */
         list($optionsType, $presetOptions) = $testData;
@@ -68,7 +69,7 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
         }
     }
 
-    public function testSetCollation()
+    public function testSetCollation(): void
     {
         $collation = 'utf8mb4_general_ci';
         $optionsType = $this->getOptionsType();
@@ -78,7 +79,7 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
         $this->assertSame($collation, $optionsType->getCollation());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $optionsType = $this->getOptionsType();
 
@@ -87,7 +88,7 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
 
     public function DDLProvider()
     {
-        $simpleOptions = array('abc', '123');
+        $simpleOptions = ['abc', '123'];
 
         $optionsType = $this->createOptionsType();
         $optionsType->setOptions($simpleOptions);
@@ -95,8 +96,8 @@ abstract class OptionsTypeTestCase extends DataTypeTestCase
         return [
             [
                 strtoupper($optionsType->getType()) . "('abc','123')",
-                $optionsType
-            ]
+                $optionsType,
+            ],
         ];
     }
 }

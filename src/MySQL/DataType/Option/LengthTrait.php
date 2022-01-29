@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
 trait LengthTrait
@@ -28,8 +30,8 @@ trait LengthTrait
     /**
      * @see LengthInterface::setLength()
      */
-    public function setLength($length)
+    public function setLength($length): void
     {
-        $this->length = (int)$length;
+        $this->length = (int) $length;
     }
 }

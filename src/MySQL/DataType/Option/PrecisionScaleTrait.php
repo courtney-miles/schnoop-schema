@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 19/06/16
- * Time: 9:17 AM
+ * Time: 9:17 AM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
@@ -33,7 +35,7 @@ trait PrecisionScaleTrait
      */
     public function hasPrecision()
     {
-        return $this->precision !== null;
+        return null !== $this->precision;
     }
 
     /**
@@ -55,9 +57,9 @@ trait PrecisionScaleTrait
     /**
      * @see PrecisionScaleInterface::setPrecisionScale()
      */
-    public function setPrecisionScale($precision, $scale = 0)
+    public function setPrecisionScale($precision, $scale = 0): void
     {
-        $this->precision = $precision !== null ? (int)$precision : null;
-        $this->scale = $scale === null ? 0 : $scale;
+        $this->precision = null !== $precision ? (int) $precision : null;
+        $this->scale = null === $scale ? 0 : $scale;
     }
 }

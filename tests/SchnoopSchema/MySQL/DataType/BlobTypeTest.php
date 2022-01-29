@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BlobType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 
 class BlobTypeTest extends DataTypeTestCase
 {
@@ -20,13 +22,13 @@ class BlobTypeTest extends DataTypeTestCase
         $this->blobType = new BlobType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame(DataTypeInterface::TYPE_BLOB, $this->blobType->getType());
         $this->assertFalse($this->blobType->doesAllowDefault());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $this->assertSame('123', $this->blobType->cast(123));
     }
@@ -38,8 +40,8 @@ class BlobTypeTest extends DataTypeTestCase
         return [
             [
                 'BLOB',
-                $blobType
-            ]
+                $blobType,
+            ],
         ];
     }
 }

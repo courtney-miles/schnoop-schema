@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
@@ -16,7 +18,7 @@ abstract class TimeTypeTestCase extends DataTypeTestCase
      */
     abstract protected function createTimeType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $timeType = $this->getTimeType();
 
@@ -25,7 +27,7 @@ abstract class TimeTypeTestCase extends DataTypeTestCase
         $this->assertTrue($timeType->doesAllowDefault());
     }
 
-    public function testSetPrecision()
+    public function testSetPrecision(): void
     {
         $precision = 2;
         $timeType = $this->getTimeType();
@@ -35,7 +37,7 @@ abstract class TimeTypeTestCase extends DataTypeTestCase
         $this->assertSame($precision, $timeType->getPrecision());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $timeType = $this->getTimeType();
 
@@ -53,12 +55,12 @@ abstract class TimeTypeTestCase extends DataTypeTestCase
         return [
             [
                 strtoupper($timeType->getType()),
-                $timeType
+                $timeType,
             ],
             [
                 strtoupper($timeType->getType()) . "($precision)",
-                $timeTypePrecision
-            ]
+                $timeTypePrecision,
+            ],
         ];
     }
 }

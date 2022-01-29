@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
@@ -19,7 +21,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         return $this->getIndex();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
 
@@ -34,7 +36,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertNull($index->getComment(), 'Assertion on ' . get_class($index));
     }
 
-    public function testSetIndexedColumns()
+    public function testSetIndexedColumns(): void
     {
         $indexedColumnA = $this->createMock(IndexedColumn::class);
         $indexedColumnA->method('getColumnName')->willReturn('col_a');
@@ -43,7 +45,7 @@ abstract class IndexTestCase extends ConstraintTestCase
 
         $indexedColumns = [
             $indexedColumnA,
-            $indexedColumnB
+            $indexedColumnB,
         ];
 
         $index = $this->getConstraint();
@@ -53,7 +55,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertSame($indexedColumns, $index->getIndexedColumns());
     }
 
-    public function testSetIndexedColumnsReplacesPreviouslySetColumns()
+    public function testSetIndexedColumnsReplacesPreviouslySetColumns(): void
     {
         $indexedColumnA = $this->createMock(IndexedColumn::class);
         $indexedColumnA->method('getColumnName')->willReturn('col_a');
@@ -64,12 +66,12 @@ abstract class IndexTestCase extends ConstraintTestCase
 
         $indexedColumnsFirstSet = [
             $indexedColumnA,
-            $indexedColumnB
+            $indexedColumnB,
         ];
 
         $indexedColumnsSecondSet = [
             $indexedColumnB,
-            $indexedColumnC
+            $indexedColumnC,
         ];
 
         $index = $this->getConstraint();
@@ -79,7 +81,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertSame($indexedColumnsSecondSet, $index->getIndexedColumns());
     }
 
-    public function testAddIndexedColumns()
+    public function testAddIndexedColumns(): void
     {
         $indexedColumnA = $this->createMock(IndexedColumn::class);
         $indexedColumnA->method('getColumnName')->willReturn('col_a');
@@ -88,7 +90,7 @@ abstract class IndexTestCase extends ConstraintTestCase
 
         $indexedColumns = [
             $indexedColumnA,
-            $indexedColumnB
+            $indexedColumnB,
         ];
 
         $index = $this->getConstraint();
@@ -99,7 +101,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertSame($indexedColumns, $index->getIndexedColumns());
     }
 
-    public function testGetIndexedColumnNames()
+    public function testGetIndexedColumnNames(): void
     {
         $indexedColumnA = $this->createMock(IndexedColumn::class);
         $indexedColumnA->method('getColumnName')->willReturn('col_a');
@@ -108,7 +110,7 @@ abstract class IndexTestCase extends ConstraintTestCase
 
         $indexedColumns = [
             $indexedColumnA,
-            $indexedColumnB
+            $indexedColumnB,
         ];
 
         $index = $this->getConstraint();
@@ -117,7 +119,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertSame(['col_a', 'col_b'], $index->getIndexedColumnNames());
     }
 
-    public function testSetComment()
+    public function testSetComment(): void
     {
         $comment = 'Schnoop comment';
         $index = $this->getIndex();
@@ -127,7 +129,7 @@ abstract class IndexTestCase extends ConstraintTestCase
         $this->assertSame($comment, $index->getComment(), 'Assertion on ' . get_class($index));
     }
 
-    protected function indexDDLAsserts($ddlPrefix)
+    protected function indexDDLAsserts($ddlPrefix): void
     {
         $index = $this->getIndex();
 
@@ -138,7 +140,7 @@ abstract class IndexTestCase extends ConstraintTestCase
 
         $indexedColumns = [
             $indexedColumnA,
-            $indexedColumnB
+            $indexedColumnB,
         ];
 
         $index->setIndexedColumns($indexedColumns);
@@ -150,7 +152,6 @@ abstract class IndexTestCase extends ConstraintTestCase
 {$ddlPrefix} (`col_a`,`col_b`) COMMENT '$comment'
 SQL;
 
-
-        $this->assertSame($expectedDDL, (string)$index);
+        $this->assertSame($expectedDDL, (string) $index);
     }
 }

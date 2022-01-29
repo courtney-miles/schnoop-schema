@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\FloatType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 
 class FloatTypeTest extends NumericPointTypeTestCase
 {
@@ -30,13 +32,13 @@ class FloatTypeTest extends NumericPointTypeTestCase
         return new FloatType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_FLOAT, $this->floatType->getType());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $floatType = new FloatType();
 

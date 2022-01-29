@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\SpatialIndex;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
 
 class SpatialIndexTest extends IndexTestCase
 {
@@ -24,7 +26,7 @@ class SpatialIndexTest extends IndexTestCase
         $this->spatialIndex = new SpatialIndex($this->constraintName);
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
         $this->indexDDLAsserts("SPATIAL INDEX `{$this->constraintName}`");
     }

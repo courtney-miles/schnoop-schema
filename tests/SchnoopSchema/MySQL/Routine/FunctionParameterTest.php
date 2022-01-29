@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -53,8 +55,8 @@ class FunctionParameterTest extends RoutineParameterTestCase
         return $this->mockDataType;
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
-        $this->assertSame("`param_name` DT_DDL", (string)$this->functionParameter);
+        $this->assertSame('`param_name` DT_DDL', (string) $this->functionParameter);
     }
 }

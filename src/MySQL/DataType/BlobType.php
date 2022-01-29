@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class BlobType extends AbstractBlobType
 {
-    const LENGTH = 65535;
+    public const LENGTH = 65535;
 
     /**
      * {@inheritdoc}

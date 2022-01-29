@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -54,22 +56,22 @@ class ProcedureParameterTest extends RoutineParameterTestCase
         return $this->mockDataType;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
 
         $this->assertSame(ProcedureParameterInterface::DIRECTION_IN, $this->procedureParameter->getDirection());
     }
 
-    public function testSetDirection()
+    public function testSetDirection(): void
     {
         $this->procedureParameter->setDirection(ProcedureParameterInterface::DIRECTION_INOUT);
 
         $this->assertSame(ProcedureParameterInterface::DIRECTION_INOUT, $this->procedureParameter->getDirection());
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
-        $this->assertSame("IN `param_name` DT_DDL", (string)$this->procedureParameter);
+        $this->assertSame('IN `param_name` DT_DDL', (string) $this->procedureParameter);
     }
 }

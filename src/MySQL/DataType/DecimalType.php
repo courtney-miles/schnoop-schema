@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class DecimalType extends AbstractNumericPointType
@@ -17,6 +19,6 @@ class DecimalType extends AbstractNumericPointType
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 }

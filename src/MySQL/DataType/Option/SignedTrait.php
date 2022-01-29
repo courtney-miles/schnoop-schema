@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
 trait SignedTrait
@@ -20,8 +22,8 @@ trait SignedTrait
     /**
      * @see SignedInterface::setSigned()
      */
-    public function setSigned($signed)
+    public function setSigned($signed): void
     {
-        $this->signed = (bool)$signed;
+        $this->signed = (bool) $signed;
     }
 }

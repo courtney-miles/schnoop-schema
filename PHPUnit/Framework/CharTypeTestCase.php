@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\CharTypeInterface;
@@ -18,7 +20,7 @@ abstract class CharTypeTestCase extends DataTypeTestCase
 
     abstract protected function getInitialLength();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $charType = $this->getCharType();
 
@@ -31,7 +33,7 @@ abstract class CharTypeTestCase extends DataTypeTestCase
         $this->assertTrue($charType->doesAllowDefault());
     }
 
-    public function testSetNewLength()
+    public function testSetNewLength(): void
     {
         $charType = $this->getCharType();
         $charType->setLength(12);
@@ -39,7 +41,7 @@ abstract class CharTypeTestCase extends DataTypeTestCase
         $this->assertSame(12, $charType->getLength());
     }
 
-    public function testSetCollation()
+    public function testSetCollation(): void
     {
         $collation = 'utf8mb4_general_ci';
         $charType = $this->getCharType();
@@ -49,7 +51,7 @@ abstract class CharTypeTestCase extends DataTypeTestCase
         $this->assertSame($collation, $charType->getCollation());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $charType = $this->getCharType();
 
@@ -68,12 +70,12 @@ abstract class CharTypeTestCase extends DataTypeTestCase
         return [
             [
                 strtoupper($charType->getType()) . "($length)",
-                $charType
+                $charType,
             ],
             [
                 strtoupper($charType->getType()) . "($length) COLLATE '$collation'",
-                $charTypeCollate
-            ]
+                $charTypeCollate,
+            ],
         ];
     }
 }

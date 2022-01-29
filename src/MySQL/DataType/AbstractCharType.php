@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 20/06/16
- * Time: 4:29 PM
+ * Time: 4:29 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
@@ -20,7 +22,8 @@ abstract class AbstractCharType implements CharTypeInterface
 
     /**
      * AbstractCharType constructor.
-     * @param int $length Character length.
+     *
+     * @param int $length character length
      */
     public function __construct($length)
     {
@@ -32,7 +35,7 @@ abstract class AbstractCharType implements CharTypeInterface
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -53,7 +56,7 @@ abstract class AbstractCharType implements CharTypeInterface
             array_filter(
                 [
                     strtoupper($this->getType()) . ($this->hasLength() ? '(' . $this->getLength() . ')' : null),
-                    $this->hasCollation() ? "COLLATE '" . addslashes($this->getCollation()) . "'" : null
+                    $this->hasCollation() ? "COLLATE '" . addslashes($this->getCollation()) . "'" : null,
                 ]
             )
         );

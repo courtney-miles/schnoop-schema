@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\BinaryTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\BinaryTypeTestCase;
 
 class BinaryTypeTest extends BinaryTypeTestCase
 {
@@ -25,7 +27,7 @@ class BinaryTypeTest extends BinaryTypeTestCase
         return $this->binaryType;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame(DataTypeInterface::TYPE_BINARY, $this->binaryType->getType());
         $this->assertFalse($this->binaryType->hasLength());
@@ -35,6 +37,7 @@ class BinaryTypeTest extends BinaryTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -47,12 +50,12 @@ class BinaryTypeTest extends BinaryTypeTestCase
         return [
             [
                 'BINARY',
-                $binaryType
+                $binaryType,
             ],
             [
                 'BINARY(3)',
-                $binaryTypeExtra
-            ]
+                $binaryTypeExtra,
+            ],
         ];
     }
 }

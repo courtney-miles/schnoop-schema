@@ -1,16 +1,18 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 23/06/16
- * Time: 7:32 AM
+ * Time: 7:32 AM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class TinyBlobType extends AbstractBlobType
 {
-    const LENGTH = 255;
+    public const LENGTH = 255;
 
     /**
      * {@inheritdoc}

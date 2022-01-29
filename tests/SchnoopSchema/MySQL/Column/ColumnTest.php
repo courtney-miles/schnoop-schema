@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Column;
 
+use MilesAsylum\SchnoopSchema\MySQL\Column\Column;
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimestampType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TimeTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Exception\LogicException;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Column\Column;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericTypeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class ColumnTest extends SchnoopSchemaTestCase
@@ -37,7 +39,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->column = new Column($this->name, $this->dataType);
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame($this->name, $this->column->getName());
         $this->assertSame($this->dataType, $this->column->getDataType());
@@ -60,7 +62,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->isAutoIncrement());
     }
 
-    public function testInitialPropertiesWithNumericDataType()
+    public function testInitialPropertiesWithNumericDataType(): void
     {
         $dataType = $this->createMock(NumericTypeInterface::class);
         $dataType->method('doesAllowDefault')->willReturn(true);
@@ -69,7 +71,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertFalse($column->isAutoIncrement());
     }
 
-    public function testSetTableName()
+    public function testSetTableName(): void
     {
         $tableName = 'schnoop_tbl';
         $this->column->setTableName($tableName);
@@ -78,7 +80,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertSame($tableName, $this->column->getTableName());
     }
 
-    public function testSetDatabaseName()
+    public function testSetDatabaseName(): void
     {
         $databaseName = 'schnoop_db';
         $this->column->setDatabaseName($databaseName);
@@ -87,7 +89,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertSame($databaseName, $this->column->getDatabaseName());
     }
 
-    public function testSetNullable()
+    public function testSetNullable(): void
     {
         $this->column->setNullable(true);
         $this->assertTrue($this->column->hasDefault());
@@ -112,11 +114,11 @@ class ColumnTest extends SchnoopSchemaTestCase
         return $this->column;
     }
 
-    public function testSetDefaultArray()
+    public function testSetDefaultArray(): void
     {
         $defaultArray = [
             'foo',
-            'bar'
+            'bar',
         ];
 
         $this->dataType->method('cast')
@@ -129,9 +131,8 @@ class ColumnTest extends SchnoopSchemaTestCase
 
     /**
      * @depends testSetDefault
-     * @param Column $columnWithDefault
      */
-    public function testUnsetDefault(Column $columnWithDefault)
+    public function testUnsetDefault(Column $columnWithDefault): void
     {
         $columnWithDefault->unsetDefault();
 
@@ -139,7 +140,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($columnWithDefault->getDefault());
     }
 
-    public function testNotHasDefaultWhenNotAllowDefaultAndAllowNull()
+    public function testNotHasDefaultWhenNotAllowDefaultAndAllowNull(): void
     {
         $dataType = $this->createMock(DataTypeInterface::class);
         $dataType->method('doesAllowDefault')->willReturn(false);
@@ -150,9 +151,9 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->getDefault());
     }
 
-    public function testExceptionWhenSetDefaultWhenNotAllowed()
+    public function testExceptionWhenSetDefaultWhenNotAllowed(): void
     {
-        $this->expectExceptionMessage("Unable to set default value for the column. The data-type \"FOO\" does not support a default.");
+        $this->expectExceptionMessage('Unable to set default value for the column. The data-type "FOO" does not support a default.');
         $this->expectException(LogicException::class);
 
         /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
@@ -164,7 +165,6 @@ class ColumnTest extends SchnoopSchemaTestCase
         $mockDataType->method('getType')
             ->willReturn('FOO');
 
-
         $column = new Column(
             'foo',
             $mockDataType
@@ -173,7 +173,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $column->setDefault('foo');
     }
 
-    public function testExceptionWhenSetOnUpdateCurrentTimestapForUnsupportedDataType()
+    public function testExceptionWhenSetOnUpdateCurrentTimestapForUnsupportedDataType(): void
     {
         $this->expectExceptionMessage(
             'Data type "FOOTYPE" for column "schnoop_col" does not support setting current time on update.'
@@ -197,7 +197,7 @@ class ColumnTest extends SchnoopSchemaTestCase
      * Testing that no warning is triggered when setting default to null when a default is not allowed.
      * This is allowed to reduce the conditions in a column mapper.
      */
-    public function testSetDefaultNullOkWhenDefaultNotAllowed()
+    public function testSetDefaultNullOkWhenDefaultNotAllowed(): void
     {
         /** @var DataTypeInterface|PHPUnit_Framework_MockObject_MockObject $mockDataType */
         $mockDataType = $this->createMock(DataTypeInterface::class);
@@ -216,7 +216,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->column->getDefault());
     }
 
-    public function testSetOnUpdateCurrentTimestamp()
+    public function testSetOnUpdateCurrentTimestamp(): void
     {
         $mockTimeStamp = $this->createMock(TimestampType::class);
         $mockTimeStamp->method('doesAllowDefault')
@@ -227,7 +227,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertTrue($column->isOnUpdateCurrentTimestamp());
     }
 
-    public function testSetAutoIncrement()
+    public function testSetAutoIncrement(): void
     {
         $dataType = $this->createMock(NumericTypeInterface::class);
         $dataType->method('doesAllowDefault')->willReturn(true);
@@ -237,7 +237,7 @@ class ColumnTest extends SchnoopSchemaTestCase
         $this->assertTrue($column->isAutoIncrement());
     }
 
-    public function testExceptionSetAutoIncrementOnUnsupportedType()
+    public function testExceptionSetAutoIncrementOnUnsupportedType(): void
     {
         $this->expectExceptionMessage(
             'Unable to set auto-increment property on the column. Data-type "FOO" does not support an auto-incrementing value.'
@@ -254,7 +254,7 @@ class ColumnTest extends SchnoopSchemaTestCase
      * Specifically testing that no problem is reported when setting ZeroFill
      * to false even when the type does not support it.
      */
-    public function testNoWarningUnsetAutoIncrementOnUnsupportedType()
+    public function testNoWarningUnsetAutoIncrementOnUnsupportedType(): void
     {
         $this->column->setAutoIncrement(false);
         $this->assertFalse($this->column->isAutoIncrement());
@@ -272,9 +272,8 @@ class ColumnTest extends SchnoopSchemaTestCase
 
     /**
      * @depends testSetComment
-     * @param Column $columnWithComment
      */
-    public function testUnsetComment(Column $columnWithComment)
+    public function testUnsetComment(Column $columnWithComment): void
     {
         $columnWithComment->unsetComment();
 
@@ -284,15 +283,16 @@ class ColumnTest extends SchnoopSchemaTestCase
 
     /**
      * @dataProvider DDLProvider
+     *
      * @param $column
      * @param $expectedDDL
      */
-    public function testDDL(Column $column, $expectedDDL)
+    public function testDDL(Column $column, $expectedDDL): void
     {
         $this->assertSame($expectedDDL, $column->getDDL());
     }
 
-    public function testToStringAliasesGetDDL()
+    public function testToStringAliasesGetDDL(): void
     {
         $ddl = '__dll__';
 
@@ -300,7 +300,7 @@ class ColumnTest extends SchnoopSchemaTestCase
             ->setConstructorArgs(
                 [
                     $this->name,
-                    $this->dataType
+                    $this->dataType,
                 ]
             )->setMethods(
                 ['getDDL']
@@ -310,11 +310,12 @@ class ColumnTest extends SchnoopSchemaTestCase
             ->method('getDDL')
             ->willReturn($ddl);
 
-        $this->assertSame($ddl, (string)$mockColumn);
+        $this->assertSame($ddl, (string) $mockColumn);
     }
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -330,7 +331,7 @@ class ColumnTest extends SchnoopSchemaTestCase
 
         $defaultArray = [
             'foo',
-            'bar'
+            'bar',
         ];
 
         $mockSetDataType = $this->createMock(SetType::class);
@@ -339,16 +340,16 @@ class ColumnTest extends SchnoopSchemaTestCase
         $mockSetDataType->method('cast')
             ->will($this->onConsecutiveCalls($defaultArray[0], $defaultArray[1]));
         $mockSetDataType->method('quote')
-            ->will($this->onConsecutiveCalls("'" . $defaultArray[0] . "'", "'". $defaultArray[1] . "'"));
+            ->will($this->onConsecutiveCalls("'" . $defaultArray[0] . "'", "'" . $defaultArray[1] . "'"));
 
-        $mockTimeType =  $this->createMock(TimeTypeInterface::class);
+        $mockTimeType = $this->createMock(TimeTypeInterface::class);
         $mockTimeType->method('doesAllowDefault')->willReturn(true);
         $mockTimeType->method('__toString')->willReturn('_DATATYPE_DDL_');
         $mockTimeType->method('cast')
             ->willReturn($default);
         $mockTimeType->method('quote')->willReturn($default);
 
-        $mockTimeTypeWithPrecision =  $this->createMock(TimeTypeInterface::class);
+        $mockTimeTypeWithPrecision = $this->createMock(TimeTypeInterface::class);
         $mockTimeTypeWithPrecision->method('doesAllowDefault')->willReturn(true);
         $mockTimeTypeWithPrecision->method('hasPrecision')->willReturn(true);
         $mockTimeTypeWithPrecision->method('getPrecision')->willReturn($timePrecision);
@@ -441,19 +442,20 @@ SQL
                 <<< SQL
 `{$this->name}` _DATATYPE_DDL_ NOT NULL DEFAULT CURRENT_TIMESTAMP({$timePrecision}) ON UPDATE CURRENT_TIMESTAMP({$timePrecision})
 SQL
-            ]
+            ],
         ];
     }
 
     /**
      * @param string $name
-     * @param DataTypeInterface $dataType
      * @param bool $nullable
      * @param mixed $default
      * @param $onUpdateCurrentTimestamp
      * @param bool|null $autoIncrement
      * @param string $comment
+     *
      * @return Column
+     *
      * @internal param bool|null $zeroFill
      */
     protected function createColumn(
@@ -470,7 +472,7 @@ SQL
         $column->setDefault($default);
         $column->setOnUpdateCurrentTimestamp($onUpdateCurrentTimestamp);
 
-        if ($autoIncrement !== null) {
+        if (null !== $autoIncrement) {
             $column->setAutoIncrement($autoIncrement);
         }
 

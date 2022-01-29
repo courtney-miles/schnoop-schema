@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,7 @@ abstract class RoutineTestCase extends TestCase
 
     abstract protected function getExpectedName();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $routine = $this->getRoutine();
 
@@ -45,7 +46,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $routine->getDropPolicy());
     }
 
-    public function testSetDatabaseName()
+    public function testSetDatabaseName(): void
     {
         $databaseName = 'schnoop_db';
         $this->getRoutine()->setDatabaseName($databaseName);
@@ -54,7 +55,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame($databaseName, $this->getRoutine()->getDatabaseName());
     }
 
-    public function testSetDefiner()
+    public function testSetDefiner(): void
     {
         $definer = 'me@example';
         $routine = $this->getRoutine();
@@ -63,7 +64,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame($definer, $routine->getDefiner());
     }
 
-    public function testSetComment()
+    public function testSetComment(): void
     {
         $comment = 'Routine comment.';
         $routine = $this->getRoutine();
@@ -73,7 +74,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame($comment, $routine->getComment());
     }
 
-    public function testSetDeterministic()
+    public function testSetDeterministic(): void
     {
         $routine = $this->getRoutine();
         $routine->setDeterministic(true);
@@ -81,7 +82,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertTrue($routine->isDeterministic());
     }
 
-    public function testSetContains()
+    public function testSetContains(): void
     {
         $routine = $this->getRoutine();
         $routine->setDataAccess(RoutineInterface::DATA_ACCESS_MODIFIES_SQL_DATA);
@@ -89,7 +90,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame(RoutineInterface::DATA_ACCESS_MODIFIES_SQL_DATA, $routine->getDataAccess());
     }
 
-    public function testSetSqlSecurity()
+    public function testSetSqlSecurity(): void
     {
         $routine = $this->getRoutine();
         $routine->setSqlSecurity(RoutineInterface::SECURITY_INVOKER);
@@ -97,9 +98,9 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame(RoutineInterface::SECURITY_INVOKER, $routine->getSqlSecurity());
     }
 
-    public function testSetBody()
+    public function testSetBody(): void
     {
-        $body = "Hello world.";
+        $body = 'Hello world.';
         $routine = $this->getRoutine();
         $routine->setBody($body);
 
@@ -120,9 +121,8 @@ abstract class RoutineTestCase extends TestCase
 
     /**
      * @depends testSetSQLMode
-     * @param RoutineInterface $routineWithSqlMode
      */
-    public function testUnsetSqlMode(RoutineInterface $routineWithSqlMode)
+    public function testUnsetSqlMode(RoutineInterface $routineWithSqlMode): void
     {
         $routineWithSqlMode->unsetSqlMode();
 
@@ -130,7 +130,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertNull($routineWithSqlMode->getSqlMode());
     }
 
-    public function testSetUseFullyQualifiedName()
+    public function testSetUseFullyQualifiedName(): void
     {
         $routine = $this->getRoutine();
         $routine->setUseFullyQualifiedName(true);
@@ -138,7 +138,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertTrue($routine->useFullyQualifiedName());
     }
 
-    public function testSetDDLDelimiter()
+    public function testSetDDLDelimiter(): void
     {
         $routine = $this->getRoutine();
         $routine->setDelimiter('@@');
@@ -146,7 +146,7 @@ abstract class RoutineTestCase extends TestCase
         $this->assertSame('@@', $routine->getDelimiter());
     }
 
-    public function testSetDDLDropPolicy()
+    public function testSetDDLDropPolicy(): void
     {
         $routine = $this->getRoutine();
         $routine->setDropPolicy(RoutineInterface::DDL_DROP_POLICY_DROP_IF_EXISTS);

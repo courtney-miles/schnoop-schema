@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\NumericPointTypeInterface;
@@ -16,7 +18,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
      */
     abstract protected function createNumericPointType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $numericPointType = $this->getNumericPointType();
 
@@ -31,7 +33,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertFalse($numericPointType->isZeroFill());
     }
 
-    public function testSetSigned()
+    public function testSetSigned(): void
     {
         $numericPointType = $this->getNumericPointType();
         $numericPointType->setSigned(false);
@@ -39,7 +41,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertFalse($numericPointType->isSigned());
     }
 
-    public function testSetPrecision()
+    public function testSetPrecision(): void
     {
         $numericPointType = $this->getNumericPointType();
 
@@ -53,7 +55,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertSame(0, $numericPointType->getScale());
     }
 
-    public function testSetPrecisionScale()
+    public function testSetPrecisionScale(): void
     {
         $numericPointType = $this->getNumericPointType();
 
@@ -69,7 +71,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertSame($scale, $numericPointType->getScale());
     }
 
-    public function testSetZeroFill()
+    public function testSetZeroFill(): void
     {
         $numericPointType = $this->getNumericPointType();
         $numericPointType->setZeroFill(true);
@@ -77,7 +79,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertTrue($numericPointType->isZeroFill());
     }
 
-    public function testMinRangeSigned()
+    public function testMinRangeSigned(): void
     {
         $numericPointType = $this->getNumericPointType();
         $numericPointType->setPrecisionScale(6, 2);
@@ -85,7 +87,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertSame('-9999.99', $numericPointType->getMinRange());
     }
 
-    public function testMinRangeUnsigned()
+    public function testMinRangeUnsigned(): void
     {
         $numericPointType = $this->getNumericPointType();
         $numericPointType->setPrecisionScale(6, 2);
@@ -94,7 +96,7 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         $this->assertSame(0, $numericPointType->getMinRange());
     }
 
-    public function testMaxRange()
+    public function testMaxRange(): void
     {
         $numericPointType = $this->getNumericPointType();
         $numericPointType->setPrecisionScale(6, 2);
@@ -122,24 +124,24 @@ abstract class NumericPointTypeTestCase extends DataTypeTestCase
         return [
             [
                 strtoupper($numericPointType->getType()),
-                $numericPointType
+                $numericPointType,
             ],
             [
                 strtoupper($numericPointTypeUnsigned->getType()) . ' UNSIGNED',
-                $numericPointTypeUnsigned
+                $numericPointTypeUnsigned,
             ],
             [
                 strtoupper($numericPointTypePrecision->getType()) . '(6)',
-                $numericPointTypePrecision
+                $numericPointTypePrecision,
             ],
             [
                 strtoupper($numericPointTypePrecisionScale->getType()) . '(6,2)',
-                $numericPointTypePrecisionScale
+                $numericPointTypePrecisionScale,
             ],
             [
                 strtoupper($numericPointTypeUnsignedPrecisionScale->getType()) . '(6,2) UNSIGNED',
-                $numericPointTypeUnsignedPrecisionScale
-            ]
+                $numericPointTypeUnsignedPrecisionScale,
+            ],
         ];
     }
 }

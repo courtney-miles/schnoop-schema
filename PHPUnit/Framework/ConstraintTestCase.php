@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
@@ -15,7 +17,7 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
 
     abstract protected function getConstraintType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $constraint = $this->getConstraint();
 
@@ -33,7 +35,7 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
         $this->assertNull($constraint->getDatabaseName(), 'Assertion on ' . get_class($constraint));
     }
 
-    public function testSetTableName()
+    public function testSetTableName(): void
     {
         $tableName = 'schnoop_tbl';
         $constraint = $this->getConstraint();
@@ -43,7 +45,7 @@ abstract class ConstraintTestCase extends SchnoopSchemaTestCase
         $this->assertSame($tableName, $constraint->getTableName(), 'Assertion on ' . get_class($constraint));
     }
 
-    public function testSetDatabaseName()
+    public function testSetDatabaseName(): void
     {
         $databaseName = 'schnoop_db';
         $constraint = $this->getConstraint();

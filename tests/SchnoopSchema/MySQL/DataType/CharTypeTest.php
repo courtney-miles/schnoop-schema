@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\CharTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\CharType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\CharTypeTestCase;
 
 class CharTypeTest extends CharTypeTestCase
 {
@@ -36,7 +38,7 @@ class CharTypeTest extends CharTypeTestCase
         return $this->length;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_CHAR, $this->charType->getType());

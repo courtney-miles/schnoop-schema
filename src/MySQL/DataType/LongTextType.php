@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class LongTextType extends AbstractTextType
 {
-    const LENGTH = 4294967295;
+    public const LENGTH = 4294967295;
 
     /**
      * {@inheritdoc}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\IntTypeInterface;
@@ -11,7 +13,7 @@ abstract class IntTypeTestCase extends DataTypeTestCase
      */
     abstract protected function getIntType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $intType = $this->getIntType();
 
@@ -22,7 +24,7 @@ abstract class IntTypeTestCase extends DataTypeTestCase
         $this->assertFalse($intType->isZeroFill());
     }
 
-    public function testSetDisplayWidth()
+    public function testSetDisplayWidth(): void
     {
         $displayWidth = 2;
         $intType = $this->getIntType();
@@ -32,7 +34,7 @@ abstract class IntTypeTestCase extends DataTypeTestCase
         $this->assertSame($displayWidth, $intType->getDisplayWidth());
     }
 
-    public function testZeroFill()
+    public function testZeroFill(): void
     {
         $intType = $this->getIntType();
         $intType->setZeroFill(true);
@@ -40,7 +42,7 @@ abstract class IntTypeTestCase extends DataTypeTestCase
         $this->assertTrue($intType->isZeroFill());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $intType = $this->getIntType();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
@@ -15,7 +17,8 @@ abstract class AbstractTimeType implements TimeTypeInterface
 
     /**
      * AbstractTimeType constructor.
-     * @param int $precision Decimal precision.
+     *
+     * @param int $precision decimal precision
      */
     public function __construct($precision = 0)
     {
@@ -41,7 +44,7 @@ abstract class AbstractTimeType implements TimeTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function setPrecision($precision)
+    public function setPrecision($precision): void
     {
         $this->precision = $precision;
     }

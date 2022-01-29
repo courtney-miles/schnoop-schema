@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractCharType;
@@ -39,7 +41,7 @@ class AbstractCharTypeTest extends CharTypeTestCase
         return $this->length;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame($this->type, $this->abstractCharType->getType());
@@ -47,6 +49,7 @@ class AbstractCharTypeTest extends CharTypeTestCase
 
     /**
      * @param $type
+     *
      * @return AbstractCharType|MockObject
      */
     protected function createMockAbstractCharType($type)

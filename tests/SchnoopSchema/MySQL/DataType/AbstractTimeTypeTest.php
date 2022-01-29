@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTimeType;
@@ -30,6 +32,7 @@ class AbstractTimeTypeTest extends TimeTypeTestCase
 
     /**
      * @param $type
+     *
      * @return AbstractTimeType|PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockAbstractTimeType($type)

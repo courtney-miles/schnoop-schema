@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
@@ -21,7 +23,7 @@ class IndexedColumnTest extends SchnoopSchemaTestCase
         $this->indexedColumn = new IndexedColumn($this->columnName);
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame($this->columnName, $this->indexedColumn->getColumnName());
 
@@ -32,7 +34,7 @@ class IndexedColumnTest extends SchnoopSchemaTestCase
         $this->assertNull($this->indexedColumn->getLength());
     }
 
-    public function testSetCollation()
+    public function testSetCollation(): void
     {
         $collation = IndexedColumn::COLLATION_ASC;
         $this->indexedColumn->setCollation($collation);
@@ -40,7 +42,7 @@ class IndexedColumnTest extends SchnoopSchemaTestCase
         $this->assertTrue($this->indexedColumn->hasCollation());
     }
 
-    public function testSetLength()
+    public function testSetLength(): void
     {
         $length = 123;
         $this->indexedColumn->setLength($length);

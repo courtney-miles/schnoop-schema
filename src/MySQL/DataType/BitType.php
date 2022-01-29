@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 28/06/16
- * Time: 4:53 PM
+ * Time: 4:53 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
@@ -16,11 +18,12 @@ class BitType implements BitTypeInterface
     use LengthTrait;
     use QuoteTrait;
 
-    const MAX_LENGTH = 64;
+    public const MAX_LENGTH = 64;
 
     /**
      * BitType constructor.
-     * @param int $length Number of bits.
+     *
+     * @param int $length number of bits
      */
     public function __construct($length = 1)
     {
@@ -56,7 +59,7 @@ class BitType implements BitTypeInterface
      */
     public function getMaxRange()
     {
-        return pow(2, $this->length)-1;
+        return pow(2, $this->length) - 1;
     }
 
     /**
@@ -64,7 +67,7 @@ class BitType implements BitTypeInterface
      */
     public function cast($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
     /**

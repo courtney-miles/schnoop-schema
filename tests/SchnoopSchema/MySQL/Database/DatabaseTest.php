@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Database;
 
+use MilesAsylum\SchnoopSchema\MySQL\Database\Database;
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\SchnoopSchemaTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Database\Database;
 
 class DatabaseTest extends SchnoopSchemaTestCase
 {
@@ -20,7 +22,7 @@ class DatabaseTest extends SchnoopSchemaTestCase
 
     protected $tableList = [
         'schnoop_table_one',
-        'schnoop_table_two'
+        'schnoop_table_two',
     ];
 
     protected function setUp(): void
@@ -30,12 +32,12 @@ class DatabaseTest extends SchnoopSchemaTestCase
         $this->database = new Database($this->name);
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->assertSame($this->name, $this->database->getName());
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertFalse($this->database->hasDefaultCollation());
         $this->assertNull($this->database->getDefaultCollation());
@@ -43,13 +45,13 @@ class DatabaseTest extends SchnoopSchemaTestCase
         $this->assertSame(DroppableInterface::DDL_DROP_POLICY_DO_NOT_DROP, $this->database->getDropPolicy());
     }
 
-    public function testDefaultCollationUndefined()
+    public function testDefaultCollationUndefined(): void
     {
         $this->assertFalse($this->database->hasDefaultCollation());
         $this->assertNull($this->database->getDefaultCollation());
     }
 
-    public function testSetDefaultCollation()
+    public function testSetDefaultCollation(): void
     {
         $collation = 'utf8_general_ci';
         $this->database->setDefaultCollation($collation);
@@ -58,14 +60,14 @@ class DatabaseTest extends SchnoopSchemaTestCase
         $this->assertSame($collation, $this->database->getDefaultCollation());
     }
 
-    public function testSetDDLDropPolicy()
+    public function testSetDDLDropPolicy(): void
     {
         $this->database->setDropPolicy(Database::DDL_DROP_POLICY_DROP_IF_EXISTS);
 
         $this->assertSame(Database::DDL_DROP_POLICY_DROP_IF_EXISTS, $this->database->getDropPolicy());
     }
 
-    public function testSetDDLDelimiter()
+    public function testSetDDLDelimiter(): void
     {
         $this->database->setDelimiter('@@');
 
@@ -74,15 +76,16 @@ class DatabaseTest extends SchnoopSchemaTestCase
 
     /**
      * @dataProvider DDLProvider
+     *
      * @param Database $database
      * @param $expectedDDL
      */
-    public function testDDL($database, $expectedDDL)
+    public function testDDL($database, $expectedDDL): void
     {
         $this->assertSame($expectedDDL, $database->getCreateStatement());
     }
 
-    public function testToStringAliasesGetDDL()
+    public function testToStringAliasesGetDDL(): void
     {
         $ddl = '__ddl__';
 
@@ -97,11 +100,12 @@ class DatabaseTest extends SchnoopSchemaTestCase
             ->method('getCreateStatement')
             ->willReturn($ddl);
 
-        $this->assertSame($ddl, (string)$mockDatabase);
+        $this->assertSame($ddl, (string) $mockDatabase);
     }
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()

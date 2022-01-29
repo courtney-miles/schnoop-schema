@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\UniqueIndex;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
 
 class UniqueIndexTest extends IndexTestCase
 {
@@ -24,16 +26,16 @@ class UniqueIndexTest extends IndexTestCase
         $this->uniqueIndex = new UniqueIndex($this->constraintName);
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
         $this->indexDDLAsserts("UNIQUE INDEX `{$this->constraintName}`");
     }
 
-    public function testPublicKeyDDL()
+    public function testPublicKeyDDL(): void
     {
         $this->uniqueIndex = new UniqueIndex('primary');
 
-        $this->indexDDLAsserts("PRIMARY KEY");
+        $this->indexDDLAsserts('PRIMARY KEY');
     }
 
     protected function getConstraintName()

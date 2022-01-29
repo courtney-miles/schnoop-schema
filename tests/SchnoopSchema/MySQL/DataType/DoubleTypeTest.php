@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DoubleType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 
 class DoubleTypeTest extends NumericPointTypeTestCase
 {
@@ -29,7 +31,7 @@ class DoubleTypeTest extends NumericPointTypeTestCase
         return new DoubleType();
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $doubleType = new DoubleType();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\SetVar;
 
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
@@ -13,6 +15,7 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * SqlMode constructor.
+     *
      * @param string $mode SQL Mode
      */
     public function __construct($mode)
@@ -22,6 +25,7 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * Get the SQL mode.
+     *
      * @return string
      */
     public function getMode()
@@ -31,15 +35,17 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * Set the SQL mode.
+     *
      * @param mixed $mode
      */
-    public function setMode($mode)
+    public function setMode($mode): void
     {
         $this->mode = $mode;
     }
 
     /**
      * Get the delimiter to use between statements.
+     *
      * @return string
      */
     public function getDelimiter()
@@ -49,15 +55,17 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * Set the delimiter to use between statements.
+     *
      * @param $delimiter
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
         $this->delimiter = $delimiter;
     }
 
     /**
      * Get the DDL statements for setting the SQL mode whilst preserving the original SQL mode.
+     *
      * @return string
      */
     public function getSetStatements()
@@ -70,6 +78,7 @@ SQL;
 
     /**
      * Get the DDL statements for restoring the previously changed SQL mode.
+     *
      * @return string
      */
     public function getRestoreStatements()

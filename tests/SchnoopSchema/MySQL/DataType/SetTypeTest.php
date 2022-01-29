@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\OptionsTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\SetType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\OptionsTypeTestCase;
 
 class SetTypeTest extends OptionsTypeTestCase
 {
@@ -30,13 +32,13 @@ class SetTypeTest extends OptionsTypeTestCase
         return new SetType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_SET, $this->setType->getType());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $value = [123];
         $expectedValue = ['123'];

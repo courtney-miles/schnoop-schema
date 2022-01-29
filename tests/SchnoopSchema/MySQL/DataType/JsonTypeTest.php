@@ -31,7 +31,7 @@ class JsonTypeTest extends DataTypeTestCase
     public function DDLProvider()
     {
         return [
-            ['JSON', new JsonType()]
+            ['JSON', new JsonType()],
         ];
     }
 }

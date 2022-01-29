@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 class UniqueIndex extends AbstractIndex
 {
     /**
      * UniqueIndex constructor.
-     * @param string $name Index name.
+     *
+     * @param string $name index name
      */
     public function __construct($name)
     {
@@ -16,7 +19,7 @@ class UniqueIndex extends AbstractIndex
     /**
      * {@inheritdoc}
      */
-    public function setIndexType($indexType)
+    public function setIndexType($indexType): void
     {
         parent::setIndexType($indexType);
     }
@@ -26,7 +29,7 @@ class UniqueIndex extends AbstractIndex
      */
     public function getDDL()
     {
-        if (strcasecmp('primary', $this->getName()) == 0) {
+        if (0 == strcasecmp('primary', $this->getName())) {
             return $this->makeIndexDDL('PRIMARY KEY', null);
         }
 

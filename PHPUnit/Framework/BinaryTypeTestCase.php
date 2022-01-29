@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
@@ -11,7 +13,7 @@ abstract class BinaryTypeTestCase extends DataTypeTestCase
      */
     abstract protected function getBinaryType();
 
-    public function testSetLength()
+    public function testSetLength(): void
     {
         $binaryType = $this->getBinaryType();
 
@@ -21,7 +23,7 @@ abstract class BinaryTypeTestCase extends DataTypeTestCase
         $this->assertSame(3, $binaryType->getLength());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $binaryType = $this->getBinaryType();
 

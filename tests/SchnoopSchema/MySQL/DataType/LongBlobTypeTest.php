@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\LongBlobType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\DataTypeTestCase;
 
 class LongBlobTypeTest extends DataTypeTestCase
 {
@@ -20,13 +22,13 @@ class LongBlobTypeTest extends DataTypeTestCase
         $this->longBlobType = new LongBlobType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame(DataTypeInterface::TYPE_LONGBLOB, $this->longBlobType->getType());
         $this->assertFalse($this->longBlobType->doesAllowDefault());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $this->assertSame('123', $this->longBlobType->cast(123));
     }
@@ -38,8 +40,8 @@ class LongBlobTypeTest extends DataTypeTestCase
         return [
             [
                 'LONGBLOB',
-                $longBlobType
-            ]
+                $longBlobType,
+            ],
         ];
     }
 }
