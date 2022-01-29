@@ -1,16 +1,18 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 28/06/16
- * Time: 8:09 PM
+ * Time: 8:09 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
+use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBinaryType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\BinaryTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\BinaryTypeTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBinaryType;
 
 class AbstractBinaryTypeTest extends BinaryTypeTestCase
 {
@@ -38,20 +40,21 @@ class AbstractBinaryTypeTest extends BinaryTypeTestCase
         return $this->abstractBinaryType;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertFalse($this->abstractBinaryType->hasLength());
         $this->assertNull($this->abstractBinaryType->getLength());
         $this->assertTrue($this->abstractBinaryType->doesAllowDefault());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $this->assertSame('123', $this->abstractBinaryType->cast(123));
     }
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -64,17 +67,18 @@ class AbstractBinaryTypeTest extends BinaryTypeTestCase
         return [
             [
                 'FOO',
-                $abstractBinaryType
+                $abstractBinaryType,
             ],
             [
                 'FOO(3)',
-                $abstractBinaryTypeExtra
-            ]
+                $abstractBinaryTypeExtra,
+            ],
         ];
     }
 
     /**
      * @param $type
+     *
      * @return AbstractBinaryType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockAbstractBinaryType($type)

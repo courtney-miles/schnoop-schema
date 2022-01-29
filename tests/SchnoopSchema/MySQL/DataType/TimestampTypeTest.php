@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -30,7 +32,7 @@ class TimestampTypeTest extends TimeTypeTestCase
         return new TimestampType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_TIMESTAMP, $this->timestampType->getType());

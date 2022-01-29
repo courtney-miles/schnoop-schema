@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TinyTextType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
@@ -37,7 +39,7 @@ class TinyTextTypeTest extends TextTypeTestCase
         return new TinyTextType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_TINYTEXT, $this->tinyTextType->getType());

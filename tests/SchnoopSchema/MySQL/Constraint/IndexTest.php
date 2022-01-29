@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\Index;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\Index;
 
 class IndexTest extends IndexTestCase
 {
@@ -24,7 +26,7 @@ class IndexTest extends IndexTestCase
         $this->index = new Index($this->constraintName);
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
         $this->indexDDLAsserts("INDEX `{$this->constraintName}`");
     }

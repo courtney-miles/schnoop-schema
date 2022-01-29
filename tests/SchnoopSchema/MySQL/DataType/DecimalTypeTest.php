@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DecimalType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\NumericPointTypeTestCase;
 
 class DecimalTypeTest extends NumericPointTypeTestCase
 {
@@ -29,7 +31,7 @@ class DecimalTypeTest extends NumericPointTypeTestCase
         return new DecimalType();
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $decimalType = new DecimalType();
 

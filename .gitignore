@@ -8,3 +8,4 @@ phpunit.xml
 Vagrantfile
 .php_cs.dist
 /.php-cs-fixer.cache
+/.phpunit.result.cache

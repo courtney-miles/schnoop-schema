@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -8,15 +10,17 @@ class ProcedureParameter extends AbstractRoutineParameter implements ProcedurePa
 {
     /**
      * Parameter value direction.
+     *
      * @var string
      */
     protected $direction = self::DIRECTION_IN;
 
     /**
      * ProcedureParameter constructor.
-     * @param string $name Parameter name.
-     * @param DataTypeInterface $dataType Parameter data type.
-     * @param string $direction Parameter value direction.
+     *
+     * @param string $name parameter name
+     * @param DataTypeInterface $dataType parameter data type
+     * @param string $direction parameter value direction
      */
     public function __construct($name, DataTypeInterface $dataType, $direction = self::DIRECTION_IN)
     {
@@ -36,7 +40,7 @@ class ProcedureParameter extends AbstractRoutineParameter implements ProcedurePa
     /**
      * {@inheritdoc}
      */
-    public function setDirection($direction)
+    public function setDirection($direction): void
     {
         $this->direction = $direction;
     }
@@ -50,7 +54,7 @@ class ProcedureParameter extends AbstractRoutineParameter implements ProcedurePa
             '%s `%s` %s',
             $this->direction,
             $this->getName(),
-            (string)$this->getDataType()
+            (string) $this->getDataType()
         );
     }
 

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class TinyTextType extends AbstractTextType
 {
-    const LENGTH = 255;
+    public const LENGTH = 255;
 
     /**
      * {@inheritdoc}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\AbstractConstraint;

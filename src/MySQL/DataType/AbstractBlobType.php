@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\QuoteTrait;
@@ -21,7 +23,7 @@ abstract class AbstractBlobType implements BlobTypeInterface
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**

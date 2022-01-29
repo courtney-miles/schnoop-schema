@@ -1,36 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Database;
 
 class Database implements DatabaseInterface
 {
     /**
      * The database name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * The default collation for the database.
+     *
      * @var string
      */
     protected $defaultCollation;
 
     /**
      * The delimiter to use between statements.
+     *
      * @var string
      */
     protected $ddlDelimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
+     *
      * @var bool
      */
     protected $ddlDropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Database constructor.
-     * @param string $name The database name.
+     *
+     * @param string $name the database name
      */
     public function __construct($name)
     {
@@ -64,7 +71,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefaultCollation($defaultCollation)
+    public function setDefaultCollation($defaultCollation): void
     {
         $this->defaultCollation = $defaultCollation;
     }
@@ -80,7 +87,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
         $this->ddlDelimiter = $delimiter;
     }
@@ -96,7 +103,7 @@ class Database implements DatabaseInterface
     /**
      * {@inheritdoc}
      */
-    public function setDropPolicy($ddlDropPolicyPolicy)
+    public function setDropPolicy($ddlDropPolicyPolicy): void
     {
         $this->ddlDropPolicy = $ddlDropPolicyPolicy;
     }
@@ -132,7 +139,7 @@ SQL;
             array_filter(
                 [
                     $dropDDL,
-                    $createDDL
+                    $createDDL,
                 ]
             )
         );

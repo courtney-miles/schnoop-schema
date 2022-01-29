@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 11/07/16
- * Time: 4:33 PM
+ * Time: 4:33 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
@@ -35,7 +37,7 @@ class YearType implements DataTypeInterface
      */
     public function cast($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
     /**

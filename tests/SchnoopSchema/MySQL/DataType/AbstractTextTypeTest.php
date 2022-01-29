@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBlobType;
@@ -33,7 +35,7 @@ class AbstractTextTypeTest extends TextTypeTestCase
         return $this->createMockAbstractTextType($this->type);
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame($this->type, $this->abstractTextType->getType());
@@ -41,6 +43,7 @@ class AbstractTextTypeTest extends TextTypeTestCase
 
     /**
      * @param string $type
+     *
      * @return AbstractTextType|MockObject
      */
     protected function createMockAbstractTextType($type)

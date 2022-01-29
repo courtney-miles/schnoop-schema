@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
@@ -9,48 +11,56 @@ abstract class AbstractRoutine implements RoutineInterface
 {
     /**
      * Routine name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Database name.
+     *
      * @var string
      */
     protected $databaseName;
 
     /**
      * Routine definer.
+     *
      * @var string
      */
     protected $definer = self::DEFINER_CURRENT_USER;
 
     /**
      * Routine comment.
+     *
      * @var string
      */
     protected $comment;
 
     /**
-     * If the routine is deterministic
+     * If the routine is deterministic.
+     *
      * @var bool
      */
     protected $deterministic = false;
 
     /**
      * Data access.
+     *
      * @var string
      */
     protected $dataAccess = self::DATA_ACCESS_CONTAINS_SQL;
 
     /**
-     * SQL security
+     * SQL security.
+     *
      * @var string
      */
     protected $sqlSecurity = self::SECURITY_DEFINER;
 
     /**
      * Routine body.
+     *
      * @var string
      */
     protected $body = '';
@@ -62,26 +72,29 @@ abstract class AbstractRoutine implements RoutineInterface
 
     /**
      * The delimiter to use between statements.
+     *
      * @var string
      */
     protected $delimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
+     *
      * @var bool
      */
     protected $dropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
+     *
      * @var bool
      */
     protected $useFullyQualifiedName = false;
 
-
     /**
      * AbstractRoutine constructor.
-     * @param string $name Routine name.
+     *
+     * @param string $name routine name
      */
     public function __construct($name)
     {
@@ -116,7 +129,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDatabaseName($databaseName)
+    public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
@@ -132,7 +145,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefiner($definer)
+    public function setDefiner($definer): void
     {
         $this->definer = $definer;
     }
@@ -156,7 +169,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setComment($comment)
+    public function setComment($comment): void
     {
         $this->comment = $comment;
     }
@@ -180,7 +193,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDeterministic($deterministic)
+    public function setDeterministic($deterministic): void
     {
         $this->deterministic = $deterministic;
     }
@@ -196,7 +209,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDataAccess($dataAccess)
+    public function setDataAccess($dataAccess): void
     {
         $this->dataAccess = $dataAccess;
     }
@@ -212,7 +225,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setSqlSecurity($sqlSecurity)
+    public function setSqlSecurity($sqlSecurity): void
     {
         $this->sqlSecurity = $sqlSecurity;
     }
@@ -228,7 +241,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
@@ -252,12 +265,12 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setSqlMode(SqlMode $sqlMode)
+    public function setSqlMode(SqlMode $sqlMode): void
     {
         $this->sqlMode = $sqlMode;
     }
 
-    public function unsetSqlMode()
+    public function unsetSqlMode(): void
     {
         $this->sqlMode = null;
     }
@@ -273,7 +286,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
         $this->delimiter = $delimiter;
     }
@@ -289,7 +302,7 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy): void
     {
         $this->dropPolicy = $ddlDropPolicy;
     }
@@ -305,22 +318,21 @@ abstract class AbstractRoutine implements RoutineInterface
     /**
      * {@inheritdoc}
      */
-    public function setUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName): void
     {
         $this->useFullyQualifiedName = $useFullyQualifiedName;
     }
 
     /**
      * Resolve the routine name to an enclosed name.
+     *
      * @return string Routine name
      */
     protected function makeRoutineName()
     {
         if ($this->useFullyQualifiedName()) {
             if (!$this->hasDatabaseName()) {
-                throw new FQNException(
-                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
-                );
+                throw new FQNException('Unable to create DDL with fully-qualified-name because the database name has not been set.');
             }
 
             $routineName = "`{$this->getDatabaseName()}`.`{$this->getName()}`";
@@ -333,18 +345,19 @@ abstract class AbstractRoutine implements RoutineInterface
 
     /**
      * Make the portion of the routine DDL statement that describes deterministic, sql security and comment.
-     * @return string Characteristics DDL.
+     *
+     * @return string characteristics DDL
      */
     protected function makeCharacteristicsDDL()
     {
         return implode(
-            " ",
+            ' ',
             array_filter(
                 [
                     $this->deterministic ? 'DETERMINISTIC' : 'NOT DETERMINISTIC',
                     $this->dataAccess,
                     !empty($this->sqlSecurity) ? 'SQL SECURITY ' . $this->sqlSecurity : null,
-                    !empty($this->comment) ? "\nCOMMENT '" . addslashes($this->comment) . "'" : null
+                    !empty($this->comment) ? "\nCOMMENT '" . addslashes($this->comment) . "'" : null,
                 ]
             )
         );

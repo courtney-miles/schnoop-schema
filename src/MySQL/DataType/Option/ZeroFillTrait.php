@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType\Option;
 
 trait ZeroFillTrait
@@ -17,7 +19,7 @@ trait ZeroFillTrait
     /**
      * @see ZeroFillInterface::setZeroFill()
      */
-    public function setZeroFill($zeroFill)
+    public function setZeroFill($zeroFill): void
     {
         $this->zeroFill = $zeroFill;
     }

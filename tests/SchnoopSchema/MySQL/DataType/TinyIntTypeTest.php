@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TinyIntType;
+use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 
 class TinyIntTypeTest extends IntTypeTestCase
 {
@@ -25,7 +27,7 @@ class TinyIntTypeTest extends IntTypeTestCase
         return $this->tinyIntType;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_TINYINT, $this->tinyIntType->getType());
@@ -33,7 +35,7 @@ class TinyIntTypeTest extends IntTypeTestCase
         $this->assertSame(TinyIntType::MAX_SIGNED, $this->tinyIntType->getMaxRange());
     }
 
-    public function testSetUnsigned()
+    public function testSetUnsigned(): void
     {
         $this->tinyIntType->setSigned(false);
 
@@ -44,6 +46,7 @@ class TinyIntTypeTest extends IntTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -57,12 +60,12 @@ class TinyIntTypeTest extends IntTypeTestCase
         return [
             [
                 'TINYINT',
-                $tinyIntTypeDefault
+                $tinyIntTypeDefault,
             ],
             [
                 'TINYINT(3) UNSIGNED',
-                $tinyIntTypeExtra
-            ]
+                $tinyIntTypeExtra,
+            ],
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Column\ColumnInterface;
@@ -12,6 +14,7 @@ class SchnoopSchemaTestCase extends TestCase
     /**
      * @param string $columnName
      * @param string $columnDDL
+     *
      * @return ColumnInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockColumn($columnName, $columnDDL)
@@ -26,6 +29,7 @@ class SchnoopSchemaTestCase extends TestCase
     /**
      * @param $indexName
      * @param $indexDDL
+     *
      * @return IndexInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockIndex($indexName, $indexDDL)
@@ -42,6 +46,7 @@ class SchnoopSchemaTestCase extends TestCase
     /**
      * @param $foreignKeyName
      * @param $foreignKeyDDL
+     *
      * @return ForeignKeyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockForeignKey($foreignKeyName, $foreignKeyDDL)

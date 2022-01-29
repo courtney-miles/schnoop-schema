@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\DisplayWidthTrait;
@@ -35,7 +37,7 @@ abstract class AbstractIntType implements IntTypeInterface
      */
     public function cast($value)
     {
-        return (int)$value;
+        return (int) $value;
     }
 
     /**
@@ -47,8 +49,8 @@ abstract class AbstractIntType implements IntTypeInterface
             ' ',
             array_filter(
                 [
-                    strtoupper($this->getType()) . ($this->displayWidth > 0 ? '(' . $this->displayWidth .')' : null),
-                    !$this->isSigned() ? 'UNSIGNED' : null
+                    strtoupper($this->getType()) . ($this->displayWidth > 0 ? '(' . $this->displayWidth . ')' : null),
+                    !$this->isSigned() ? 'UNSIGNED' : null,
                 ]
             )
         );

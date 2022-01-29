@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\AbstractIndex;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\AbstractIndex;
 
 class AbstractIndexTest extends IndexTestCase
 {

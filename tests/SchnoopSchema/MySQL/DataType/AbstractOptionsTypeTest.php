@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractOptionsType;
@@ -31,7 +33,7 @@ class AbstractOptionsTypeTest extends OptionsTypeTestCase
         return $this->createAbstractOptionsType($this->type);
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame($this->type, $this->abstractOptionsType->getType());

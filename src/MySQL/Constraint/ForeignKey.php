@@ -1,35 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
 {
     /**
      * Reference table name.
+     *
      * @var string
      */
     protected $referenceTableName;
 
     /**
      * Foreign key columns.
+     *
      * @var ForeignKeyColumnInterface[]
      */
     protected $foreignKeyColumns = [];
 
     /**
      * Action on deletion.
+     *
      * @var string
      */
     protected $onDeleteAction;
 
     /**
      * Action on update.
+     *
      * @var string
      */
     protected $onUpdateAction;
 
     /**
      * ForeignKey constructor.
+     *
      * @param string $name Trigger name
      */
     public function __construct($name)
@@ -50,7 +57,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
-    public function setOnDeleteAction($onDeleteAction)
+    public function setOnDeleteAction($onDeleteAction): void
     {
         $this->onDeleteAction = $onDeleteAction;
     }
@@ -66,7 +73,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
-    public function setOnUpdateAction($onUpdateAction)
+    public function setOnUpdateAction($onUpdateAction): void
     {
         $this->onUpdateAction = $onUpdateAction;
     }
@@ -90,7 +97,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
-    public function setReferenceTableName($referenceTableName)
+    public function setReferenceTableName($referenceTableName): void
     {
         $this->referenceTableName = $referenceTableName;
     }
@@ -168,7 +175,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
-    public function setForeignKeyColumns(array $foreignKeyColumns)
+    public function setForeignKeyColumns(array $foreignKeyColumns): void
     {
         $this->foreignKeyColumns = [];
 
@@ -180,7 +187,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
     /**
      * {@inheritdoc}
      */
-    public function addForeignKeyColumn(ForeignKeyColumnInterface $foreignKeyColumn)
+    public function addForeignKeyColumn(ForeignKeyColumnInterface $foreignKeyColumn): void
     {
         $this->foreignKeyColumns[$foreignKeyColumn->getColumnName()] = $foreignKeyColumn;
     }
@@ -222,7 +229,7 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
                     'REFERENCES',
                     $this->makeReferenceColumnDDL(),
                     'ON DELETE ' . $this->getOnDeleteAction(),
-                    'ON UPDATE ' . $this->getOnUpdateAction()
+                    'ON UPDATE ' . $this->getOnUpdateAction(),
                 ]
             )
         );

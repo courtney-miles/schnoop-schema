@@ -1,29 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 abstract class AbstractIndex extends AbstractConstraint implements IndexInterface
 {
     /**
      * Indexed columns.
+     *
      * @var IndexedColumnInterface[]
      */
     protected $indexedColumns = [];
 
     /**
      * Index type.
+     *
      * @var string
      */
     protected $indexType;
 
     /**
      * Index comment.
+     *
      * @var string
      */
     protected $comment;
 
     /**
      * AbstractIndex constructor.
+     *
      * @param string $name Index name
      * @param string $constraintType Constraint type. One of self::CONSTRAINT_* constants.
      * @param null $indexType Index type. Either self::INDEX_TYPE_BTREE or self::INDEX_TYPE_HASH.
@@ -46,7 +52,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
     /**
      * {@inheritdoc}
      */
-    public function setIndexedColumns(array $indexedColumns)
+    public function setIndexedColumns(array $indexedColumns): void
     {
         $this->indexedColumns = [];
 
@@ -66,7 +72,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
     /**
      * {@inheritdoc}
      */
-    public function addIndexedColumn(IndexedColumnInterface $indexedColumn)
+    public function addIndexedColumn(IndexedColumnInterface $indexedColumn): void
     {
         $this->indexedColumns[$indexedColumn->getColumnName()] = $indexedColumn;
     }
@@ -100,21 +106,23 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
      */
     public function hasComment()
     {
-        return (bool)strlen($this->comment);
+        return null !== $this->comment && '' !== $this->comment;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setComment($comment)
+    public function setComment($comment): void
     {
         $this->comment = $comment;
     }
 
     /**
      * Makes the DDL statement for the index.
+     *
      * @param string $type Index type
      * @param string|null $name Index name
+     *
      * @return string Index DDL
      */
     protected function makeIndexDDL($type, $name = null)
@@ -124,9 +132,9 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
             array_filter(
                 [
                     strtoupper($type),
-                    $name !== null ? '`' . $name . '`' : null,
+                    null !== $name ? '`' . $name . '`' : null,
                     $this->makeIndexedColumnsDDL(),
-                    $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null
+                    $this->hasComment() ? "COMMENT '" . addslashes($this->getComment()) . "'" : null,
                 ]
             )
         );
@@ -134,7 +142,8 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
 
     /**
      * Makes the column portion of the index DDL statement.
-     * @return string Column portion of index DDL statement.
+     *
+     * @return string column portion of index DDL statement
      */
     protected function makeIndexedColumnsDDL()
     {
@@ -151,9 +160,10 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
 
     /**
      * Set the index type.
+     *
      * @param $indexType Index type. One of self::INDEX_TYPE_* constants.
      */
-    protected function setIndexType($indexType)
+    protected function setIndexType($indexType): void
     {
         $this->indexType = $indexType;
     }

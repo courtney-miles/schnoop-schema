@@ -1,35 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 abstract class AbstractConstraint implements ConstraintInterface
 {
     /**
      * Constraint name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Constraint type.
+     *
      * @var string
      */
     protected $constraintType;
 
     /**
      * Name of the table the constraint belongs to.
+     *
      * @var string
      */
     protected $tableName;
 
     /**
      * Name of the database the constraint belongs to.
+     *
      * @var string
      */
     protected $databaseName;
 
     /**
      * AbstractConstraint constructor.
+     *
      * @param string $name Constraint name
      * @param string $constraintType Constraint type.  One of self::CONSTRAINT_* constants.
      */
@@ -66,7 +73,7 @@ abstract class AbstractConstraint implements ConstraintInterface
     /**
      * {@inheritdoc}
      */
-    public function setTableName($tableName)
+    public function setTableName($tableName): void
     {
         $this->tableName = $tableName;
     }
@@ -98,7 +105,7 @@ abstract class AbstractConstraint implements ConstraintInterface
     /**
      * {@inheritdoc}
      */
-    public function setDatabaseName($databaseName)
+    public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }

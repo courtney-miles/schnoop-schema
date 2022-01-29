@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Trigger;
 
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
@@ -9,88 +11,102 @@ class Trigger implements TriggerInterface
 {
     /**
      * Trigger Name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Table name.
+     *
      * @var string
      */
     protected $tableName;
 
     /**
      * Database name.
+     *
      * @var string
      */
     protected $databaseName;
 
     /**
      * Trigger definer.
+     *
      * @var string
      */
     protected $definer;
 
     /**
      * Trigger event.
+     *
      * @var string
      */
     protected $event;
 
     /**
      * Trigger timing.
+     *
      * @var string
      */
     protected $timing;
 
     /**
      * Trigger logic.
+     *
      * @var string
      */
     protected $body;
 
     /**
      * Position context. One of self::POSITION_* constants.
+     *
      * @var string
      */
     protected $positionContext;
 
     /**
      * Name of trigger this trigger position is relative to.
+     *
      * @var string
      */
     protected $positionRelativeTo;
 
     /**
      * The delimiter to use between statements.
+     *
      * @var string
      */
     protected $delimiter = self::DEFAULT_DELIMITER;
 
     /**
      * Whether to include a drop statement with the create statement.
+     *
      * @var bool
      */
     protected $dropPolicy = self::DDL_DROP_POLICY_DO_NOT_DROP;
 
     /**
      * Whether the DDL will use the fully qualified name for resources.
+     *
      * @var bool
      */
     protected $useFullyQualifiedName = false;
 
     /**
      * Trigger SQL mode.
+     *
      * @var SqlMode
      */
     protected $sqlMode;
 
     /**
      * Trigger constructor.
+     *
      * @param string $name Trigger name
      * @param string $timing Trigger timing.  One of self::TIMING_* constants.
      * @param string $event Trigger event. One of self::EVENT_* constants.
-     * @param string $tableName Name of table the trigger is for.
+     * @param string $tableName name of table the trigger is for
      */
     public function __construct($name, $timing, $event, $tableName)
     {
@@ -111,7 +127,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -127,7 +143,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setTableName($tableName)
+    public function setTableName($tableName): void
     {
         $this->tableName = $tableName;
     }
@@ -151,7 +167,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setDatabaseName($databaseName)
+    public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
@@ -175,7 +191,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefiner($definer)
+    public function setDefiner($definer): void
     {
         $this->definer = $definer;
     }
@@ -191,7 +207,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setEvent($event)
+    public function setEvent($event): void
     {
         $this->event = $event;
     }
@@ -207,7 +223,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setTiming($timing)
+    public function setTiming($timing): void
     {
         $this->timing = $timing;
     }
@@ -225,13 +241,13 @@ class Trigger implements TriggerInterface
      */
     public function hasBody()
     {
-        return (bool)strlen($this->body);
+        return null !== $this->body && '' !== $this->body;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
@@ -263,7 +279,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setPosition($positionContext, $relativeTo)
+    public function setPosition($positionContext, $relativeTo): void
     {
         $this->positionContext = $positionContext;
         $this->positionRelativeTo = $relativeTo;
@@ -288,12 +304,12 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setSqlMode(SqlMode $sqlMode)
+    public function setSqlMode(SqlMode $sqlMode): void
     {
         $this->sqlMode = $sqlMode;
     }
 
-    public function unsetSqlMode()
+    public function unsetSqlMode(): void
     {
         $this->sqlMode = null;
     }
@@ -309,7 +325,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setDelimiter($delimiter)
+    public function setDelimiter($delimiter): void
     {
         $this->delimiter = $delimiter;
     }
@@ -325,7 +341,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setDropPolicy($ddlDropPolicy)
+    public function setDropPolicy($ddlDropPolicy): void
     {
         $this->dropPolicy = $ddlDropPolicy;
     }
@@ -341,7 +357,7 @@ class Trigger implements TriggerInterface
     /**
      * {@inheritdoc}
      */
-    public function setUseFullyQualifiedName($useFullyQualifiedName)
+    public function setUseFullyQualifiedName($useFullyQualifiedName): void
     {
         $this->useFullyQualifiedName = $useFullyQualifiedName;
     }
@@ -355,9 +371,7 @@ class Trigger implements TriggerInterface
 
         if ($this->useFullyQualifiedName) {
             if (!$this->hasDatabaseName()) {
-                throw new FQNException(
-                    'Unable to create DDL with fully-qualified-name because the database name has not been set.'
-                );
+                throw new FQNException('Unable to create DDL with fully-qualified-name because the database name has not been set.');
             }
 
             $tableName = "`{$this->getDatabaseName()}`.`{$this->getTableName()}`";
@@ -409,7 +423,7 @@ SQL;
                         $triggerOrder,
                         'BEGIN',
                         $this->getBody(),
-                        'END' . $this->delimiter
+                        'END' . $this->delimiter,
                     ]
                 )
             );
@@ -421,7 +435,7 @@ SQL;
                     $setSqlMode,
                     $dropDDL,
                     $createDDL,
-                    $revertSqlMode
+                    $revertSqlMode,
                 ]
             )
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\CollationTrait;
@@ -36,13 +38,13 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
      */
     public function hasOption($option)
     {
-        return in_array($option, $this->options);
+        return in_array($option, $this->options, true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         $this->options = array_values($options);
     }
@@ -50,7 +52,7 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function addOption($option)
+    public function addOption($option): void
     {
         $this->options[] = $option;
     }
@@ -68,7 +70,7 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -80,8 +82,8 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
             ' ',
             array_filter(
                 [
-                    strtoupper($this->getType()) . "(" . $this->makeOptionsDDL($this->getOptions()) . ")",
-                    $this->hasCollation() ? 'COLLATE ' . $this->getCollation() : null
+                    strtoupper($this->getType()) . '(' . $this->makeOptionsDDL($this->getOptions()) . ')',
+                    $this->hasCollation() ? 'COLLATE ' . $this->getCollation() : null,
                 ]
             )
         );
@@ -96,16 +98,16 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
     }
 
     /**
-     * Make just the portion of the DDL that describes the options
-     * @param array $options
-     * @return string Portion of DDL for options.
+     * Make just the portion of the DDL that describes the options.
+     *
+     * @return string portion of DDL for options
      */
     protected function makeOptionsDDL(array $options)
     {
         $escapedOptions = [];
 
         foreach ($options as $option) {
-            $escapedOptions[] = $this->quote((string)$option);
+            $escapedOptions[] = $this->quote((string) $option);
         }
 
         return implode(',', $escapedOptions);

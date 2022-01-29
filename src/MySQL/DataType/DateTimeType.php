@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 11/07/16
- * Time: 4:23 PM
+ * Time: 4:23 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;

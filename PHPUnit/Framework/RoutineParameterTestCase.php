@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -20,13 +22,13 @@ abstract class RoutineParameterTestCase extends TestCase
      */
     abstract protected function getExpectedParameterDataType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $this->assertSame($this->getExpectedParameterName(), $this->getRoutineParameter()->getName());
         $this->assertSame($this->getExpectedParameterDataType(), $this->getRoutineParameter()->getDataType());
     }
 
-    public function testSetName()
+    public function testSetName(): void
     {
         $newName = 'neo_name';
         $this->getRoutineParameter()->setName($newName);
@@ -34,7 +36,7 @@ abstract class RoutineParameterTestCase extends TestCase
         $this->assertSame($newName, $this->getRoutineParameter()->getName());
     }
 
-    public function testSetDataType()
+    public function testSetDataType(): void
     {
         $newMockDataType = $this->createMock(DataTypeInterface::class);
         $this->getRoutineParameter()->setDataType($newMockDataType);

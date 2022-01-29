@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameterInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineProcedure;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineProcedure;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -50,7 +51,7 @@ class RoutineProcedureTest extends RoutineTestCase
         return $this->name;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
 
@@ -58,12 +59,12 @@ class RoutineProcedureTest extends RoutineTestCase
         $this->assertSame([], $this->procedure->getParameters());
     }
 
-    public function testSetParameters()
+    public function testSetParameters(): void
     {
         /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(ProcedureParameterInterface::class),
-            $this->createMock(ProcedureParameterInterface::class)
+            $this->createMock(ProcedureParameterInterface::class),
         ];
 
         $parameters[0]->method('getName')
@@ -77,12 +78,12 @@ class RoutineProcedureTest extends RoutineTestCase
         $this->assertSame($parameters, $this->procedure->getParameters());
     }
 
-    public function testAddParameter()
+    public function testAddParameter(): void
     {
         /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(ProcedureParameterInterface::class),
-            $this->createMock(ProcedureParameterInterface::class)
+            $this->createMock(ProcedureParameterInterface::class),
         ];
 
         $parameters[0]->method('getName')
@@ -98,11 +99,11 @@ class RoutineProcedureTest extends RoutineTestCase
 
     /**
      * @dataProvider getDDLTestData
-     * @param RoutineProcedure $procedure
+     *
      * @param $doMockSqlMode
      * @param $expectedDDL
      */
-    public function testDDL(RoutineProcedure $procedure, $doMockSqlMode, $expectedDDL)
+    public function testDDL(RoutineProcedure $procedure, $doMockSqlMode, $expectedDDL): void
     {
         if ($doMockSqlMode) {
             $mockSqlMode = $this->createMock(SqlMode::class);
@@ -114,7 +115,7 @@ class RoutineProcedureTest extends RoutineTestCase
         $this->assertSame($expectedDDL, $procedure->getCreateStatement());
     }
 
-    public function testToStringAliasesGetDDL()
+    public function testToStringAliasesGetDDL(): void
     {
         $ddl = '__ddl__';
         $mockProcedure = $this->getMockBuilder(RoutineProcedure::class)
@@ -127,7 +128,7 @@ class RoutineProcedureTest extends RoutineTestCase
             ->method('getCreateStatement')
             ->willReturn($ddl);
 
-        $this->assertSame($ddl, (string)$mockProcedure);
+        $this->assertSame($ddl, (string) $mockProcedure);
     }
 
     public function getDDLTestData()
@@ -137,7 +138,7 @@ class RoutineProcedureTest extends RoutineTestCase
         /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $mockParameters */
         $mockParameters = [
             $this->createMock(ProcedureParameterInterface::class),
-            $this->createMock(ProcedureParameterInterface::class)
+            $this->createMock(ProcedureParameterInterface::class),
         ];
 
         $mockParameters[0]->method('getDDL')->willReturn('__param_1__');
@@ -205,11 +206,11 @@ BEGIN
 END@@
 __sql_mode_restore__
 SQL
-            ]
+            ],
         ];
     }
 
-    public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
+    public function testExceptionOnUseFQNWhenDatabaseNameNotSet(): void
     {
         $this->expectExceptionMessage(
             'Unable to create DDL with fully-qualified-name because the database name has not been set.'

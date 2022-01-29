@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
@@ -16,7 +18,7 @@ abstract class TextTypeTestCase extends DataTypeTestCase
      */
     abstract protected function createTextType();
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         $textType = $this->getTextType();
 
@@ -26,7 +28,7 @@ abstract class TextTypeTestCase extends DataTypeTestCase
         $this->assertFalse($textType->doesAllowDefault());
     }
 
-    public function testSetCollation()
+    public function testSetCollation(): void
     {
         $collation = 'utf8mb4_general_ci';
         $textType = $this->getTextType();
@@ -36,7 +38,7 @@ abstract class TextTypeTestCase extends DataTypeTestCase
         $this->assertSame($collation, $textType->getCollation());
     }
 
-    public function testCast()
+    public function testCast(): void
     {
         $textType = $this->getTextType();
 
@@ -45,6 +47,7 @@ abstract class TextTypeTestCase extends DataTypeTestCase
 
     /**
      * @see testDDL
+     *
      * @return array
      */
     public function DDLProvider()
@@ -57,12 +60,12 @@ abstract class TextTypeTestCase extends DataTypeTestCase
         return [
             [
                 strtoupper($textType->getType()),
-                $textType
+                $textType,
             ],
             [
                 strtoupper($textTypeCollate->getType()) . " COLLATE '$collation'",
-                $textTypeCollate
-            ]
+                $textTypeCollate,
+            ],
         ];
     }
 }

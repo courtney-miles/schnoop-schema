@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class CharType extends AbstractCharType
 {
-    const MAX_LENGTH = 255;
+    public const MAX_LENGTH = 255;
 
     /**
      * CharType constructor.
-     * @param int $length Number of characters.
+     *
+     * @param int $length number of characters
      */
     public function __construct($length = 1)
     {

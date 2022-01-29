@@ -1,30 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 class IndexedColumn implements IndexedColumnInterface
 {
     /**
      * Column name.
+     *
      * @var string
      */
     protected $columnName;
 
     /**
      * Index prefix length.
+     *
      * @var int
      */
     protected $length;
 
     /**
      * Index collation.
+     *
      * @var string
      */
     protected $collation;
 
     /**
      * IndexedColumn constructor.
-     * @param string $columnName Column name.
+     *
+     * @param string $columnName column name
      */
     public function __construct($columnName)
     {
@@ -74,7 +80,7 @@ class IndexedColumn implements IndexedColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function setCollation($collation)
+    public function setCollation($collation): void
     {
         $this->collation = $collation;
     }

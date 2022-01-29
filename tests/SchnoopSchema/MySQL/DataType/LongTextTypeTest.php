@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
-use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\LongTextType;
+use MilesAsylum\SchnoopSchema\MySQL\DataType\TextTypeInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
 
 class LongTextTypeTest extends TextTypeTestCase
@@ -37,7 +39,7 @@ class LongTextTypeTest extends TextTypeTestCase
         return new LongTextType();
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
         $this->assertSame(DataTypeInterface::TYPE_LONGTEXT, $this->longTextType->getType());

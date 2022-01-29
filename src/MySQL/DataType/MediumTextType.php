@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class MediumTextType extends AbstractTextType
 {
-    const LENGTH = 16777215;
+    public const LENGTH = 16777215;
 
     /**
      * {@inheritdoc}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\Option\PrecisionScaleTrait;
@@ -84,7 +86,7 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
             array_filter(
                 [
                     $typeDDL,
-                    !$this->isSigned() ? 'UNSIGNED' : null
+                    !$this->isSigned() ? 'UNSIGNED' : null,
                 ]
             )
         );

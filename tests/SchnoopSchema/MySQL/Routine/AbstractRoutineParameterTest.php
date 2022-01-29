@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\DataTypeInterface;
@@ -41,7 +43,7 @@ class AbstractRoutineParameterTest extends RoutineParameterTestCase
     {
         return $this->name;
     }
-    
+
     protected function getExpectedParameterDataType()
     {
         return $this->mockDataType;

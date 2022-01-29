@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
+use MilesAsylum\SchnoopSchema\MySQL\Constraint\FullTextIndex;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IndexTestCase;
-use MilesAsylum\SchnoopSchema\MySQL\Constraint\FullTextIndex;
 
 class FullTextIndexTest extends IndexTestCase
 {
@@ -19,7 +21,7 @@ class FullTextIndexTest extends IndexTestCase
         parent::setUp();
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
         $this->indexDDLAsserts("FULLTEXT INDEX `{$this->constraintName}`");
     }

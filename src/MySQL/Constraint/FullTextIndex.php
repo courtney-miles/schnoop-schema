@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\Constraint;
 
 class FullTextIndex extends AbstractIndex
 {
     /**
      * FullTextIndex constructor.
-     * @param string $name Index name.
+     *
+     * @param string $name index name
      */
     public function __construct($name)
     {

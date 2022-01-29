@@ -24,7 +24,7 @@ class JsonType implements DataTypeInterface
     {
         $json = json_encode($value);
 
-        if ($json === false) {
+        if (false === $json) {
             throw new \InvalidArgumentException('Supplied value could not be converted to JSON.');
         }
 

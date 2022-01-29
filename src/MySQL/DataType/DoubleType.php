@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class DoubleType extends AbstractNumericPointType
@@ -17,6 +19,6 @@ class DoubleType extends AbstractNumericPointType
      */
     public function cast($value)
     {
-        return (double)$value;
+        return (float) $value;
     }
 }

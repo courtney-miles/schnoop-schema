@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
 
 class BigIntType extends AbstractIntType
 {
-    const MIN_SIGNED = -9223372036854775808;
-    const MAX_SIGNED = 9223372036854775807;
-    const MIN_UNSIGNED = 0;
-    const MAX_UNSIGNED = 18446744073709551615;
+    public const MIN_SIGNED = -9223372036854775808;
+    public const MAX_SIGNED = 9223372036854775807;
+    public const MIN_UNSIGNED = 0;
+    public const MAX_UNSIGNED = 18446744073709551615;
 
     /**
      * {@inheritdoc}

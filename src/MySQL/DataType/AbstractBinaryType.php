@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: courtney
  * Date: 26/06/16
- * Time: 5:05 PM
+ * Time: 5:05 PM.
  */
 
 namespace MilesAsylum\SchnoopSchema\MySQL\DataType;
@@ -38,9 +40,9 @@ abstract class AbstractBinaryType implements BinaryTypeInterface
     /**
      * {@inheritdoc}
      */
-    public function setLength($length)
+    public function setLength($length): void
     {
-        $this->length = (int)$length;
+        $this->length = (int) $length;
     }
 
     /**
@@ -56,7 +58,7 @@ abstract class AbstractBinaryType implements BinaryTypeInterface
      */
     public function cast($value)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     public function getDDL()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Constraint;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\ConstraintInterface;
@@ -41,7 +43,7 @@ class ForeignKeyTest extends ConstraintTestCase
         return ConstraintInterface::CONSTRAINT_FOREIGN_KEY;
     }
 
-    public function testInitialProperties()
+    public function testInitialProperties(): void
     {
         parent::testInitialProperties();
 
@@ -61,19 +63,19 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertFalse($this->foreignKey->hasReferenceColumnName('bogus'));
     }
 
-    public function testSetOnDeleteAction()
+    public function testSetOnDeleteAction(): void
     {
         $this->foreignKey->setOnDeleteAction(ForeignKey::REFERENCE_ACTION_CASCADE);
         $this->assertSame(ForeignKey::REFERENCE_ACTION_CASCADE, $this->foreignKey->getOnDeleteAction());
     }
 
-    public function testSetOnUpdateAction()
+    public function testSetOnUpdateAction(): void
     {
         $this->foreignKey->setOnUpdateAction(ForeignKey::REFERENCE_ACTION_CASCADE);
         $this->assertSame(ForeignKey::REFERENCE_ACTION_CASCADE, $this->foreignKey->getOnUpdateAction());
     }
 
-    public function testSetReferenceTableName()
+    public function testSetReferenceTableName(): void
     {
         $referenceTableName = 'ref_tbl';
         $this->foreignKey->setReferenceTableName($referenceTableName);
@@ -81,10 +83,10 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertSame($referenceTableName, $this->foreignKey->getReferenceTableName());
     }
 
-    public function testSetForeignKeyColumns()
+    public function testSetForeignKeyColumns(): void
     {
-        $columnNames = ['col_a','col_b'];
-        $refColumnNames = ['ref_col_a','ref_col_b'];
+        $columnNames = ['col_a', 'col_b'];
+        $refColumnNames = ['ref_col_a', 'ref_col_b'];
 
         $fkColumnA = $this->createMock(ForeignKeyColumn::class);
         $fkColumnA->method('getColumnName')->willReturn($columnNames[0]);
@@ -95,7 +97,7 @@ class ForeignKeyTest extends ConstraintTestCase
 
         $foreignKeyColumns = [
             $fkColumnA,
-            $fkColumnB
+            $fkColumnB,
         ];
 
         $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
@@ -113,7 +115,7 @@ class ForeignKeyTest extends ConstraintTestCase
         }
     }
 
-    public function testHasReferenceColumnNameWithRefTable()
+    public function testHasReferenceColumnNameWithRefTable(): void
     {
         $refTableName = 'ref_tbl';
         $refColumnName = 'ref_col';
@@ -127,7 +129,7 @@ class ForeignKeyTest extends ConstraintTestCase
         $this->assertFalse($this->foreignKey->hasReferenceColumnName($refColumnName, 'bogus'));
     }
 
-    public function testDDL()
+    public function testDDL(): void
     {
         $expectedDDL = <<<SQL
 CONSTRAINT `{$this->constraintName}` FOREIGN KEY (`col_a`,`col_b`) REFERENCES `ref_tbl` (`ref_col_a`,`ref_col_b`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -141,12 +143,12 @@ SQL;
 
         $foreignKeyColumns = [
             $fkColumnA,
-            $fkColumnB
+            $fkColumnB,
         ];
         $this->foreignKey->setForeignKeyColumns($foreignKeyColumns);
 
         $this->foreignKey->setReferenceTableName('ref_tbl');
 
-        $this->assertSame($expectedDDL, (string)$this->foreignKey);
+        $this->assertSame($expectedDDL, (string) $this->foreignKey);
     }
 }
