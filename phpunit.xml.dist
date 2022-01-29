@@ -1,15 +1,17 @@
 <?xml version="1.0" ?>
-<phpunit bootstrap="./PHPUnit/bootstrap.php">
+<phpunit bootstrap="./PHPUnit/bootstrap.php"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <testsuites>
         <testsuite name="unit_tests">
             <directory>./tests/SchnoopSchema/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory suffix=".php">./src/</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
     <php>
         <ini name="display_errors" value="On" />
         <ini name="error_reporting" value="E_ALL" />
