@@ -14,7 +14,7 @@ class MediumTextTypeTest extends TextTypeTestCase
      */
     protected $mediumTextType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -12,7 +12,7 @@ class FullTextIndexTest extends IndexTestCase
 
     protected $fullTextIndex;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fullTextIndex = new FullTextIndex($this->constraintName);
 

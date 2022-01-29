@@ -13,7 +13,7 @@ class IntTypeTest extends IntTypeTestCase
      */
     protected $intType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

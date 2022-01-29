@@ -21,7 +21,7 @@ class FunctionParameterTest extends RoutineParameterTestCase
      */
     protected $functionParameter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

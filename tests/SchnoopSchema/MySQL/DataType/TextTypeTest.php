@@ -14,7 +14,7 @@ class TextTypeTest extends TextTypeTestCase
      */
     protected $textType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

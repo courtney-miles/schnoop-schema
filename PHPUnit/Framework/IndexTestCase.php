@@ -4,7 +4,6 @@ namespace MilesAsylum\SchnoopSchema\PHPUnit\Framework;
 
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexedColumn;
 use MilesAsylum\SchnoopSchema\MySQL\Constraint\IndexInterface;
-use MilesAsylum\SchnoopSchema\MySQL\Table\TableInterface;
 
 abstract class IndexTestCase extends ConstraintTestCase
 {

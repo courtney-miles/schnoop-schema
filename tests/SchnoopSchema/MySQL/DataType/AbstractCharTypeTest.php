@@ -4,7 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractCharType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\CharTypeTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractCharTypeTest extends CharTypeTestCase
 {
@@ -17,7 +17,7 @@ class AbstractCharTypeTest extends CharTypeTestCase
 
     protected $length = 6;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class AbstractCharTypeTest extends CharTypeTestCase
 
     /**
      * @param $type
-     * @return AbstractCharType|PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractCharType|MockObject
      */
     protected function createMockAbstractCharType($type)
     {

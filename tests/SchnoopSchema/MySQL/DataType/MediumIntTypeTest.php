@@ -13,7 +13,7 @@ class MediumIntTypeTest extends IntTypeTestCase
      */
     protected $mediumIntType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

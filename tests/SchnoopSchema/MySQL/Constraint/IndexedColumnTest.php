@@ -14,7 +14,7 @@ class IndexedColumnTest extends SchnoopSchemaTestCase
      */
     protected $indexedColumn;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

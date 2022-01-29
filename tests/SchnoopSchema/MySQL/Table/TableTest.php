@@ -21,7 +21,7 @@ class TableTest extends SchnoopSchemaTestCase
 
     protected $name = 'schnoop_tbl';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -332,12 +332,13 @@ class TableTest extends SchnoopSchemaTestCase
         $this->assertSame($ddl, (string)$mockTable);
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException
-     * @expectedExceptionMessage Unable to create DDL with fully-qualified-name because the database name has not been set.
-     */
     public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
     {
+        $this->expectExceptionMessage(
+            'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+        );
+        $this->expectException(\MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException::class);
+
         $this->table->setUseFullyQualifiedName(true);
 
         $this->table->getCreateStatement();

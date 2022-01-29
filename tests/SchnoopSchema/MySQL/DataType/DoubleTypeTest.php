@@ -12,7 +12,7 @@ class DoubleTypeTest extends NumericPointTypeTestCase
      */
     protected $doubleType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

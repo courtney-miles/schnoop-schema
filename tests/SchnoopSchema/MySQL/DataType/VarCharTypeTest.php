@@ -14,7 +14,7 @@ class VarCharTypeTest extends CharTypeTestCase
     protected $varCharType;
     protected $length = 6;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

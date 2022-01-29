@@ -13,7 +13,7 @@ class SmallIntTypeTest extends IntTypeTestCase
      */
     protected $smallIntType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

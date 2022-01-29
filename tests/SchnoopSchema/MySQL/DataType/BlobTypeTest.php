@@ -13,7 +13,7 @@ class BlobTypeTest extends DataTypeTestCase
      */
     protected $blobType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -5,7 +5,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractBlobType;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTextType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TextTypeTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractTextTypeTest extends TextTypeTestCase
 {
@@ -16,7 +16,7 @@ class AbstractTextTypeTest extends TextTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class AbstractTextTypeTest extends TextTypeTestCase
 
     /**
      * @param string $type
-     * @return AbstractTextType|PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractTextType|MockObject
      */
     protected function createMockAbstractTextType($type)
     {

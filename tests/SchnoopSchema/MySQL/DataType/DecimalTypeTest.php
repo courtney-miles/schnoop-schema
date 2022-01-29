@@ -12,7 +12,7 @@ class DecimalTypeTest extends NumericPointTypeTestCase
      */
     protected $decimalType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

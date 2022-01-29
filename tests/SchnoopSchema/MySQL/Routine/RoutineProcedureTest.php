@@ -3,6 +3,7 @@
 namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\Routine;
 
 use MilesAsylum\SchnoopSchema\MySQL\DroppableInterface;
+use MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException;
 use MilesAsylum\SchnoopSchema\MySQL\HasDelimiterInterface;
 use MilesAsylum\SchnoopSchema\MySQL\MySQLInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\ProcedureParameterInterface;
@@ -21,7 +22,7 @@ class RoutineProcedureTest extends RoutineTestCase
      */
     protected $procedure;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -208,12 +209,13 @@ SQL
         ];
     }
 
-    /**
-     * @expectedException \MilesAsylum\SchnoopSchema\MySQL\Exception\FQNException
-     * @expectedExceptionMessage Unable to create DDL with fully-qualified-name because the database name has not been set.
-     */
     public function testExceptionOnUseFQNWhenDatabaseNameNotSet()
     {
+        $this->expectExceptionMessage(
+            'Unable to create DDL with fully-qualified-name because the database name has not been set.'
+        );
+        $this->expectException(FQNException::class);
+
         $routine = $this->getRoutine();
         $routine->setUseFullyQualifiedName(true);
 

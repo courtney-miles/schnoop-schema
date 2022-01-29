@@ -13,7 +13,7 @@ class BinaryTypeTest extends BinaryTypeTestCase
      */
     protected $binaryType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

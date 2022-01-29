@@ -4,7 +4,6 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractTimeType;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\TimeTypeTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 class AbstractTimeTypeTest extends TimeTypeTestCase
 {
@@ -12,7 +11,7 @@ class AbstractTimeTypeTest extends TimeTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

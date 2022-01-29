@@ -14,7 +14,7 @@ class TinyTextTypeTest extends TextTypeTestCase
      */
     protected $tinyTextType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -22,7 +22,7 @@ class ProcedureParameterTest extends RoutineParameterTestCase
      */
     protected $procedureParameter;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

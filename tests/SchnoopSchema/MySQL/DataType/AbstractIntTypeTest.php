@@ -4,7 +4,7 @@ namespace MilesAsylum\SchnoopSchema\Tests\SchnoopSchema\MySQL\DataType;
 
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\IntTypeTestCase;
 use MilesAsylum\SchnoopSchema\MySQL\DataType\AbstractIntType;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractIntTypeTest extends IntTypeTestCase
 {
@@ -15,7 +15,7 @@ class AbstractIntTypeTest extends IntTypeTestCase
 
     protected $type = 'foo';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -60,7 +60,7 @@ class AbstractIntTypeTest extends IntTypeTestCase
 
     /**
      * @param string $type
-     * @return AbstractIntType|PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractIntType|MockObject
      */
     protected function createMockAbstractIntType($type)
     {

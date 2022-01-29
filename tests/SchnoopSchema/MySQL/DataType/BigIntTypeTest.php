@@ -13,7 +13,7 @@ class BigIntTypeTest extends IntTypeTestCase
      */
     protected $bigIntType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
