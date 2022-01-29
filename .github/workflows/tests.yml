@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-version: ['7.2', '7.3', '7.4', '8.0']
+                php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
                 composer-flag:
                     - '--prefer-dist'
                     - '--prefer-stable --prefer-lowest'
@@ -38,8 +38,14 @@ jobs:
                   key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-php-
+
             - name: Install Composer dependencies
               run: composer update ${{ matrix.composer-flag }} --no-interaction --no-progress
+
+            # This may be necessary for older dev packages that do not have
+            #   upper PHP compatibility version constraints.
+            - name: Update Composer Dev dependencies
+              run: composer update phpunit/phpunit --prefer-dist --no-interaction --no-progress
 
             - name: Run Code Style Check for PHP ${{ matrix.php-version }}
               run: composer run-script style-check
