@@ -12,7 +12,7 @@ jobs:
                 php-version: ['7.2', '7.3', '7.4', '8.0']
                 composer-flag:
                     - '--prefer-dist'
-#                    - '--prefer-stable --prefer-lowest'
+                    - '--prefer-stable --prefer-lowest'
 
         name: Test PHP ${{ matrix.php-version }} / composer ${{ matrix.composer-flag }}
 
