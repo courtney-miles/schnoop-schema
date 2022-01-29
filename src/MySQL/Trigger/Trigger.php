@@ -241,7 +241,7 @@ class Trigger implements TriggerInterface
      */
     public function hasBody()
     {
-        return $this->body !== null && $this->body !== '';
+        return null !== $this->body && '' !== $this->body;
     }
 
     /**

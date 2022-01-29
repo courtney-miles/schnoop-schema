@@ -411,7 +411,7 @@ class Table implements TableInterface
      */
     public function hasComment()
     {
-        return $this->comment !== null && $this->comment !== '';
+        return null !== $this->comment && '' !== $this->comment;
     }
 
     /**

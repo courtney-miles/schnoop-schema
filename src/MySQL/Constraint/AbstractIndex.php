@@ -106,7 +106,7 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
      */
     public function hasComment()
     {
-        return $this->comment !== null && $this->comment !== '';
+        return null !== $this->comment && '' !== $this->comment;
     }
 
     /**

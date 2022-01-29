@@ -257,7 +257,7 @@ class Column implements ColumnInterface
      */
     public function hasComment()
     {
-        return $this->comment !== null && $this->comment !== '';
+        return null !== $this->comment && '' !== $this->comment;
     }
 
     /**
@@ -265,7 +265,7 @@ class Column implements ColumnInterface
      */
     public function setComment($comment): void
     {
-        $this->comment = $comment !== null && $comment !== '' ? $comment : null;
+        $this->comment = null !== $comment && '' !== $comment ? $comment : null;
     }
 
     /**
