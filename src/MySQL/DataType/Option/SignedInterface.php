@@ -8,8 +8,6 @@ interface SignedInterface
 {
     /**
      * Identify if the type allows signed values (i.e. negative values.).
-     *
-     * @return mixed
      */
     public function isSigned();
 

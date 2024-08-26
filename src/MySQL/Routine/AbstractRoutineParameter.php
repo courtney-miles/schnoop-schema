@@ -34,33 +34,21 @@ abstract class AbstractRoutineParameter implements RoutineParameterInterface
         $this->dataType = $dataType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setName($name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataType()
     {
         return $this->dataType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDataType(DataTypeInterface $dataType): void
     {
         $this->dataType = $dataType;

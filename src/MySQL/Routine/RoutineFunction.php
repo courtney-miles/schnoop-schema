@@ -35,57 +35,36 @@ class RoutineFunction extends AbstractRoutine implements RoutineFunctionInterfac
         $this->returns = $return;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameters()
     {
         return $this->parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasParameters()
     {
         return !empty($this->parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addParameter(FunctionParameterInterface $parameter): void
     {
         $this->parameters[] = $parameter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReturnType()
     {
         return $this->returns;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setReturnType(DataTypeInterface $returns): void
     {
         $this->returns = $returns;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreateStatement()
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';

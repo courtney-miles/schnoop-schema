@@ -27,8 +27,6 @@ class Column implements ColumnInterface
 
     /**
      * The name of the table the column belongs to.
-     *
-     * @var
      */
     protected $tableName;
 
@@ -48,8 +46,6 @@ class Column implements ColumnInterface
 
     /**
      * The default value for the column.
-     *
-     * @var mixed
      */
     protected $default;
 
@@ -88,89 +84,56 @@ class Column implements ColumnInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTableName()
     {
         return $this->tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTableName($tableName): void
     {
         $this->tableName = $tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasTableName()
     {
         return isset($this->tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDatabaseName()
     {
         return $this->databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDatabaseName()
     {
         return isset($this->databaseName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataType()
     {
         return $this->dataType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isNullable()
     {
         return $this->nullable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setNullable($nullable): void
     {
         $this->nullable = $nullable;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefault()
     {
         if (!$this->getDataType()->doesAllowDefault()) {
@@ -180,17 +143,12 @@ class Column implements ColumnInterface
         return null !== $this->default || $this->isNullable();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefault()
     {
         return $this->default;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws LogicException exception when setting a default value when the
      *                        data type does not support it
      */
@@ -213,25 +171,17 @@ class Column implements ColumnInterface
         $this->default = $default;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unsetDefault(): void
     {
         $this->default = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isOnUpdateCurrentTimestamp()
     {
         return $this->onUpdateCurrentTimestamp;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws LogicException exception when setting this property when the
      *                        data type does not support it
      */
@@ -244,49 +194,32 @@ class Column implements ColumnInterface
         $this->onUpdateCurrentTimestamp = $onUpdateCurrentTimestamp;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getComment()
     {
         return $this->comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasComment()
     {
         return null !== $this->comment && '' !== $this->comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setComment($comment): void
     {
         $this->comment = null !== $comment && '' !== $comment ? $comment : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unsetComment(): void
     {
         $this->comment = '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isAutoIncrement()
     {
         return $this->autoIncrement;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws LogicException exception when setting this property when the
      *                        data type does not support it
      */
@@ -299,9 +232,6 @@ class Column implements ColumnInterface
         $this->autoIncrement = $autoIncrement;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         $default = null;
@@ -326,9 +256,6 @@ class Column implements ColumnInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();
@@ -336,8 +263,6 @@ class Column implements ColumnInterface
 
     /**
      * Creates the portion of DDL for the column default value.
-     *
-     * @param mixed $default
      *
      * @return string DDL portion for the column default
      */

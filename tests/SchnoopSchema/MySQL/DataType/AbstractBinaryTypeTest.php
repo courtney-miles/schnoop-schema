@@ -77,8 +77,6 @@ class AbstractBinaryTypeTest extends BinaryTypeTestCase
     }
 
     /**
-     * @param $type
-     *
      * @return AbstractBinaryType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockAbstractBinaryType($type)

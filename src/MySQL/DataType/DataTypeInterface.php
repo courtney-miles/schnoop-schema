@@ -71,10 +71,6 @@ interface DataTypeInterface extends MySQLInterface
 
     /**
      * Cast a value from MySQL to a suitable PHP type.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
      */
     public function cast($value);
 
@@ -85,8 +81,6 @@ interface DataTypeInterface extends MySQLInterface
      *
      * @param string|float|int $value The value to quote. If you are passing
      *                                a number and you need it quoted, cast it to a string.
-     *
-     * @return mixed
      */
     public function quote($value);
 

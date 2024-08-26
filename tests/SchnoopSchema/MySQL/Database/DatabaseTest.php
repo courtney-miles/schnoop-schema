@@ -78,7 +78,6 @@ class DatabaseTest extends SchnoopSchemaTestCase
      * @dataProvider DDLProvider
      *
      * @param Database $database
-     * @param $expectedDDL
      */
     public function testDDL($database, $expectedDDL): void
     {

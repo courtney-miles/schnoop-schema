@@ -16,41 +16,26 @@ class YearType implements DataTypeInterface
 {
     use QuoteTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_YEAR;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return (int) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return strtoupper($this->getType());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

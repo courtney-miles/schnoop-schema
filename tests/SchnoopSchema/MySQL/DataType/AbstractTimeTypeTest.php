@@ -31,8 +31,6 @@ class AbstractTimeTypeTest extends TimeTypeTestCase
     }
 
     /**
-     * @param $type
-     *
      * @return AbstractTimeType|PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockAbstractTimeType($type)

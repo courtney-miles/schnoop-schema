@@ -116,194 +116,122 @@ class Trigger implements TriggerInterface
         $this->setTableName($tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setName($name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTableName()
     {
         return $this->tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTableName($tableName): void
     {
         $this->tableName = $tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDatabaseName()
     {
         return $this->databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDatabaseName()
     {
         return !empty($this->databaseName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefiner()
     {
         return $this->definer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefiner()
     {
         return !empty($this->definer);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefiner($definer): void
     {
         $this->definer = $definer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEvent()
     {
         return $this->event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setEvent($event): void
     {
         $this->event = $event;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTiming()
     {
         return $this->timing;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTiming($timing): void
     {
         $this->timing = $timing;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBody()
     {
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasBody()
     {
         return null !== $this->body && '' !== $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setBody($body): void
     {
         $this->body = $body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPositionContext()
     {
         return $this->positionContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPositionRelativeTo()
     {
         return $this->positionRelativeTo;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasPosition()
     {
         return !empty($this->positionRelativeTo);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setPosition($positionContext, $relativeTo): void
     {
         $this->positionContext = $positionContext;
         $this->positionRelativeTo = $relativeTo;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSqlMode()
     {
         return $this->sqlMode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasSqlMode()
     {
         return isset($this->sqlMode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setSqlMode(SqlMode $sqlMode): void
     {
         $this->sqlMode = $sqlMode;
@@ -314,57 +242,36 @@ class Trigger implements TriggerInterface
         $this->sqlMode = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDelimiter()
     {
         return $this->delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDelimiter($delimiter): void
     {
         $this->delimiter = $delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDropPolicy()
     {
         return $this->dropPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDropPolicy($ddlDropPolicy): void
     {
         $this->dropPolicy = $ddlDropPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function useFullyQualifiedName()
     {
         return $this->useFullyQualifiedName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUseFullyQualifiedName($useFullyQualifiedName): void
     {
         $this->useFullyQualifiedName = $useFullyQualifiedName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreateStatement()
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';

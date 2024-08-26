@@ -105,8 +105,6 @@ interface ColumnInterface extends MySQLInterface
 
     /**
      * Set the default value for the column.
-     *
-     * @param mixed $default
      */
     public function setDefault($default);
 

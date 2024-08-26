@@ -8,9 +8,6 @@ class BinaryType extends AbstractBinaryType
 {
     public const MAX_LENGTH = 255;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_BINARY;

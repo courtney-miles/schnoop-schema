@@ -41,8 +41,6 @@ class AbstractNumericPointTypeTest extends NumericPointTypeTestCase
     }
 
     /**
-     * @param $type
-     *
      * @return AbstractNumericPointType|MockObject
      */
     protected function createMockAbstractNumericPointType($type)

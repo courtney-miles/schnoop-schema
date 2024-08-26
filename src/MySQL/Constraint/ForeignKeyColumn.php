@@ -8,15 +8,11 @@ class ForeignKeyColumn implements ForeignKeyColumnInterface
 {
     /**
      * Column name.
-     *
-     * @var
      */
     protected $columnName;
 
     /**
      * Reference column name.
-     *
-     * @var
      */
     protected $referenceColumnName;
 
@@ -32,17 +28,11 @@ class ForeignKeyColumn implements ForeignKeyColumnInterface
         $this->referenceColumnName = $referenceColumnName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getColumnName()
     {
         return $this->columnName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReferenceColumnName()
     {
         return $this->referenceColumnName;

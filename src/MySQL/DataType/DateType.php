@@ -18,33 +18,21 @@ class DateType implements DataTypeInterface
         return self::TYPE_DATE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return strtoupper($this->getType());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

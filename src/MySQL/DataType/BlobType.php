@@ -8,9 +8,6 @@ class BlobType extends AbstractBlobType
 {
     public const LENGTH = 65535;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_BLOB;

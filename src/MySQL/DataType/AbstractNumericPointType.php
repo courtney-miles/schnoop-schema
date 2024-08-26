@@ -24,17 +24,11 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
         $this->setSigned(true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMinRange()
     {
         $minRange = null;
@@ -51,9 +45,6 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
         return $minRange;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMaxRange()
     {
         $maxRange = null;
@@ -66,9 +57,6 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
         return $maxRange;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         $typeDDL = strtoupper($this->getType());
@@ -92,9 +80,6 @@ abstract class AbstractNumericPointType implements NumericPointTypeInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

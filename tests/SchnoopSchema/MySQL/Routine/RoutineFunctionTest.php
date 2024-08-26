@@ -14,7 +14,6 @@ use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineFunction;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 class RoutineFunctionTest extends RoutineTestCase
 {
@@ -82,7 +81,7 @@ class RoutineFunctionTest extends RoutineTestCase
 
     public function testSetParameters(): void
     {
-        /** @var FunctionParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
+        /** @var FunctionParameterInterface[]|\PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(FunctionParameterInterface::class),
             $this->createMock(FunctionParameterInterface::class),
@@ -101,7 +100,7 @@ class RoutineFunctionTest extends RoutineTestCase
 
     public function testAddParameter(): void
     {
-        /** @var FunctionParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
+        /** @var FunctionParameterInterface[]|\PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(FunctionParameterInterface::class),
             $this->createMock(FunctionParameterInterface::class),
@@ -122,7 +121,6 @@ class RoutineFunctionTest extends RoutineTestCase
      * @dataProvider getDDLTestData
      *
      * @param bool $doMockSqlMode
-     * @param $expectedDDL
      */
     public function testGetDDL(RoutineFunction $function, $doMockSqlMode, $expectedDDL): void
     {
@@ -262,13 +260,7 @@ SQL
     }
 
     /**
-     * @param $name
-     * @param $databaseName
-     * @param $body
      * @param ProcedureParameterInterface[] $parameters
-     * @param $useFQN
-     * @param $ddlDelimiter
-     * @param $ddlDropPolicy
      *
      * @return RoutineFunction
      */

@@ -17,65 +17,41 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
      */
     protected $options = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOptions()
     {
         return $this->options;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasOptions()
     {
         return !empty($this->options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasOption($option)
     {
         return in_array($option, $this->options, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOptions(array $options): void
     {
         $this->options = array_values($options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addOption($option): void
     {
         $this->options[] = $option;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return (string) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return implode(
@@ -89,9 +65,6 @@ abstract class AbstractOptionsType implements OptionsTypeInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

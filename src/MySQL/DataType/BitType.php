@@ -30,57 +30,36 @@ class BitType implements BitTypeInterface
         $this->setLength($length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_BIT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMinRange()
     {
         return 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMaxRange()
     {
         return pow(2, $this->length) - 1;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return (int) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return strtoupper($this->getType()) . '(' . $this->getLength() . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

@@ -51,8 +51,6 @@ class AbstractBlobTypeTest extends DataTypeTestCase
     }
 
     /**
-     * @param $type
-     *
      * @return AbstractBlobType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockAbstractBlobType($type)

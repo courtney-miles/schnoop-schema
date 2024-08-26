@@ -12,7 +12,6 @@ use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineInterface;
 use MilesAsylum\SchnoopSchema\MySQL\Routine\RoutineProcedure;
 use MilesAsylum\SchnoopSchema\MySQL\SetVar\SqlMode;
 use MilesAsylum\SchnoopSchema\PHPUnit\Framework\RoutineTestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 class RoutineProcedureTest extends RoutineTestCase
 {
@@ -61,7 +60,7 @@ class RoutineProcedureTest extends RoutineTestCase
 
     public function testSetParameters(): void
     {
-        /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
+        /** @var ProcedureParameterInterface[]|\PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(ProcedureParameterInterface::class),
             $this->createMock(ProcedureParameterInterface::class),
@@ -80,7 +79,7 @@ class RoutineProcedureTest extends RoutineTestCase
 
     public function testAddParameter(): void
     {
-        /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $parameters */
+        /** @var ProcedureParameterInterface[]|\PHPUnit_Framework_MockObject_MockObject[] $parameters */
         $parameters = [
             $this->createMock(ProcedureParameterInterface::class),
             $this->createMock(ProcedureParameterInterface::class),
@@ -99,9 +98,6 @@ class RoutineProcedureTest extends RoutineTestCase
 
     /**
      * @dataProvider getDDLTestData
-     *
-     * @param $doMockSqlMode
-     * @param $expectedDDL
      */
     public function testDDL(RoutineProcedure $procedure, $doMockSqlMode, $expectedDDL): void
     {
@@ -135,7 +131,7 @@ class RoutineProcedureTest extends RoutineTestCase
     {
         $databaseName = 'schnoop_db';
 
-        /** @var ProcedureParameterInterface[]|PHPUnit_Framework_MockObject_MockObject[] $mockParameters */
+        /** @var ProcedureParameterInterface[]|\PHPUnit_Framework_MockObject_MockObject[] $mockParameters */
         $mockParameters = [
             $this->createMock(ProcedureParameterInterface::class),
             $this->createMock(ProcedureParameterInterface::class),

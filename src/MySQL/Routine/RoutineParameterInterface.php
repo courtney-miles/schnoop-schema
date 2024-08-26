@@ -17,8 +17,6 @@ interface RoutineParameterInterface
 
     /**
      * Set the parameter name.
-     *
-     * @param $name
      */
     public function setName($name);
 
