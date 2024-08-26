@@ -48,8 +48,6 @@ class AbstractCharTypeTest extends CharTypeTestCase
     }
 
     /**
-     * @param $type
-     *
      * @return AbstractCharType|MockObject
      */
     protected function createMockAbstractCharType($type)

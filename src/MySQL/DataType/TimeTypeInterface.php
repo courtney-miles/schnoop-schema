@@ -28,10 +28,6 @@ interface TimeTypeInterface extends DataTypeInterface
 
     /**
      * Set the number of decimal places used to represent fractional seconds.
-     *
-     * @param $precision
-     *
-     * @return mixed
      */
     public function setPrecision($precision);
 }

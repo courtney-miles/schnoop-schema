@@ -16,17 +16,11 @@ class Index extends AbstractIndex
         parent::__construct($name, self::CONSTRAINT_INDEX, self::INDEX_TYPE_BTREE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return $this->makeIndexDDL($this->getConstraintType(), $this->getName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

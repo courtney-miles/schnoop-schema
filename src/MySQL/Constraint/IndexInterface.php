@@ -53,8 +53,6 @@ interface IndexInterface extends ConstraintInterface
 
     /**
      * Set a comment for the index.
-     *
-     * @param $comment
      */
     public function setComment($comment);
 

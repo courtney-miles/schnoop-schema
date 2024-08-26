@@ -283,9 +283,6 @@ class ColumnTest extends SchnoopSchemaTestCase
 
     /**
      * @dataProvider DDLProvider
-     *
-     * @param $column
-     * @param $expectedDDL
      */
     public function testDDL(Column $column, $expectedDDL): void
     {
@@ -449,8 +446,6 @@ SQL
     /**
      * @param string $name
      * @param bool $nullable
-     * @param mixed $default
-     * @param $onUpdateCurrentTimestamp
      * @param bool|null $autoIncrement
      * @param string $comment
      *

@@ -13,41 +13,26 @@ class RoutineProcedure extends AbstractRoutine implements RoutineProcedureInterf
      */
     protected $parameters = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameters()
     {
         return $this->parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasParameters()
     {
         return !empty($this->parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addParameter(ProcedureParameterInterface $parameter): void
     {
         $this->parameters[] = $parameter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreateStatement()
     {
         $dropDDL = $setSqlMode = $createDDL = $revertSqlMode = '';
@@ -114,9 +99,6 @@ SQL;
         return $createDDL;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getCreateStatement();

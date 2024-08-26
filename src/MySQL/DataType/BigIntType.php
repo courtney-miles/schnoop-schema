@@ -11,25 +11,16 @@ class BigIntType extends AbstractIntType
     public const MIN_UNSIGNED = 0;
     public const MAX_UNSIGNED = 18446744073709551615;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_BIGINT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMinRange()
     {
         return $this->isSigned() ? self::MIN_SIGNED : self::MIN_UNSIGNED;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getMaxRange()
     {
         return $this->isSigned() ? self::MAX_SIGNED : self::MAX_UNSIGNED;

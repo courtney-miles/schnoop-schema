@@ -46,73 +46,46 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         $this->setOnUpdateAction(self::REFERENCE_ACTION_RESTRICT);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOnDeleteAction()
     {
         return $this->onDeleteAction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOnDeleteAction($onDeleteAction): void
     {
         $this->onDeleteAction = $onDeleteAction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOnUpdateAction()
     {
         return $this->onUpdateAction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOnUpdateAction($onUpdateAction): void
     {
         $this->onUpdateAction = $onUpdateAction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReferenceTableName()
     {
         return $this->referenceTableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasReferenceTableName()
     {
         return isset($this->referenceTableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setReferenceTableName($referenceTableName): void
     {
         $this->referenceTableName = $referenceTableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getColumnNames()
     {
         return array_keys($this->foreignKeyColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReferenceColumnNames()
     {
         $fkNames = [];
@@ -124,9 +97,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         return $fkNames;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasReferenceColumnName($columnName, $tableName = null)
     {
         if ($this->getReferenceTableName() !== $tableName) {
@@ -142,25 +112,16 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getForeignKeyColumns()
     {
         return array_values($this->foreignKeyColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasForeignKeyColumns()
     {
         return !empty($this->foreignKeyColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasForeignKeyColumn($columnName)
     {
         foreach ($this->foreignKeyColumns as $fkColumn) {
@@ -172,9 +133,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setForeignKeyColumns(array $foreignKeyColumns): void
     {
         $this->foreignKeyColumns = [];
@@ -184,9 +142,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addForeignKeyColumn(ForeignKeyColumnInterface $foreignKeyColumn): void
     {
         $this->foreignKeyColumns[$foreignKeyColumn->getColumnName()] = $foreignKeyColumn;
@@ -214,9 +169,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         return '`' . $this->referenceTableName . '` (' . implode(',', $referenceColumnDDLs) . ')';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return implode(
@@ -235,9 +187,6 @@ class ForeignKey extends AbstractConstraint implements ForeignKeyInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

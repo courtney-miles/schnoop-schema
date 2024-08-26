@@ -8,17 +8,11 @@ class TinyTextType extends AbstractTextType
 {
     public const LENGTH = 255;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_TINYTEXT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLength()
     {
         return self::LENGTH;

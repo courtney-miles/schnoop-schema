@@ -29,25 +29,16 @@ class ProcedureParameter extends AbstractRoutineParameter implements ProcedurePa
         $this->direction = $direction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDirection()
     {
         return $this->direction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDirection($direction): void
     {
         $this->direction = $direction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return sprintf(
@@ -58,9 +49,6 @@ class ProcedureParameter extends AbstractRoutineParameter implements ProcedurePa
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

@@ -18,9 +18,6 @@ class CharType extends AbstractCharType
         parent::__construct($length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_CHAR;

@@ -46,65 +46,41 @@ abstract class AbstractConstraint implements ConstraintInterface
         $this->constraintType = $constraintType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConstraintType()
     {
         return $this->constraintType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTableName()
     {
         return $this->tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTableName($tableName): void
     {
         $this->tableName = $tableName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasTableName()
     {
         return isset($this->tableName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDatabaseName()
     {
         return $this->databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDatabaseName()
     {
         return isset($this->databaseName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;

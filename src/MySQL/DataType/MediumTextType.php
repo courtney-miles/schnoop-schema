@@ -8,17 +8,11 @@ class MediumTextType extends AbstractTextType
 {
     public const LENGTH = 16777215;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_MEDIUMTEXT;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLength()
     {
         return self::LENGTH;

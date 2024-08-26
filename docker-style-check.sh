@@ -2,4 +2,4 @@
 
 set -o errexit
 
-docker-compose run --rm schnoop-schema composer style-check
+docker compose run --rm schnoop-schema composer style-check

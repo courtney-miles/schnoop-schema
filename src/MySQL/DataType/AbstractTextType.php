@@ -12,25 +12,16 @@ abstract class AbstractTextType implements TextTypeInterface
     use CollationTrait;
     use QuoteTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return (string) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return implode(
@@ -44,9 +35,6 @@ abstract class AbstractTextType implements TextTypeInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

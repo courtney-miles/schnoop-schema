@@ -49,8 +49,6 @@ interface ForeignKeyInterface extends ConstraintInterface
     /**
      * Identifies if the foreign key includes the specified column.
      *
-     * @param $columnName
-     *
      * @return bool true if the column exists in the foreign key
      */
     public function hasForeignKeyColumn($columnName);

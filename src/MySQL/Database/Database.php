@@ -44,73 +44,46 @@ class Database implements DatabaseInterface
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultCollation()
     {
         return $this->defaultCollation;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultCollation()
     {
         return !empty($this->defaultCollation);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefaultCollation($defaultCollation): void
     {
         $this->defaultCollation = $defaultCollation;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDelimiter()
     {
         return $this->ddlDelimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDelimiter($delimiter): void
     {
         $this->ddlDelimiter = $delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDropPolicy()
     {
         return $this->ddlDropPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDropPolicy($ddlDropPolicyPolicy): void
     {
         $this->ddlDropPolicy = $ddlDropPolicyPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreateStatement()
     {
         $dropDDL = $createDDL = '';
@@ -147,9 +120,6 @@ SQL;
         return $createDDL;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getCreateStatement();

@@ -17,8 +17,6 @@ abstract class DataTypeTestCase extends SchnoopSchemaTestCase
 
     /**
      * @dataProvider DDLProvider
-     *
-     * @param $expectedDDL
      */
     public function testDDL($expectedDDL, DataTypeInterface $intType): void
     {

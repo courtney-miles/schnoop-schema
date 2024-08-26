@@ -163,9 +163,6 @@ class TriggerTest extends TestCase
 
     /**
      * @dataProvider getDDLTestData
-     *
-     * @param $doMockSqlMode
-     * @param $expectedDDL
      */
     public function testDDL(Trigger $trigger, $doMockSqlMode, $expectedDDL): void
     {
@@ -297,7 +294,6 @@ SQL
     }
 
     /**
-     * @param $name
      * @param string $timing
      * @param string $event
      * @param string $tableName

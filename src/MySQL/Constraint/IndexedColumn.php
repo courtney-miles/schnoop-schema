@@ -37,57 +37,36 @@ class IndexedColumn implements IndexedColumnInterface
         $this->columnName = $columnName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getColumnName()
     {
         return $this->columnName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLength()
     {
         return $this->length;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setLength($length)
     {
         return $this->length = $length;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasLength()
     {
         return !empty($this->length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCollation()
     {
         return $this->collation;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCollation($collation): void
     {
         $this->collation = $collation;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasCollation()
     {
         return !empty($this->collation);

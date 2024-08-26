@@ -16,17 +16,11 @@ class UniqueIndex extends AbstractIndex
         parent::__construct($name, self::CONSTRAINT_INDEX_UNIQUE, self::INDEX_TYPE_BTREE);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setIndexType($indexType): void
     {
         parent::setIndexType($indexType);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         if (0 == strcasecmp('primary', $this->getName())) {
@@ -36,9 +30,6 @@ class UniqueIndex extends AbstractIndex
         return $this->makeIndexDDL($this->getConstraintType(), $this->getName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

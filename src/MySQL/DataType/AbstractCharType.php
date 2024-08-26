@@ -30,25 +30,16 @@ abstract class AbstractCharType implements CharTypeInterface
         $this->setLength($length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function cast($value)
     {
         return (string) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doesAllowDefault()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDDL()
     {
         return implode(
@@ -62,9 +53,6 @@ abstract class AbstractCharType implements CharTypeInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getDDL();

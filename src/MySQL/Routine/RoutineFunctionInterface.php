@@ -31,8 +31,6 @@ interface RoutineFunctionInterface extends RoutineInterface
 
     /**
      * Add a parameter to the function.
-     *
-     * @return mixed
      */
     public function addParameter(FunctionParameterInterface $parameter);
 

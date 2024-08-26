@@ -35,8 +35,6 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * Set the SQL mode.
-     *
-     * @param mixed $mode
      */
     public function setMode($mode): void
     {
@@ -55,8 +53,6 @@ class SqlMode implements MySQLInterface, HasDelimiterInterface
 
     /**
      * Set the delimiter to use between statements.
-     *
-     * @param $delimiter
      */
     public function setDelimiter($delimiter): void
     {

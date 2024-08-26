@@ -102,169 +102,106 @@ abstract class AbstractRoutine implements RoutineInterface
         $this->setDefiner(self::DEFINER_CURRENT_USER);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDatabaseName()
     {
         return $this->databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDatabaseName()
     {
         return !empty($this->databaseName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDatabaseName($databaseName): void
     {
         $this->databaseName = $databaseName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefiner()
     {
         return $this->definer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefiner($definer): void
     {
         $this->definer = $definer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefiner()
     {
         return !empty($this->definer);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getComment()
     {
         return $this->comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setComment($comment): void
     {
         $this->comment = $comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasComment()
     {
         return !empty($this->comment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isDeterministic()
     {
         return $this->deterministic;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDeterministic($deterministic): void
     {
         $this->deterministic = $deterministic;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataAccess()
     {
         return $this->dataAccess;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDataAccess($dataAccess): void
     {
         $this->dataAccess = $dataAccess;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSqlSecurity()
     {
         return $this->sqlSecurity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setSqlSecurity($sqlSecurity): void
     {
         $this->sqlSecurity = $sqlSecurity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBody()
     {
         return $this->body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setBody($body): void
     {
         $this->body = $body;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSqlMode()
     {
         return $this->sqlMode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasSqlMode()
     {
         return isset($this->sqlMode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setSqlMode(SqlMode $sqlMode): void
     {
         $this->sqlMode = $sqlMode;
@@ -275,49 +212,31 @@ abstract class AbstractRoutine implements RoutineInterface
         $this->sqlMode = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDelimiter()
     {
         return $this->delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDelimiter($delimiter): void
     {
         $this->delimiter = $delimiter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDropPolicy()
     {
         return $this->dropPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDropPolicy($ddlDropPolicy): void
     {
         $this->dropPolicy = $ddlDropPolicy;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function useFullyQualifiedName()
     {
         return $this->useFullyQualifiedName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUseFullyQualifiedName($useFullyQualifiedName): void
     {
         $this->useFullyQualifiedName = $useFullyQualifiedName;

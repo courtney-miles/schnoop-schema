@@ -14,9 +14,6 @@ class TinyBlobType extends AbstractBlobType
 {
     public const LENGTH = 255;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return self::TYPE_TINYBLOB;

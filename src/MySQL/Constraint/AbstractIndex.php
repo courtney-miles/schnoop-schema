@@ -41,17 +41,11 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         $this->setIndexType($indexType);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIndexedColumns()
     {
         return array_values($this->indexedColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setIndexedColumns(array $indexedColumns): void
     {
         $this->indexedColumns = [];
@@ -61,57 +55,36 @@ abstract class AbstractIndex extends AbstractConstraint implements IndexInterfac
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasIndexedColumns()
     {
         return !empty($this->indexedColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addIndexedColumn(IndexedColumnInterface $indexedColumn): void
     {
         $this->indexedColumns[$indexedColumn->getColumnName()] = $indexedColumn;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIndexedColumnNames()
     {
         return array_keys($this->indexedColumns);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIndexType()
     {
         return $this->indexType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getComment()
     {
         return $this->comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasComment()
     {
         return null !== $this->comment && '' !== $this->comment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setComment($comment): void
     {
         $this->comment = $comment;
