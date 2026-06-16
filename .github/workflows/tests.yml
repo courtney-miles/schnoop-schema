@@ -17,7 +17,7 @@ jobs:
         name: Test PHP ${{ matrix.php-version }} / composer ${{ matrix.composer-flag }}
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
 
             - name: Setup PHP version ${{ matrix.php-version }}
               uses: shivammathur/setup-php@v2
@@ -32,7 +32,7 @@ jobs:
 
             - name: Cache Composer packages
               id: composer-cache
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               with:
                   path: vendor
                   key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
