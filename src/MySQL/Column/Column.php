@@ -163,7 +163,7 @@ class Column implements ColumnInterface
                 $default[$k] = $this->getDataType()->cast($v);
             }
         } elseif (null !== $default) {
-            if (!($this->getDataType() instanceof TimeTypeInterface)) {
+            if (!$this->getDataType() instanceof TimeTypeInterface) {
                 $default = $this->getDataType()->cast($default);
             }
         }
