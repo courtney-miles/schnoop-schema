@@ -3,11 +3,5 @@ services:
         build: .
         volumes:
             - .:/src
-        links:
-            - mysql
+        network_mode: host
         command: bash
-    mysql:
-        image: mysql:8.0
-        environment:
-            - MYSQL_DATABASE=slurp_testing
-            - MYSQL_ALLOW_EMPTY_PASSWORD=yes

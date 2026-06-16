@@ -18,5 +18,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
 	  && mv composer.phar /usr/local/bin/composer \
 	  && apt-get install git unzip -y
 ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN git config --global --add safe.directory /src
 ENV XDEBUG_MODE=coverage
 WORKDIR /src
